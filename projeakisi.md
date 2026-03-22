@@ -266,7 +266,7 @@ Test edilmiş kullanıcı arayüzü
 
 ### Geliştirme Ortamı Kurulumu
 - Sorumlu: Baver Katar
-- Durum: Devam Ediyor
+- Durum: Tamamlandı
 - Yapılan:
 
 Mobil Uygulama İskeletinin Oluşturulması ve Platform Yapılandırması:
