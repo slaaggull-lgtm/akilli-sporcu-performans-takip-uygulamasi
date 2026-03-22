@@ -29,20 +29,20 @@ Proje Analizi: Giyilebilir Sensör Destekli Performans ve Sağlık Takip Sistemi
 
 Bu doküman, projenin temel hedeflerini, kapsamını ve başarı kriterlerini detaylandırmak amacıyla hazırlanmıştır.
 
-### Projenin Genel Hedefleri
+ Projenin Genel Hedefleri
 
 - Performans Optimizasyonu: Sporculardan alınan nabız, uyku kalitesi ve hareket verilerini analiz ederek en verimli antrenman saatlerini ve yoğunluğunu belirlemek.
 - Sakatlık Önleme (Injury Prevention): Aşırı yüklenme (overtraining) sinyallerini erkenden tespit edip kullanıcıyı uyarmak.
 - Veri Görselleştirme: Karmaşık sensör verilerini, sporcunun kolayca anlayabileceği anlamlı grafiklere dönüştürmek.
 
-### Kapsam (Scope)
+ Kapsam (Scope)
 
 - Veri Kaynakları: Apple Health, Google Fit ve Garmin gibi platformlardan gelen ham verilerin entegrasyonu.
 - Analiz Motoru: Yapay zeka destekli, kişiselleştirilmiş antrenman öneri algoritması.
 - Mobil Arayüz: Kullanıcı dostu dashboard, günlük raporlar ve anlık bildirim sistemi.
 - Geri Bildirim Döngüsü: Sporcunun gelişimine göre dinamik olarak güncellenen haftalık programlar.
 
-### Çözülen Sorunlar ve Kullanıcı İhtiyaçları
+Çözülen Sorunlar ve Kullanıcı İhtiyaçları
 
 Sorunlar:
 
@@ -56,7 +56,7 @@ Sorunlar:
 - Yorgunluk ve toparlanma (recovery) sürelerinin net takibi.
 - Sakatlık riskini minimize eden proaktif uyarılar.
 
-### Başarı Kriterleri (KPIs)
+ Başarı Kriterleri (KPIs)
 
 - Hata Payı: Sensör verilerinin analizinde %90 ve üzeri tutarlılık.
 - Kullanıcı Bağlılığı: Aktif kullanıcıların haftada en az 5 kez uygulamayı kontrol etmesi.
