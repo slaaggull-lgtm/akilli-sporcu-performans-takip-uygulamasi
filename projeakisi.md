@@ -25,6 +25,7 @@ Sistem Optimizasyonu ve Proje Yönetimi: Uygulamanın arka planda (background) �
 - Sorumlu: Nur Beyda Genç
 - Durum: Tamamlandı
 - Yapılan:
+
 Proje Analizi: Giyilebilir Sensör Destekli Performans ve Sağlık Takip Sistemi
 
 Bu doküman, projenin temel hedeflerini, kapsamını ve başarı kriterlerini detaylandırmak amacıyla hazırlanmıştır.
