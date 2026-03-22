@@ -269,6 +269,21 @@ Test edilmiş kullanıcı arayüzü
 - Durum: Devam Ediyor
 - Yapılan:
 
+Mobil Uygulama İskeletinin Oluşturulması ve Platform Yapılandırması:
+Uygulamanın hem iOS hem de Android platformlarında sorunsuz çalışabilmesi için gerekli altyapı kurulumları gerçekleştirilmiştir. Geliştirme ortamı yapılandırılarak projenin temel paket dizinleri, konfigürasyon dosyaları ve platformlara özgü SDK (Software Development Kit) entegrasyonları tamamlanmıştır.
+
+Versiyon Kontrol Sistemi ve Dal (Branch) Yönetimi:
+Proje kaynak kodlarının güvenli bir şekilde saklanması ve ekip içi eşzamanlı geliştirme sürecinin yönetilebilmesi amacıyla GitHub üzerinde versiyon kontrol altyapısı kurulmuştur. Kod çakışmalarını önlemek adına Git Branching modeli benimsenmiş; ana sürüm ve geliştirme dalları oluşturulmuştur. Ayrıca gereksiz sistem dosyalarının repoya yüklenmesini engellemek için yapılandırmalar sağlanmıştır.
+
+Bağımlılık (Dependency) Yönetimi ve Kütüphane Entegrasyonu:
+İlerleyen aşamalarda kullanılacak olan makine öğrenmesi (TensorFlow Lite), bulut veritabanı (Firebase) ve donanım haberleşme (BLE) araçlarının projeye dahil edilebilmesi için paket yöneticisi altyapıları (Android için Gradle, iOS için CocoaPods) kurulmuştur. Gerekli kütüphanelerin temel versiyon tanımlamaları yapılarak proje bağımlılıkları stabilize edilmiştir.
+
+Lokal Geliştirme Ortamı ve Ekip Senkronizasyonu:
+Takım üyelerinin projeyi kendi lokal ortamlarında hatasız bir şekilde ayağa kaldırabilmeleri için gerekli ortam değişkenleri (environment variables) ve derleme yapılandırmaları ayarlanmıştır. Geliştirici ortamlarının standartlaştırılması amacıyla gerekli dokümantasyonlar ve kurulum adımları hazırlanarak ekibe sunulmuştur.
+
+  
+
+
 ### Veri Toplama ve İşleme Altyapısı Araştırması
 - Sorumlu: Asım Gökalp
 - Durum: Tamamlandı
