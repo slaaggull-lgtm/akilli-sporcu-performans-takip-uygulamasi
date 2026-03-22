@@ -291,3 +291,23 @@ Uygulamanın hem çevrimdışı hem de çevrimiçi çalışabilmesi için hibrit
 
 API ve Veri İletişim Altyapısı:
 Mobil uygulama ile backend servisleri arasındaki veri iletişimi için REST API mimarisi incelenmiştir. Sensör verilerinin JSON formatında sunucuya gönderilmesi ve analiz sonuçlarının mobil uygulamaya geri iletilmesi için API tabanlı veri akışı modeli tasarlanmıştır.
+
+
+
+
+## Hafta 2
+
+### API Tasarımı
+- Sorumlu: Sıla Ağgül
+- Durum: Devam Ediyor
+- Yapılan:
+
+### UI/UX Wireframe Tasarımı
+- Sorumlu: Şevval Bulut
+- Durum: Devam Ediyor
+- Yapılan:
+
+### Veritabanı Yapısının Oluşturulması
+- Sorumlu: Nur Beyda Genç 
+- Durum: Devam Ediyor
+- Yapılan:
