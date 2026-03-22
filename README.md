@@ -1,12 +1,12 @@
 # Akıllı Sporcu Performans Takip Uygulaması
 
-## 📌 Proje Hakkında
+##  Proje Hakkında
 Bu proje, giyilebilir sensörlerden (akıllı saat, fitness takip cihazları) alınan verileri analiz ederek sporcuların performansını değerlendiren ve kişiselleştirilmiş antrenman önerileri sunan bir mobil uygulama geliştirmeyi amaçlamaktadır.  
 Amaç, sporcuların daha verimli antrenman yapmalarını sağlamak ve sakatlanma riskini azaltmaktır.
 
 
 
-## 🎯 Özellikler
+## Özellikler
 - Giyilebilir cihazlardan veri toplama ve senkronizasyon  
 - Performans analiz algoritmaları ile değerlendirme  
 - Kişiselleştirilmiş antrenman planı oluşturma  
@@ -15,7 +15,7 @@ Amaç, sporcuların daha verimli antrenman yapmalarını sağlamak ve sakatlanma
 
 
 
-## 👥 Takım
+##  Takım
 - Sıla Ağgül  
 - Nur Beyda Genç  
 - Şevval Bulut  
