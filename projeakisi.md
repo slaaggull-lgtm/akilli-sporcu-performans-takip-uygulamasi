@@ -299,8 +299,31 @@ Mobil uygulama ile backend servisleri arasındaki veri iletişimi için REST API
 
 ### API Tasarımı
 - Sorumlu: Sıla Ağgül
-- Durum: Devam Ediyor
+- Durum: Tamamlandı
 - Yapılan:
+API Mimarisi, Veri Akışı ve Sistem Entegrasyonu Tasarımı
+
+Genel API Yaklaşımı: Mobil uygulama ile sunucu arasında güvenli, hızlı ve ölçeklenebilir bir veri iletişimi sağlamak amacıyla REST mimarisi temel alınarak API tasarımı yapılmıştır. Bu yapı, mobil uygulamanın farklı platformlarda (iOS ve Android) sorunsuz çalışabilmesini, verilerin hatasız iletilmesini ve veri bütünlüğünün korunmasını garanti altına alır. API tasarımında veri formatı olarak JSON tercih edilmiş, böylece hem insan tarafından okunabilir hem de sistemler arası uyumluluk sağlanmıştır.
+
+Kullanıcı Yönetimi Endpointleri: Uygulamanın temel kullanıcı işlevlerini gerçekleştirebilmesi için kimlik doğrulama, kullanıcı kaydı, giriş ve profil yönetimi için detaylı endpointler tasarlanmıştır. Bu endpointler, veri güvenliği ve kullanıcı deneyimi açısından optimize edilmiştir:
+- POST /register → Yeni kullanıcı kaydı; kullanıcı adı, e-posta ve şifre bilgileri güvenli bir şekilde sunucuya iletilir. Sistemde mevcut kullanıcılarla çakışma kontrolü yapılır ve başarılı kayıt sonrası kullanıcıya token üretilir.
+- POST /login → Kullanıcı giriş işlemi; sağlanan kimlik bilgileri doğrulanır, JWT tabanlı token üretilir ve kullanıcıya güvenli bir oturum sağlanır. Giriş başarısız olduğunda anlamlı hata mesajları döndürülür.
+- GET /user → Kullanıcı profil bilgilerini getirme; kullanıcıya ait isim, yaş, kayıt tarihi, son antrenman verileri ve genel istatistikler sunulur. Yetkilendirme mekanizması sayesinde yalnızca kendi verilerine erişim sağlanır.
+
+Sporcu Verisi ve Antrenman Endpointleri: Sporcuların performans verilerini yönetmek için endpointler aşağıdaki şekilde tasarlanmıştır:
+- GET /workoutData → Kullanıcının geçmiş antrenman verileri detaylı bir şekilde getirilir. Her veri; tarih, süre, kalp atışı, adım sayısı, yakılan kalori ve aktivite tipi gibi bilgilerle birlikte döndürülür. Bu sayede kullanıcı kendi performansını takip edebilir ve gelişim eğrilerini görebilir.
+- POST /workoutData → Yeni antrenman verisi ekleme işlemi; mobil uygulamadan alınan veriler sunucuya güvenli bir şekilde iletilir ve veritabanına kaydedilir. Veri doğrulama, eksik veya hatalı veri kontrolleri ve zaman damgası ekleme işlemleri bu endpoint üzerinden yapılır.
+
+Sensör Veri Entegrasyonu: Giyilebilir cihazlardan gelen sensör verilerinin doğru ve güvenli bir şekilde sunucuya iletilmesi için özel endpointler oluşturulmuştur:
+- POST /sensorData → Kalp atışı, adım sayısı, yakılan kalori, VO2 Max ve diğer biyometrik veriler bu endpoint aracılığıyla sunucuya gönderilir. API, verilerin zaman damgalı ve sıralı bir şekilde kaydedilmesini sağlayarak veri bütünlüğünü garanti eder. Ayrıca yüksek frekansta veri akışı olması durumunda verilerin önbellekleme ve toplu işleme yöntemleri ile işlenmesi planlanmıştır.
+
+Veri Güvenliği ve Yetkilendirme: API tasarımında güvenlik öncelikli olarak ele alınmıştır. Kullanıcı doğrulama işlemleri JWT tabanlı token sistemi ile yapılır. API, yetkisiz erişim girişimlerini engellemek için kullanıcı ve token bazlı kontrol mekanizmalarına sahiptir. Ayrıca hassas kullanıcı verilerinin şifrelenerek saklanması (AES-256 veya benzeri protokoller) önerilmiş ve GDPR ile KVKK uyumluluğu açısından değerlendirilmiştir.
+
+Performans Optimizasyonu ve Ölçeklenebilirlik: API endpointlerinin yüksek veri hacmi altında sorunsuz çalışabilmesi için performans ve ölçeklenebilirlik kriterleri planlanmıştır. GET ve POST isteklerinin asenkron çalışması, yük dengeleme (load balancing) stratejileri ve cache mekanizmaları ile verilerin hızlı erişimi sağlanacaktır. Bu sayede binlerce kullanıcı aynı anda veri gönderse bile sistem yanıt süreleri düşmeyecektir.
+
+Dokümantasyon ve Test Süreci: Tüm API endpointleri için OpenAPI/Swagger tabanlı kapsamlı dokümantasyon hazırlanması planlanmıştır. Bu dokümantasyon ile her endpointin amacı, parametreleri, beklenen veri formatları ve hata kodları detaylı bir şekilde açıklanır. Mobil uygulama geliştiricileri, backend ekibi ve test uzmanları bu dokümantasyon sayesinde API’yi doğru ve hatasız bir şekilde entegre edebilir. Test süreçlerinde birim testler (unit test) ve entegrasyon testleri uygulanarak API’nin güvenilirliği ve tutarlılığı sağlanacaktır.
+
+Gelecek Planlaması ve Geliştirilebilirlik: API tasarımı esnek ve modüler bir yapıya sahiptir. Yeni endpoint eklenmesi, mevcut verilerin genişletilmesi veya üçüncü taraf hizmetlerle entegrasyon gerektiğinde minimal değişiklik ile uygulanabilir. Bu sayede projenin ilerleyen aşamalarında kullanıcı taleplerine veya teknolojik yeniliklere hızlı adaptasyon sağlanabilecektir.
 
 ### UI/UX Wireframe Tasarımı
 - Sorumlu: Şevval Bulut
