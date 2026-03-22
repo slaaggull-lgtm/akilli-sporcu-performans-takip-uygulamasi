@@ -301,6 +301,7 @@ Mobil uygulama ile backend servisleri arasındaki veri iletişimi için REST API
 - Sorumlu: Sıla Ağgül
 - Durum: Tamamlandı
 - Yapılan:
+
 API Mimarisi, Veri Akışı ve Sistem Entegrasyonu Tasarımı
 
 Genel API Yaklaşımı: Mobil uygulama ile sunucu arasında güvenli, hızlı ve ölçeklenebilir bir veri iletişimi sağlamak amacıyla REST mimarisi temel alınarak API tasarımı yapılmıştır. Bu yapı, mobil uygulamanın farklı platformlarda (iOS ve Android) sorunsuz çalışabilmesini, verilerin hatasız iletilmesini ve veri bütünlüğünün korunmasını garanti altına alır. API tasarımında veri formatı olarak JSON tercih edilmiş, böylece hem insan tarafından okunabilir hem de sistemler arası uyumluluk sağlanmıştır.
