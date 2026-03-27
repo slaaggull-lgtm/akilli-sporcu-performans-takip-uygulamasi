@@ -348,6 +348,7 @@ Gelecek Planlaması ve Geliştirilebilirlik: API tasarımı esnek ve modüler bi
 
 Ana Ekran (Dashboard)
 
+```
 +------------------------------+
 |  MERHABA SPORCU              |
 |  Hedef: %75  ████████░░      |
@@ -363,6 +364,7 @@ Ana Ekran (Dashboard)
 +------------------------------+
 |  EV | ANALİZ | CİHAZ | PROFİL|
 +------------------------------+
+```
 
 1. Ana Ekran (Gösterge Paneli)
 Kullanıcının maç özetini ve maçların izlendiği merkezdir.
