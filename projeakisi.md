@@ -343,8 +343,93 @@ Gelecek Planlaması ve Geliştirilebilirlik: API tasarımı esnek ve modüler bi
 
 ### UI/UX Wireframe Tasarımı
 - Sorumlu: Şevval Bulut
-- Durum: Devam Ediyor
+- Durum: Tamamlandı
 - Yapılan:
+- ---------------------------------
+| Akıllı Sporcu Performans Takip Uygulaması |
+---------------------------------
+|  MERHABA SPORCU!              |
+|  Bugünkü Hedef: %75 Tamamlandı|
+|  [|||||||||||||||------]      |
+---------------------------------
+| [ KALP RİTMİ ] | [ KALORİ    ] |
+|    72 BPM      |   450 kcal    |
+---------------------------------
+| [ ADIM SAYISI] | [ AKTİF SÜRE] |
+|     8.420      |    45 Dak.    |
+---------------------------------
+|       HAFTALIK GRAFİK (📈)      |
+|  P  S  Ç  P  C  C  P          |
+|  _  _  _  _  _  _  _          |
+---------------------------------
+|      [ ANTRENMANI BAŞLAT ]     |
+---------------------------------
+| [EV]  [ANALİZ]  [CİHAZ] [AYAR] |
+---------------------------------
+
+1. Ana Ekran (Gösterge Paneli)
+Kullanıcının maç özetini ve maçların izlendiği merkezdir.
+
+Üst Çubuk: Profil simgesi (Sol), Bildirimler (Sağ).
+
+Hoş Geldin Kartı: "Merhaba [İsim], bugün performansa hazır mısın?"
+
+Özet Widget'ları (2x2 Izgara):
+
+Kalp Atış Hızı: [BPM]
+
+Yakılan Kalori: [kcal]
+
+Adım Sayısı: [Sayı]
+
+Aktif Süre: [Dakika]
+
+Grafik Alanı: Haftalık performans trendini gösteren basit bir çizgi grafik.
+
+Hızlı Başlat Düğmesi: Ekranın alt ortasında, belirgin bir "Antrenmanı Başlat" (Çal simgesi) düğmesi.
+
+2. Antrenman Takip Ekranı (Aktif Mod)
+Sensörlerden gelen veriler canlı olarak aktif olan ekrandır.
+
+Zamanlayıcı: Ekranın en üstünde, büyük puntolu kronometre.
+
+Ana Metrikler:
+
+Hız/Tempo (Büyük yazı tipi)
+
+Mesafe (Orta yazı tipi)
+
+Sensör Durumu: Sağ üst köşede küçük bir "Bağlı" ikonu (Giyilebilir sensörlü yazmaku için).
+
+Kontrol Butonları (Alt Kısım):
+
+[Durdur] - Turuncu/Sarı
+
+[Bitir] - Kırmızı (Uzun basma)
+
+3. Performans Analiz Ekranı (İstatistikler)
+Geçmişe ait verilerin incelendiği bölümdür.
+
+Takvim Görünümü: En üstte Aşırı kaydırılabilir haftalık/aylık takvim.
+
+Detaylı Liste:
+
+[Tarih] - [Antrenman Tipi] - [Skor/Süre]
+
+Karşılaştırma Kartı: "Geçen haftaya göre %10 daha hızlısın" gibi bir içgörü kutucuğu.
+
+Paylaş Butonu: Verileri aktarmak veya GitHub/Sosyal Medya üzerinden paylaşmak için sağ üstte bir simge.
+
+4. Alt Navigasyon Menüsü (Sekme Çubuğu)
+Uygulamanın her yerinden erişilebilen 4 ana sekme:
+
+Ev (Dashboard): Genel özet.
+
+Analiz: Detaylı veriler ve geçmiş veriler.
+
+Cihazlar: Giyilebilir sensör ayarları düğmesi.
+
+Profil: Kişisel hedefler ve genel ayarlar.
 
 ### Veritabanı Yapısının Oluşturulması
 - Sorumlu: Nur Beyda Genç 
