@@ -345,28 +345,24 @@ Gelecek Planlaması ve Geliştirilebilirlik: API tasarımı esnek ve modüler bi
 - Sorumlu: Şevval Bulut
 - Durum: Tamamlandı
 - Yapılan:
-- ---------------------------------
-| Akıllı Sporcu Performans Takip Uygulaması |
----------------------------------
-|  MERHABA SPORCU!              |
-|  Bugünkü Hedef: %75 Tamamlandı|
-|  [|||||||||||||||------]      |
----------------------------------
-| [ KALP RİTMİ ] | [ KALORİ    ] |
-|    72 BPM      |   450 kcal    |
----------------------------------
-| [ ADIM SAYISI] | [ AKTİF SÜRE] |
-|     8.420      |    45 Dak.    |
----------------------------------
-|       HAFTALIK GRAFİK (📈)
-|
-|  P  S  Ç  P  C  C  P          |
-|  _  _  _  _  _  _  _          |
----------------------------------
-|      [ ANTRENMANI BAŞLAT ]     |
----------------------------------
-| [EV]  [ANALİZ]  [CİHAZ] [AYAR] |
----------------------------------
+
+Ana Ekran (Dashboard)
+
++------------------------------+
+|  MERHABA SPORCU              |
+|  Hedef: %75  ████████░░      |
++------------------------------+
+|  Kalp: 72 BPM   | Kalori: 450|
+|  Adım: 8420     | Süre: 45 dk|
++------------------------------+
+|  Haftalık Grafik             |
+|  P S Ç P C C P              |
+|  ▂ ▃ ▅ ▄ ▆ ▇ ▅              |
++------------------------------+
+|   [ ANTRENMANI BAŞLAT ]      |
++------------------------------+
+|  EV | ANALİZ | CİHAZ | PROFİL|
++------------------------------+
 
 1. Ana Ekran (Gösterge Paneli)
 Kullanıcının maç özetini ve maçların izlendiği merkezdir.
