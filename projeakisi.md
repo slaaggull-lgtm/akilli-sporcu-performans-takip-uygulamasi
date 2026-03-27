@@ -358,7 +358,8 @@ Gelecek Planlaması ve Geliştirilebilirlik: API tasarımı esnek ve modüler bi
 | [ ADIM SAYISI] | [ AKTİF SÜRE] |
 |     8.420      |    45 Dak.    |
 ---------------------------------
-|       HAFTALIK GRAFİK (📈)      |
+|       HAFTALIK GRAFİK (📈)
+|
 |  P  S  Ç  P  C  C  P          |
 |  _  _  _  _  _  _  _          |
 ---------------------------------
