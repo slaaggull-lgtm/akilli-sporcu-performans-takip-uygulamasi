@@ -434,3 +434,27 @@ Profil: Kişisel hedefler ve genel ayarlar.
 - Sorumlu: Nur Beyda Genç 
 - Durum: Devam Ediyor
 - Yapılan:
+
+Veritabanı Mimarisi, Veri Modelleme ve Depolama Stratejisi Tasarımı
+
+Genel Veritabanı Yaklaşımı: Akıllı Sporcu Performans Takip Uygulaması'nın ihtiyaç duyduğu yüksek frekanslı sensör verilerini ve uzun vadeli performans analizlerini yönetmek amacıyla hibrit bir veritabanı mimarisi tasarlanmıştır. Bu yapı, giyilebilir cihazlardan gelen anlık verilerin (nabız, adım, oksijen seviyesi) kayıpsız depolanmasını, TensorFlow Lite modelleri için veri beslemesini ve kullanıcıya geçmişe dönük raporlama sunulmasını garanti altına alır. Veritabanı tasarımında veri tutarlılığı, sorgu hızı ve ölçeklenebilirlik temel prensip olarak benimsenmiştir.
+
+Veri Gruplandırma ve Tablo Yapıları: Sistemin işlevsel gereksinimlerini karşılamak üzere veriler mantıksal tablolar altında normalize edilerek yapılandırılmıştır:
+
+Kullanıcı ve Profil Yönetimi (Users Table): Sporcuların fiziksel parametreleri (boy, kilo, yaş) ve fitness seviyeleri bu tabloda tutulur. Bu veriler, kişiselleştirilmiş antrenman algoritmalarının temel girdilerini oluşturur.
+
+Ham Sensör Kayıtları (Sensor_Logs Table): Bluetooth LE üzerinden gelen anlık biyometrik veriler (BPM, SpO2, adım) zaman damgalı (timestamp) olarak bu tabloda depolanır. Yüksek veri trafiğini yönetmek adına bu tablo indekslenerek optimize edilmiştir.
+
+Antrenman ve Performans Özeti (Workouts & Analytics Tables): Tamamlanan oturumların özet verileri ve yapay zeka modelinden dönen yorgunluk/sakatlık riski analizleri bu tablolarda ilişkilendirilerek saklanır.
+
+Veri Senkronizasyonu ve Entegrasyonu: Mobil uygulama ile bulut sunucu arasındaki veri akışını yönetmek için gelişmiş bir senkronizasyon stratejisi kurgulanmıştır:
+
+Firebase ve Yerel Depolama (Realm/SQLite): Sporcuların antrenman esnasında internet bağlantısı kopsa dahi veri kaybı yaşamaması için "Offline-First" yaklaşımı benimsenmiştir. Veriler önce yerel veritabanına (Realm/SQLite) yazılır, bağlantı sağlandığında Firebase ile asenkron olarak senkronize edilir.
+
+Veri Bütünlüğü: İlişkisel modelleme (ER Diyagramı) sayesinde kullanıcılar, antrenmanlar ve analiz sonuçları arasındaki bağlar (1:N ve 1:1 ilişkiler) korunarak veri yetkilendirmesi ve güvenliği en üst seviyeye çıkarılmıştır.
+
+Yapay Zeka (TensorFlow Lite) Veri Katmanı: Performans analiz algoritmalarının ihtiyaç duyduğu veri setlerini hızlıca çekebilmek için özel "View"lar ve sorgu optimizasyonları yapılmıştır. Modelin gelişimini izlemek amacıyla geçmiş performans verileri, makine öğrenmesi süreçlerini destekleyecek formatta (JSON/Dizi yapısı) yapılandırılmıştır.
+
+Güvenlik ve KVKK Uyumluluğu: Veritabanı seviyesinde veri güvenliği önceliklendirilmiştir. Hassas sağlık verileri ve kişisel bilgiler şifrelenmiş kolonlarda saklanacak şekilde planlanmıştır. Erişim kontrolleri (Role-Based Access Control) ile yalnızca yetkili kullanıcıların kendi sağlık verilerine erişimi teknik olarak kısıtlanmıştır.
+
+Gelecek Planlaması ve Genişletilebilirlik: Tasarlanan veritabanı şeması modüler bir yapıdadır. İlerleyen aşamalarda yeni sensör türleri (örneğin; uyku takip verileri veya beslenme tabloları) eklendiğinde mevcut mimariyi bozmadan kolayca entegre edilebilecek esnekliktedir. NoSQL ve Relational yapıların avantajları birleştirilerek sistemin binlerce eş zamanlı kullanıcıya hizmet verebilecek kapasiteye ulaşması hedeflenmiştir.
