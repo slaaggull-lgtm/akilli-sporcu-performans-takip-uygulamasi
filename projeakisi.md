@@ -432,7 +432,7 @@ Profil: Kişisel hedefler ve genel ayarlar.
 
 ### Veritabanı Yapısının Oluşturulması
 - Sorumlu: Nur Beyda Genç 
-- Durum: Devam Ediyor
+- Durum: Tamamlandı
 - Yapılan:
 
 Veritabanı Mimarisi, Veri Modelleme ve Depolama Stratejisi Tasarımı
