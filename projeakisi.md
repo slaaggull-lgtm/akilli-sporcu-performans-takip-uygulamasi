@@ -517,3 +517,8 @@ Bu senaryolar sayesinde arayüzde olası kullanım sorunlarının erken aşamada
 
 Genel Sonuç
 Bu çalışma kapsamında, Akıllı Sporcu Performans Takip Uygulaması için modern, kullanıcı dostu ve sporcu ihtiyaçlarına uygun bir UI/UX yapısının nasıl tasarlanması gerektiği araştırılmıştır. Elde edilen bulgular doğrultusunda, uygulamanın sade bir ana ekran, güçlü veri görselleştirme yapısı, kolay cihaz entegrasyonu ve kullanıcıyı yönlendiren etkileşimli bir deneyim sunması gerektiği belirlenmiştir.
+
+
+
+
+## Hafta 3
