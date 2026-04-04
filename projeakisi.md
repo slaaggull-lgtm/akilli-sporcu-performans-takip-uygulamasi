@@ -380,8 +380,8 @@ Bu çalışma kapsamında, Akıllı Sporcu Performans Takip Uygulaması için mo
 - Sorumlu: Sıla Ağgül
 - Durum: Tamamlandı
 - Yapılan:
-  
-- Projenin temelini oluşturan kişiselleştirilmiş antrenman modülü, statik programların aksine kullanıcının biyometrik verilerini ve geçmiş spor deneyimini merkeze alan bir algoritma üzerine kurgulanmıştır. Bu aşamada; yaş, cinsiyet, boy/kilo endeksi (BMI) ve mevcut bazal metabolizma hızı gibi temel parametreler, antrenman yoğunluğunun belirlenmesinde birincil filtre olarak kullanılmıştır. Kullanıcının "sedanter", "orta seviye" veya "aktif sporcu" şeklindeki geçmiş beyanı, sakatlık riskini minimize etmek adına başlangıç ağırlıklarını ve set aralıklarını belirleyen kritik bir veri seti olarak modele dahil edilmiştir.
+
+Projenin temelini oluşturan kişiselleştirilmiş antrenman modülü, statik programların aksine kullanıcının biyometrik verilerini ve geçmiş spor deneyimini merkeze alan bir algoritma üzerine kurgulanmıştır. Bu aşamada; yaş, cinsiyet, boy/kilo endeksi (BMI) ve mevcut bazal metabolizma hızı gibi temel parametreler, antrenman yoğunluğunun belirlenmesinde birincil filtre olarak kullanılmıştır. Kullanıcının "sedanter", "orta seviye" veya "aktif sporcu" şeklindeki geçmiş beyanı, sakatlık riskini minimize etmek adına başlangıç ağırlıklarını ve set aralıklarını belirleyen kritik bir veri seti olarak modele dahil edilmiştir.
 
 Tasarlanan sistemde, antrenman planlarının sadece başlangıçta değil, süreç içerisinde de evrilmesi hedeflenmiştir. Bu bağlamda, "Algılanan Zorluk Derecesi" (RPE - Rate of Perceived Exertion) skalası entegre edilerek, sporcunun her set sonundaki geri bildirimi üzerinden bir sonraki haftanın yükleme parametreleri (Volume/Intensity) otomatik olarak ayarlanmaktadır. Eğer bir kullanıcı belirli bir harekette hedef tekrar sayısına "çok kolay" ulaşıyorsa, sistem bir sonraki döngüde %5 ile %10 arasında bir ağırlık artırımı veya dinlenme süresinde daralma planlayarak gelişimi maksimize etmektedir.
 
