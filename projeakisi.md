@@ -579,6 +579,9 @@ Veri tabanı mimarisinde "Repository" deseni uygulanarak, verinin kaynağı ile 
 
 Son aşamada, veritabanı şeması içerisine "JSON Type Converter" yapıları eklenerek karmaşık liste verilerinin de SQLite içinde verimli bir şekilde saklanması sağlanmıştır. Örneğin, bir setin içindeki farklı dinlenme süreleri veya özel notlar, tek bir sütunda JSON formatında tutularak tablo karmaşıklığı azaltılmıştır. Bu modern veri saklama teknikleri, uygulamanın hem hafif kalmasını hem de gelecekteki karmaşık özelliklere (giyilebilir teknoloji senkronizasyonu vb.) hızlıca adapte olmasını sağlayacak bir zemin oluşturmaktadır.
 
+![Ekran Resmi 2026-04-04 20 06 04](https://github.com/user-attachments/assets/caeb6ef4-7b99-4127-a38f-73ce026d9fae)
+
+
 
 ### Temel Performans Analizi Algoritması Geliştirme (Koşu):
 - Sorumlu: Baver Katar
