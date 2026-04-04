@@ -312,6 +312,68 @@ Mobil uygulama ile backend servisleri arasındaki veri iletişimi için REST API
 
 ## Hafta 2
 
+### Kullanıcı Arayüzü (UI) ve Kullanıcı Deneyimi (UX) Tasarımı Araştırması
+- Sorumlu: Asım Gökalp
+- Durum: Tamamlandı
+- Yapılan:
+
+Akıllı Sporcu Performans Takip Uygulaması için kullanıcı dostu, sade ve etkileşimli bir arayüz yapısı oluşturulabilmesi amacıyla spor ve sağlık odaklı mobil uygulamalardaki güncel UI/UX trendleri araştırılmıştır. Araştırma sürecinde hem kullanıcı beklentileri hem de rakip uygulamaların tasarım yaklaşımları dikkate alınmıştır.
+
+1. Spor Uygulamalarındaki Güncel UI/UX Trendlerinin İncelenmesi
+Sporcu performans takibi yapan uygulamalarda öne çıkan tasarım yaklaşımları analiz edilmiştir. Bu kapsamda özellikle aşağıdaki noktalar değerlendirilmiştir:
+Gerçek zamanlı veri gösterimi
+Basit ve okunabilir gösterge panelleri
+Grafik destekli performans izleme
+Hedef odaklı kart yapıları
+Kullanıcıyı motive eden bildirim ve geri bildirim mekanizmaları
+Minimal ve dikkat dağıtmayan renk kullanımı
+Araştırma sonucunda, sporcu odaklı uygulamalarda verinin karmaşık şekilde değil, sade ve anlamlı ekran bileşenleriyle sunulmasının kullanıcı deneyimini önemli ölçüde artırdığı belirlenmiştir.
+
+2. Rakip Uygulama Analizi
+Benzer alanda hizmet veren spor ve sağlık uygulamalarının arayüz yapıları incelenmiştir. Özellikle performans takibi, aktivite analizi ve hedef yönetimi sunan uygulamalardaki güçlü ve zayıf yönler değerlendirilmiştir. Bu incelemeler sonucunda:
+Başarılı uygulamaların kullanıcıyı fazla menü içinde kaybetmediği
+Ana ekranda en kritik verileri doğrudan sunduğu
+Kullanıcının günlük, haftalık ve aylık gelişimini görselleştirdiği
+Sensör bağlantısı ve veri senkronizasyonunu kolay anlaşılır şekilde yönettiği
+tespit edilmiştir.
+Geliştirilmesi gereken yönler arasında ise bazı uygulamalarda ekran yoğunluğunun fazla olması, veri görselleştirmesinin karmaşıklaşması ve yeni kullanıcılar için ilk kullanım deneyiminin yeterince yönlendirilmemesi yer almaktadır.
+
+3. Kullanıcı İhtiyaçlarının Belirlenmesi
+Uygulamanın hedef kitlesi olan sporcuların temel beklentileri analiz edilmiştir. Bu kapsamda kullanıcıların uygulamadan şu ihtiyaçları karşılaması beklenmektedir:
+Günlük performans verilerini hızlı şekilde görebilmek
+Kalp atışı, kalori, adım ve süre gibi temel metrikleri tek ekranda izleyebilmek
+Kişiselleştirilmiş antrenman önerileri alabilmek
+Geçmiş performansını grafiklerle takip edebilmek
+Sensör bağlantı durumunu kolayca anlayabilmek
+Karmaşık olmayan, hızlı öğrenilebilen bir uygulama deneyimi yaşamak
+Bu değerlendirmelere göre uygulamanın özellikle sadelik, erişilebilirlik ve veri okunabilirliği üzerine kurulması gerektiği sonucuna ulaşılmıştır.
+
+4. Wireframe ve Prototip Taslaklarının Planlanması
+Araştırma sonucunda uygulama için temel ekran yapıları belirlenmiştir. Bunlar:
+Ana Ekran (Dashboard): Günlük hedef, özet performans verileri ve hızlı başlat butonu
+Antrenman Takip Ekranı: Canlı sensör verileri, süre, tempo ve durum bilgisi
+Analiz Ekranı: Geçmiş veriler, grafikler ve karşılaştırmalı performans analizi
+Cihazlar Ekranı: Giyilebilir cihaz bağlantısı ve senkronizasyon ayarları
+Profil Ekranı: Kullanıcı bilgileri, hedefler ve kişisel ayarlar
+Bu ekranlar için düşük sadakatli wireframe mantığında bir yapı planlanmış, ekranlar arası geçiş akışı sade ve anlaşılır olacak şekilde düşünülmüştür.
+
+5. Kullanıcı Test Senaryolarının Oluşturulması
+Uygulamanın kullanılabilirliğini değerlendirmek amacıyla temel kullanıcı test senaryoları oluşturulmuştur. Örnek senaryolar şunlardır:
+Kullanıcının uygulamaya giriş yapıp ana performans ekranını görüntülemesi
+Akıllı saat veya fitness cihazını uygulamaya bağlaması
+Günlük antrenman başlatma ve takip ekranını kullanması
+Geçmiş performans grafiklerini incelemesi
+Kendisi için önerilen antrenman planını görüntülemesi
+Bu senaryolar sayesinde arayüzde olası kullanım sorunlarının erken aşamada fark edilmesi hedeflenmiştir.
+
+Genel Sonuç
+Bu çalışma kapsamında, Akıllı Sporcu Performans Takip Uygulaması için modern, kullanıcı dostu ve sporcu ihtiyaçlarına uygun bir UI/UX yapısının nasıl tasarlanması gerektiği araştırılmıştır. Elde edilen bulgular doğrultusunda, uygulamanın sade bir ana ekran, güçlü veri görselleştirme yapısı, kolay cihaz entegrasyonu ve kullanıcıyı yönlendiren etkileşimli bir deneyim sunması gerektiği belirlenmiştir.
+
+
+
+
+## Hafta 3
+
 ### API Tasarımı
 - Sorumlu: Sıla Ağgül
 - Durum: Tamamlandı
@@ -458,67 +520,3 @@ Yapay Zeka (TensorFlow Lite) Veri Katmanı: Performans analiz algoritmalarının
 Güvenlik ve KVKK Uyumluluğu: Veritabanı seviyesinde veri güvenliği önceliklendirilmiştir. Hassas sağlık verileri ve kişisel bilgiler şifrelenmiş kolonlarda saklanacak şekilde planlanmıştır. Erişim kontrolleri (Role-Based Access Control) ile yalnızca yetkili kullanıcıların kendi sağlık verilerine erişimi teknik olarak kısıtlanmıştır.
 
 Gelecek Planlaması ve Genişletilebilirlik: Tasarlanan veritabanı şeması modüler bir yapıdadır. İlerleyen aşamalarda yeni sensör türleri (örneğin; uyku takip verileri veya beslenme tabloları) eklendiğinde mevcut mimariyi bozmadan kolayca entegre edilebilecek esnekliktedir. NoSQL ve Relational yapıların avantajları birleştirilerek sistemin binlerce eş zamanlı kullanıcıya hizmet verebilecek kapasiteye ulaşması hedeflenmiştir.
-
-
-
-### Kullanıcı Arayüzü (UI) ve Kullanıcı Deneyimi (UX) Tasarımı Araştırması
-- Sorumlu: Asım Gökalp
-- Durum: Tamamlandı
-- Yapılan:
-
-Akıllı Sporcu Performans Takip Uygulaması için kullanıcı dostu, sade ve etkileşimli bir arayüz yapısı oluşturulabilmesi amacıyla spor ve sağlık odaklı mobil uygulamalardaki güncel UI/UX trendleri araştırılmıştır. Araştırma sürecinde hem kullanıcı beklentileri hem de rakip uygulamaların tasarım yaklaşımları dikkate alınmıştır.
-
-1. Spor Uygulamalarındaki Güncel UI/UX Trendlerinin İncelenmesi
-Sporcu performans takibi yapan uygulamalarda öne çıkan tasarım yaklaşımları analiz edilmiştir. Bu kapsamda özellikle aşağıdaki noktalar değerlendirilmiştir:
-Gerçek zamanlı veri gösterimi
-Basit ve okunabilir gösterge panelleri
-Grafik destekli performans izleme
-Hedef odaklı kart yapıları
-Kullanıcıyı motive eden bildirim ve geri bildirim mekanizmaları
-Minimal ve dikkat dağıtmayan renk kullanımı
-Araştırma sonucunda, sporcu odaklı uygulamalarda verinin karmaşık şekilde değil, sade ve anlamlı ekran bileşenleriyle sunulmasının kullanıcı deneyimini önemli ölçüde artırdığı belirlenmiştir.
-
-2. Rakip Uygulama Analizi
-Benzer alanda hizmet veren spor ve sağlık uygulamalarının arayüz yapıları incelenmiştir. Özellikle performans takibi, aktivite analizi ve hedef yönetimi sunan uygulamalardaki güçlü ve zayıf yönler değerlendirilmiştir. Bu incelemeler sonucunda:
-Başarılı uygulamaların kullanıcıyı fazla menü içinde kaybetmediği
-Ana ekranda en kritik verileri doğrudan sunduğu
-Kullanıcının günlük, haftalık ve aylık gelişimini görselleştirdiği
-Sensör bağlantısı ve veri senkronizasyonunu kolay anlaşılır şekilde yönettiği
-tespit edilmiştir.
-Geliştirilmesi gereken yönler arasında ise bazı uygulamalarda ekran yoğunluğunun fazla olması, veri görselleştirmesinin karmaşıklaşması ve yeni kullanıcılar için ilk kullanım deneyiminin yeterince yönlendirilmemesi yer almaktadır.
-
-3. Kullanıcı İhtiyaçlarının Belirlenmesi
-Uygulamanın hedef kitlesi olan sporcuların temel beklentileri analiz edilmiştir. Bu kapsamda kullanıcıların uygulamadan şu ihtiyaçları karşılaması beklenmektedir:
-Günlük performans verilerini hızlı şekilde görebilmek
-Kalp atışı, kalori, adım ve süre gibi temel metrikleri tek ekranda izleyebilmek
-Kişiselleştirilmiş antrenman önerileri alabilmek
-Geçmiş performansını grafiklerle takip edebilmek
-Sensör bağlantı durumunu kolayca anlayabilmek
-Karmaşık olmayan, hızlı öğrenilebilen bir uygulama deneyimi yaşamak
-Bu değerlendirmelere göre uygulamanın özellikle sadelik, erişilebilirlik ve veri okunabilirliği üzerine kurulması gerektiği sonucuna ulaşılmıştır.
-
-4. Wireframe ve Prototip Taslaklarının Planlanması
-Araştırma sonucunda uygulama için temel ekran yapıları belirlenmiştir. Bunlar:
-Ana Ekran (Dashboard): Günlük hedef, özet performans verileri ve hızlı başlat butonu
-Antrenman Takip Ekranı: Canlı sensör verileri, süre, tempo ve durum bilgisi
-Analiz Ekranı: Geçmiş veriler, grafikler ve karşılaştırmalı performans analizi
-Cihazlar Ekranı: Giyilebilir cihaz bağlantısı ve senkronizasyon ayarları
-Profil Ekranı: Kullanıcı bilgileri, hedefler ve kişisel ayarlar
-Bu ekranlar için düşük sadakatli wireframe mantığında bir yapı planlanmış, ekranlar arası geçiş akışı sade ve anlaşılır olacak şekilde düşünülmüştür.
-
-5. Kullanıcı Test Senaryolarının Oluşturulması
-Uygulamanın kullanılabilirliğini değerlendirmek amacıyla temel kullanıcı test senaryoları oluşturulmuştur. Örnek senaryolar şunlardır:
-Kullanıcının uygulamaya giriş yapıp ana performans ekranını görüntülemesi
-Akıllı saat veya fitness cihazını uygulamaya bağlaması
-Günlük antrenman başlatma ve takip ekranını kullanması
-Geçmiş performans grafiklerini incelemesi
-Kendisi için önerilen antrenman planını görüntülemesi
-Bu senaryolar sayesinde arayüzde olası kullanım sorunlarının erken aşamada fark edilmesi hedeflenmiştir.
-
-Genel Sonuç
-Bu çalışma kapsamında, Akıllı Sporcu Performans Takip Uygulaması için modern, kullanıcı dostu ve sporcu ihtiyaçlarına uygun bir UI/UX yapısının nasıl tasarlanması gerektiği araştırılmıştır. Elde edilen bulgular doğrultusunda, uygulamanın sade bir ana ekran, güçlü veri görselleştirme yapısı, kolay cihaz entegrasyonu ve kullanıcıyı yönlendiren etkileşimli bir deneyim sunması gerektiği belirlenmiştir.
-
-
-
-
-## Hafta 3
