@@ -370,6 +370,31 @@ Genel Sonuç
 Bu çalışma kapsamında, Akıllı Sporcu Performans Takip Uygulaması için modern, kullanıcı dostu ve sporcu ihtiyaçlarına uygun bir UI/UX yapısının nasıl tasarlanması gerektiği araştırılmıştır. Elde edilen bulgular doğrultusunda, uygulamanın sade bir ana ekran, güçlü veri görselleştirme yapısı, kolay cihaz entegrasyonu ve kullanıcıyı yönlendiren etkileşimli bir deneyim sunması gerektiği belirlenmiştir.
 
 
+### Mobil Uygulama (iOS ve Android) Mimari Tasarımı:
+- Sorumlu: Baver Katar
+- Durum: Devam Ediyor
+- Yapılan:
+
+
+### Kişiselleştirilmiş Antrenman Planı Oluşturucu Tasarımı:
+- Sorumlu: Sıla Ağgül
+- Durum: Devam Ediyor
+- Yapılan:
+
+
+### Performans Analiz Algoritmaları Araştırması ve Seçimi:
+- Sorumlu: Şevval Bulut
+- Durum: Devam Ediyor
+- Yapılan:
+
+
+### Veri Toplama ve Senkronizasyon Modülü Gereksinim Analizi:
+- Sorumlu: Nur Beyda Genç
+- Durum: Devam Ediyor
+- Yapılan: 
+
+
+
 
 
 ## Hafta 3
@@ -520,3 +545,38 @@ Yapay Zeka (TensorFlow Lite) Veri Katmanı: Performans analiz algoritmalarının
 Güvenlik ve KVKK Uyumluluğu: Veritabanı seviyesinde veri güvenliği önceliklendirilmiştir. Hassas sağlık verileri ve kişisel bilgiler şifrelenmiş kolonlarda saklanacak şekilde planlanmıştır. Erişim kontrolleri (Role-Based Access Control) ile yalnızca yetkili kullanıcıların kendi sağlık verilerine erişimi teknik olarak kısıtlanmıştır.
 
 Gelecek Planlaması ve Genişletilebilirlik: Tasarlanan veritabanı şeması modüler bir yapıdadır. İlerleyen aşamalarda yeni sensör türleri (örneğin; uyku takip verileri veya beslenme tabloları) eklendiğinde mevcut mimariyi bozmadan kolayca entegre edilebilecek esnekliktedir. NoSQL ve Relational yapıların avantajları birleştirilerek sistemin binlerce eş zamanlı kullanıcıya hizmet verebilecek kapasiteye ulaşması hedeflenmiştir.
+
+
+
+## Hafta 4
+
+### SQLite Veritabanı Entegrasyonu ve Veri Modeli Oluşturma (Android):
+- Sorumlu: Sıla Ağgül
+- Durum: Devam Ediyor
+- Yapılan:
+
+
+### Temel Performans Analizi Algoritması Geliştirme (Koşu):
+- Sorumlu: Baver Katar
+- Durum: Devam Ediyor
+- Yapılan:
+
+
+ ### REST API Entegrasyonu için Temel Veri Alma Fonksiyonları (iOS)
+ - Sorumlu: Asım Gökalp
+ - Durum:
+ - Yapılan:
+
+ 
+ ### Firebase ile Temel Kullanıcı Kimlik Doğrulama Entegrasyonu (Android):
+ - Sorumlu: Şevval Bulut
+ - Durum: Devam Ediyor
+ - Yapılan:
+
+
+ ### Bluetooth LE Veri Senkronizasyon Entegrasyonu (iOS):
+ - Sorumlu: Nur Beyda Genç
+ - Durum: Devam Ediyor
+ - Yapılan:
+
+   
