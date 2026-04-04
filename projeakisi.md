@@ -395,7 +395,8 @@ Son olarak, sistemin uzun vadeli hedefleri arasında yapay zeka destekli form an
 
 
 
-![Ekran Resmi 2026-04-04 20 11 41](https://github.com/user-attachments/assets/ad727359-0186-4518-9751-276061ba0308)
+![Kişiselleştirilmiş Antrenman Planı Oluşturucu 2](https://github.com/user-attachments/assets/287bfc76-0664-48ad-8d0c-2787bf316242)
+
 
 
 
