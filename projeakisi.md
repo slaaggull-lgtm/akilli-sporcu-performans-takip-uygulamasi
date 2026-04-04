@@ -394,6 +394,14 @@ Görsel tasarım aşamasında, kullanıcı deneyimini (UX) ön planda tutan bir 
 Son olarak, sistemin uzun vadeli hedefleri arasında yapay zeka destekli form analizi entegrasyonu bulunmaktadır. Tasarlanan veri modeli, gelecekte kameradan alınacak görüntülerin işlenmesine uygun şekilde "iskelet sistemi koordinat verilerini" kabul edebilecek esnekliktedir. Mevcut antrenman planlayıcı, kullanıcının sadece ne yapacağını değil, neden yapması gerektiğini de açıklayan kısa bilgilendirme notları ile desteklenmiştir. Bu sayede sporcu bilinci artırılarak sürdürülebilir bir fitness alışkanlığı hedeflenmektedir.
 
 
+
+![Ekran Resmi 2026-04-04 20 11 41](https://github.com/user-attachments/assets/ad727359-0186-4518-9751-276061ba0308)
+
+
+
+
+
+
 ### Performans Analiz Algoritmaları Araştırması ve Seçimi:
 - Sorumlu: Şevval Bulut
 - Durum: Devam Ediyor
@@ -564,7 +572,7 @@ Gelecek Planlaması ve Genişletilebilirlik: Tasarlanan veritabanı şeması mod
 
 ### SQLite Veritabanı Entegrasyonu ve Veri Modeli Oluşturma (Android):
 - Sorumlu: Sıla Ağgül
-- Durum: Devam Ediyor
+- Durum: Tamamlandı
 - Yapılan:
 
 Android platformunda veri yönetimi için endüstri standardı olan SQLite altyapısı tercih edilmiş; ancak verimliliği artırmak ve hata payını düşürmek adına "Room Persistence Library" katmanı projeye dahil edilmiştir. Room kullanımı, SQL sorgularının derleme zamanında kontrol edilmesine olanak tanıyan bir soyutlama katmanı sunarak uygulamanın çalışma anındaki olası çökmelerini engellemektedir. Bu mimari tercih, veri tabanı şemasının daha güvenli yönetilmesini ve veri erişim nesneleri sayesinde işlemlerin modüler bir hale getirilmesini sağlamıştır.
@@ -578,6 +586,7 @@ Sistem tasarımı sadece veri depolamayı değil, verinin doğruluğunu ve gelec
 Veri tabanı mimarisinde "Repository" deseni uygulanarak, verinin kaynağı ile arayüz arasındaki bağ zayıflatılmış (Decoupling) ve test edilebilir bir yapı oluşturulmuştur. Bu sayede gelecekte verilerin bir kısmının bulut sistemine (Cloud Storage) taşınması durumunda arayüz kodlarında büyük değişiklikler yapılmasına gerek kalmayacaktır. Local-first yaklaşımı ile tasarlanan bu yapı, kullanıcının internet bağlantısı olmadığı durumlarda bile tüm antrenman geçmişine erişebilmesini ve yeni kayıtlar ekleyebilmesini mümkün kılmaktadır.
 
 Son aşamada, veritabanı şeması içerisine "JSON Type Converter" yapıları eklenerek karmaşık liste verilerinin de SQLite içinde verimli bir şekilde saklanması sağlanmıştır. Örneğin, bir setin içindeki farklı dinlenme süreleri veya özel notlar, tek bir sütunda JSON formatında tutularak tablo karmaşıklığı azaltılmıştır. Bu modern veri saklama teknikleri, uygulamanın hem hafif kalmasını hem de gelecekteki karmaşık özelliklere (giyilebilir teknoloji senkronizasyonu vb.) hızlıca adapte olmasını sağlayacak bir zemin oluşturmaktadır.
+
 
 ![Ekran Resmi 2026-04-04 20 06 04](https://github.com/user-attachments/assets/caeb6ef4-7b99-4127-a38f-73ce026d9fae)
 
