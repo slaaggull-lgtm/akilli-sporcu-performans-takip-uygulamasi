@@ -378,8 +378,20 @@ Bu çalışma kapsamında, Akıllı Sporcu Performans Takip Uygulaması için mo
 
 ### Kişiselleştirilmiş Antrenman Planı Oluşturucu Tasarımı:
 - Sorumlu: Sıla Ağgül
-- Durum: Devam Ediyor
+- Durum: Tamamlandı
 - Yapılan:
+  
+- Projenin temelini oluşturan kişiselleştirilmiş antrenman modülü, statik programların aksine kullanıcının biyometrik verilerini ve geçmiş spor deneyimini merkeze alan bir algoritma üzerine kurgulanmıştır. Bu aşamada; yaş, cinsiyet, boy/kilo endeksi (BMI) ve mevcut bazal metabolizma hızı gibi temel parametreler, antrenman yoğunluğunun belirlenmesinde birincil filtre olarak kullanılmıştır. Kullanıcının "sedanter", "orta seviye" veya "aktif sporcu" şeklindeki geçmiş beyanı, sakatlık riskini minimize etmek adına başlangıç ağırlıklarını ve set aralıklarını belirleyen kritik bir veri seti olarak modele dahil edilmiştir.
+
+Tasarlanan sistemde, antrenman planlarının sadece başlangıçta değil, süreç içerisinde de evrilmesi hedeflenmiştir. Bu bağlamda, "Algılanan Zorluk Derecesi" (RPE - Rate of Perceived Exertion) skalası entegre edilerek, sporcunun her set sonundaki geri bildirimi üzerinden bir sonraki haftanın yükleme parametreleri (Volume/Intensity) otomatik olarak ayarlanmaktadır. Eğer bir kullanıcı belirli bir harekette hedef tekrar sayısına "çok kolay" ulaşıyorsa, sistem bir sonraki döngüde %5 ile %10 arasında bir ağırlık artırımı veya dinlenme süresinde daralma planlayarak gelişimi maksimize etmektedir.
+
+Antrenman planlarının içeriği; ısınma, ana evre ve soğuma olmak üzere üç temel fazdan oluşan modüler bir kütüphane üzerinden tanımlanmıştır. Ana evre içerisinde bileşik hareketler ve izole egzersizler, sporcunun hedefine göre farklı hacimlerde dağıtılmaktadır. Her egzersiz için belirlenen set, tekrar ve tempo süreleri, kas grubunun toparlanma süreci gözetilerek takvime yerleştirilmiştir. Bu modüler yapı, kullanıcının o günkü enerji seviyesine göre antrenman süresini kısaltıp uzatabilmesine olanak tanıyan esnek bir mimariye sahiptir.
+
+Sistemin en güçlü yanını oluşturan dinamik güncelleme mekanizması, sporcunun performans grafiklerini sürekli analiz eden bir yapı üzerine kuruludur. Kullanıcının nabız verileri veya bitirilen setlerdeki istikrarı, programın dinlenme haftası periyotlarını otomatik olarak hesaplamasını sağlar. Bu sayede sporcu aşırı antrenman riskinden korunurken, plato dönemlerini aşmak için sistem tarafından periyodik olarak farklı antrenman varyasyonları önerilerek planın güncelliği korunmaktadır. Kullanıcı verileri biriktikçe, algoritma kişiye özel "en verimli saatleri" de tahminleme yeteneğine sahip olacaktır.
+
+Görsel tasarım aşamasında, kullanıcı deneyimini (UX) ön planda tutan bir "dashboard" yapısı kurgulanmıştır. Sporcu, o gün yapması gereken egzersizleri sadece isim olarak değil, hedef kas gruplarını gösteren anatomik haritalar eşliğinde görebilecektir. Antrenman esnasında setler arası kronometre takibi ve bir önceki antrenmanda kaldırılan ağırlığın referans olarak gösterilmesi, motivasyonu artırıcı bir unsur olarak tasarıma eklenmiştir. Bu etkileşimli yapı, sporcunun uygulamayı sadece bir liste olarak değil, bir dijital koç olarak görmesini sağlayacaktır.
+
+Son olarak, sistemin uzun vadeli hedefleri arasında yapay zeka destekli form analizi entegrasyonu bulunmaktadır. Tasarlanan veri modeli, gelecekte kameradan alınacak görüntülerin işlenmesine uygun şekilde "iskelet sistemi koordinat verilerini" kabul edebilecek esnekliktedir. Mevcut antrenman planlayıcı, kullanıcının sadece ne yapacağını değil, neden yapması gerektiğini de açıklayan kısa bilgilendirme notları ile desteklenmiştir. Bu sayede sporcu bilinci artırılarak sürdürülebilir bir fitness alışkanlığı hedeflenmektedir.
 
 
 ### Performans Analiz Algoritmaları Araştırması ve Seçimi:
@@ -554,6 +566,18 @@ Gelecek Planlaması ve Genişletilebilirlik: Tasarlanan veritabanı şeması mod
 - Sorumlu: Sıla Ağgül
 - Durum: Devam Ediyor
 - Yapılan:
+
+Android platformunda veri yönetimi için endüstri standardı olan SQLite altyapısı tercih edilmiş; ancak verimliliği artırmak ve hata payını düşürmek adına "Room Persistence Library" katmanı projeye dahil edilmiştir. Room kullanımı, SQL sorgularının derleme zamanında kontrol edilmesine olanak tanıyan bir soyutlama katmanı sunarak uygulamanın çalışma anındaki olası çökmelerini engellemektedir. Bu mimari tercih, veri tabanı şemasının daha güvenli yönetilmesini ve veri erişim nesneleri sayesinde işlemlerin modüler bir hale getirilmesini sağlamıştır.
+
+Uygulamanın omurgasını oluşturan veri modelleri; kullanıcı profili, antrenman planları, egzersiz kayıtları ve performans istatistikleri olmak üzere dört ana tablo üzerine kurgulanmıştır. Kullanıcı profili tablosunda biyometrik veriler saklanırken, antrenman planları ile egzersiz içerikleri arasında "Bire-Çok" ilişkisi kurulmuştur. Bu ilişkisel model, kullanıcının geçmişteki her bir antrenman seansını, yapılan setleri ve kaldırılan ağırlıkları en ince ayrıntısına kadar sorgulayabilmemize ve performans grafiklerini geçmişe dönük olarak oluşturabilmemize imkan tanımaktadır.
+
+Veritabanı işlemlerinin ana iş parçacığını bloke ederek kullanıcı arayüzünde takılmalara yol açmaması için tüm operasyonlar asenkron bir yapıda tasarlanmıştır. Bu noktada Kotlin'in Coroutines yapısı ve IO kapsamı kullanılarak veritabanı sorguları arka planda yürütülmektedir. Ayrıca, büyük veri setlerinde sorgu hızını artırmak amacıyla sık kullanılan sütunlara indeksleme uygulanarak arama süreleri minimize edilmiştir. Veri tabanı erişim hızı, uygulamanın genel akıcılığını doğrudan etkileyen bir parametre olarak optimize edilmiştir.
+
+Sistem tasarımı sadece veri depolamayı değil, verinin doğruluğunu ve gelecekteki güncellemeleri de kapsamaktadır. Kullanıcıdan gelen veriler veritabanına kaydedilmeden önce bir doğrulama katmanından geçirilerek hatalı veri girişi engellenmektedir. Ayrıca, uygulamanın ilerleyen versiyonlarında şemada yapılacak değişiklikler için versiyon yükseltme stratejisi belirlenmiş, böylece kullanıcıların mevcut antrenman verileri kaybolmadan sistemin güncellenmesi garanti altına alınmıştır. Bu süreç, veri bütünlüğünü (Data Integrity) korumak adına birincil öncelik olarak ele alınmıştır.
+
+Veri tabanı mimarisinde "Repository" deseni uygulanarak, verinin kaynağı ile arayüz arasındaki bağ zayıflatılmış (Decoupling) ve test edilebilir bir yapı oluşturulmuştur. Bu sayede gelecekte verilerin bir kısmının bulut sistemine (Cloud Storage) taşınması durumunda arayüz kodlarında büyük değişiklikler yapılmasına gerek kalmayacaktır. Local-first yaklaşımı ile tasarlanan bu yapı, kullanıcının internet bağlantısı olmadığı durumlarda bile tüm antrenman geçmişine erişebilmesini ve yeni kayıtlar ekleyebilmesini mümkün kılmaktadır.
+
+Son aşamada, veritabanı şeması içerisine "JSON Type Converter" yapıları eklenerek karmaşık liste verilerinin de SQLite içinde verimli bir şekilde saklanması sağlanmıştır. Örneğin, bir setin içindeki farklı dinlenme süreleri veya özel notlar, tek bir sütunda JSON formatında tutularak tablo karmaşıklığı azaltılmıştır. Bu modern veri saklama teknikleri, uygulamanın hem hafif kalmasını hem de gelecekteki karmaşık özelliklere (giyilebilir teknoloji senkronizasyonu vb.) hızlıca adapte olmasını sağlayacak bir zemin oluşturmaktadır.
 
 
 ### Temel Performans Analizi Algoritması Geliştirme (Koşu):
