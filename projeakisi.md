@@ -600,9 +600,222 @@ Son aşamada, veritabanı şeması içerisine "JSON Type Converter" yapıları e
 
 
  ### REST API Entegrasyonu için Temel Veri Alma Fonksiyonları (iOS)
- - Sorumlu: Asım Gökalp
- - Durum:
- - Yapılan:
+
+- Sorumlu: Asım Gökalp
+- Durum: Tamamlandı
+- Yapılan:
+
+  - Swift dili kullanılarak REST API’den veri alma işlemleri için temel yapı oluşturuldu.
+  - URLSession ile API’ye GET isteği gönderme işlemi geliştirildi.
+  - JSON formatındaki yanıtların Codable kullanılarak veri modellerine dönüştürülmesi sağlandı.
+  - Ağ bağlantısı, sunucu yanıtı ve veri çözümleme hataları için temel hata yönetimi eklendi.
+  - Mock JSON verisi kullanılarak veri çözümleme testi yapıldı ve sonuçlar konsolda doğrulandı.:
+
+  import Foundation
+
+// MARK: - Veri Modelleri
+
+struct WorkoutPlan: Codable {
+    let id: Int
+    let title: String
+    let description: String
+    let duration: Int // dakika
+    let exercises: [Exercise]
+}
+
+struct Exercise: Codable {
+    let id: Int
+    let name: String
+    let sets: Int
+    let reps: Int
+    let restSeconds: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case id, name, sets, reps
+        case restSeconds = "rest_seconds"
+    }
+}
+
+// MARK: - Hata Tipleri
+
+enum APIError: Error, LocalizedError {
+    case invalidURL
+    case noData
+    case decodingError(String)
+    case serverError(Int)
+    case networkError(String)
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL:
+            return "Geçersiz URL."
+        case .noData:
+            return "Sunucudan veri alınamadı."
+        case .decodingError(let msg):
+            return "Veri çözümleme hatası: \(msg)"
+        case .serverError(let code):
+            return "Sunucu hatası: HTTP \(code)"
+        case .networkError(let msg):
+            return "Ağ bağlantısı hatası: \(msg)"
+        }
+    }
+}
+
+// MARK: - API Servisi
+
+class WorkoutAPIService {
+    
+    static let shared = WorkoutAPIService()
+    
+    private let baseURL = "https://api.example.com" // Gerçek API adresiyle değiştir
+    private let session: URLSession
+    
+    private init() {
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 30
+        config.timeoutIntervalForResource = 60
+        self.session = URLSession(configuration: config)
+    }
+    
+    // MARK: - Tüm Antrenman Planlarını Getir
+    
+    func fetchWorkoutPlans(completion: @escaping (Result<[WorkoutPlan], APIError>) -> Void) {
+        guard let url = URL(string: "\(baseURL)/workout-plans") else {
+            completion(.failure(.invalidURL))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        // request.setValue("Bearer TOKEN", forHTTPHeaderField: "Authorization")
+        
+        performRequest(request: request, completion: completion)
+    }
+    
+    // MARK: - Belirli Bir Antrenman Planını Getir
+    
+    func fetchWorkoutPlan(id: Int, completion: @escaping (Result<WorkoutPlan, APIError>) -> Void) {
+        guard let url = URL(string: "\(baseURL)/workout-plans/\(id)") else {
+            completion(.failure(.invalidURL))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        performRequest(request: request, completion: completion)
+    }
+    
+    // MARK: - Genel İstek Fonksiyonu
+    
+    private func performRequest<T: Decodable>(
+        request: URLRequest,
+        completion: @escaping (Result<T, APIError>) -> Void
+    ) {
+        session.dataTask(with: request) { data, response, error in
+            
+            DispatchQueue.main.async {
+                
+                // Ağ hatası kontrolü
+                if let error = error {
+                    completion(.failure(.networkError(error.localizedDescription)))
+                    return
+                }
+                
+                // HTTP durum kodu kontrolü
+                if let httpResponse = response as? HTTPURLResponse {
+                    guard (200...299).contains(httpResponse.statusCode) else {
+                        completion(.failure(.serverError(httpResponse.statusCode)))
+                        return
+                    }
+                }
+                
+                // Veri kontrolü
+                guard let data = data else {
+                    completion(.failure(.noData))
+                    return
+                }
+                
+                // JSON çözümleme
+                do {
+                    let decoder = JSONDecoder()
+                    let decoded = try decoder.decode(T.self, from: data)
+                    completion(.success(decoded))
+                } catch {
+                    completion(.failure(.decodingError(error.localizedDescription)))
+                }
+            }
+            
+        }.resume()
+    }
+}
+
+// MARK: - Kullanım Örneği (ViewController veya ViewModel içinde)
+
+class WorkoutViewModel {
+    
+    func loadWorkoutPlans() {
+        WorkoutAPIService.shared.fetchWorkoutPlans { result in
+            switch result {
+            case .success(let plans):
+                print("✅ \(plans.count) antrenman planı alındı.")
+                for plan in plans {
+                    print("📋 Plan: \(plan.title) - \(plan.duration) dk")
+                    for exercise in plan.exercises {
+                        print("   💪 \(exercise.name): \(exercise.sets) set x \(exercise.reps) tekrar")
+                    }
+                }
+                
+            case .failure(let error):
+                print("❌ Hata: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func loadSinglePlan(id: Int) {
+        WorkoutAPIService.shared.fetchWorkoutPlan(id: id) { result in
+            switch result {
+            case .success(let plan):
+                print("✅ Plan alındı: \(plan.title)")
+            case .failure(let error):
+                print("❌ Hata: \(error.localizedDescription)")
+            }
+        }
+    }
+}
+
+// MARK: - Test (Mock Data ile)
+
+func testWithMockData() {
+    let mockJSON = """
+    [
+        {
+            "id": 1,
+            "title": "Üst Vücut Antrenmanı",
+            "description": "Göğüs, sırt ve omuz egzersizleri",
+            "duration": 60,
+            "exercises": [
+                { "id": 1, "name": "Bench Press", "sets": 4, "reps": 10, "rest_seconds": 90 },
+                { "id": 2, "name": "Pull-Up", "sets": 3, "reps": 8, "rest_seconds": 60 }
+            ]
+        }
+    ]
+    """.data(using: .utf8)!
+    
+    do {
+        let plans = try JSONDecoder().decode([WorkoutPlan].self, from: mockJSON)
+        print("✅ Mock veri başarıyla çözümlendi: \(plans.first?.title ?? "")")
+    } catch {
+        print("❌ Mock veri hatası: \(error)")
+    }
+}
+
+// Test et
+testWithMockData()
+let vm = WorkoutViewModel()
+vm.loadWorkoutPlans()
 
  
  ### Firebase ile Temel Kullanıcı Kimlik Doğrulama Entegrasyonu (Android):
