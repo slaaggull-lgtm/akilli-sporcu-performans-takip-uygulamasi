@@ -409,25 +409,30 @@ Son olarak, sistemin uzun vadeli hedefleri arasında yapay zeka destekli form an
 - Yapılan:
 - Performans Analiz Algoritmaları Araştırması ve Seçimi
 1. Giriş
+   
 Bu rapor, sporcu performansını değerlendirmek için kullanılabilecek makine öğrenimi algoritmalarını araştırmak, karşılaştırmak ve proje gereksinimlerine en uygun algoritmayı seçmek amacıyla hazırlanmıştır. Algoritmaların avantajları, dezavantajları ve uygulama alanları incelenmiş, eğitim ve optimizasyon planları oluşturulmuştur.
-2. Araştırılan Algoritmalar
-Algoritma	Açıklama
-Linear Regression	Sürekli performans ölçümlerini tahmin etmek için kullanılır (ör: koşu süresi).
-Decision Tree	Kolay anlaşılır sınıflandırma algoritması, sporcu seviyesini sınıflandırmak için uygundur.
-Random Forest	Birden fazla karar ağacının birleşimi ile daha doğru ve dayanıklı sınıflandırma sağlar.
+3. Araştırılan Algoritmalar
+
+Algoritma	                        Açıklama
+Linear Regression	             Sürekli performans ölçümlerini tahmin etmek için kullanılır (ör: koşu süresi).
+
+Decision Tree	                 Kolay anlaşılır sınıflandırma algoritması, sporcu seviyesini sınıflandırmak için uygundur.
+Random Forest	                 Birden fazla karar ağacının birleşimi ile daha doğru ve dayanıklı sınıflandırma sağlar.
+
 Support Vector
- Machine (SVM)	Sınıflandırma için yüksek doğruluk sağlar, ancak veri boyutu arttıkça yavaşlayabilir.
+ Machine (SVM)	                 Sınıflandırma için yüksek doğruluk sağlar, ancak veri boyutu arttıkça yavaşlayabilir.
+
 K-Nearest Neighbors
- (KNN)	Benzer sporculara göre performans tahmini yapabilir; hesaplama maliyeti yüksektir.
+ (KNN)	                    Benzer sporculara göre performans tahmini yapabilir; hesaplama maliyeti yüksektir.
+
 Neural Network 
-(TensorFlow Lite)	Karmaşık ilişkileri öğrenebilir ve mobil cihazlarda çalışabilir; eğitim süreci daha uzun ve veri yoğun olabilir.
+(TensorFlow Lite)	           Karmaşık ilişkileri öğrenebilir ve mobil cihazlarda çalışabilir; eğitim süreci daha uzun ve veri yoğun olabilir.
 
-3. Algoritmaların Karşılaştırması
+4. Algoritmaların Karşılaştırması
 
-Algoritma
-	Avantaj	Dezavantaj	Uygulama Alanı
-Decision Tree	Kolay yorumlanır, hızlı
-	Overfitting riski yüksek	Sporcu seviyesi sınıflandırma
+Algoritma                        Avantaj	                      Dezavantaj	          Uygulama Alanı
+Decision Tree	           Kolay yorumlanır, hızlı         Overfitting riski yüksek          Sporcu seviyesi sınıflandırma
+		
 Random Forest	Daha doğru ve dayanıklı	Daha fazla hesaplama gücü gerektirir	Performans tahmini ve sınıflandırma
 SVM	Yüksek doğruluk
 	Büyük veri ile yavaş	Sınıflandırma
