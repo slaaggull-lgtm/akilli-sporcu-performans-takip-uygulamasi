@@ -407,67 +407,150 @@ Son olarak, sistemin uzun vadeli hedefleri arasında yapay zeka destekli form an
 - Sorumlu: Şevval Bulut
 - Durum: Devam Ediyor
 - Yapılan:
-- Performans Analiz Algoritmaları Araştırması ve Seçimi
+📊 Sporcu Performans Analizi İçin Makine Öğrenimi Algoritmalarının Karşılaştırılması ve Seçimi
 1. Giriş
-   
-Bu rapor, sporcu performansını değerlendirmek için kullanılabilecek makine öğrenimi algoritmalarını araştırmak, karşılaştırmak ve proje gereksinimlerine en uygun algoritmayı seçmek amacıyla hazırlanmıştır. Algoritmaların avantajları, dezavantajları ve uygulama alanları incelenmiş, eğitim ve optimizasyon planları oluşturulmuştur.
-3. Araştırılan Algoritmalar
 
-Algoritma	                        Açıklama
-Linear Regression	             Sürekli performans ölçümlerini tahmin etmek için kullanılır (ör: koşu süresi).
+Sporcu performansının doğru ve etkili bir şekilde analiz edilmesi, antrenman süreçlerinin optimize edilmesi ve bireysel gelişimin izlenmesi açısından kritik öneme sahiptir. Giyilebilir teknolojilerin (akıllı saatler, fitness takip cihazları vb.) yaygınlaşmasıyla birlikte büyük miktarda veri elde edilebilmekte ve bu verilerin anlamlı hale getirilmesi için makine öğrenimi yöntemlerine ihtiyaç duyulmaktadır.
 
-Decision Tree	                 Kolay anlaşılır sınıflandırma algoritması, sporcu seviyesini sınıflandırmak için uygundur.
-Random Forest	                 Birden fazla karar ağacının birleşimi ile daha doğru ve dayanıklı sınıflandırma sağlar.
+Bu çalışma kapsamında, sporcu performans analizinde kullanılabilecek çeşitli makine öğrenimi algoritmaları incelenmiş, bu algoritmaların avantajları ve sınırlamaları karşılaştırılmış ve mobil uygulama ortamına en uygun algoritmalar belirlenmiştir. Ayrıca, seçilen algoritmaların eğitimi, optimizasyonu ve performans değerlendirme süreçleri detaylandırılmıştır.
 
-Support Vector
- Machine (SVM)	                 Sınıflandırma için yüksek doğruluk sağlar, ancak veri boyutu arttıkça yavaşlayabilir.
+2. İncelenen Makine Öğrenimi Algoritmaları
 
-K-Nearest Neighbors
- (KNN)	                    Benzer sporculara göre performans tahmini yapabilir; hesaplama maliyeti yüksektir.
+Bu çalışmada hem klasik hem de modern makine öğrenimi yaklaşımları değerlendirilmiştir:
+```
+Algoritma	                                              Tanım	                                                                                             Kullanım Amacı
 
-Neural Network 
-(TensorFlow Lite)	           Karmaşık ilişkileri öğrenebilir ve mobil cihazlarda çalışabilir; eğitim süreci daha uzun ve veri yoğun olabilir.
+Linear Regression	                        Bağımlı ve bağımsız değişkenler arasındaki doğrusal ilişkiyi modelleyen istatistiksel yöntemdir.        	 Sürekli değer tahmini (örneğin performans skoru)
 
-4. Algoritmaların Karşılaştırması
+Decision Tree	                            Veriyi karar düğümleri aracılığıyla parçalayan ağaç tabanlı algoritmadır.	                                  Sınıflandırma ve karar destek
 
-Algoritma                        Avantaj	                      Dezavantaj	          Uygulama Alanı
-Decision Tree	           Kolay yorumlanır, hızlı         Overfitting riski yüksek          Sporcu seviyesi sınıflandırma
-		
-Random Forest	Daha doğru ve dayanıklı	Daha fazla hesaplama gücü gerektirir	Performans tahmini ve sınıflandırma
-SVM	Yüksek doğruluk
-	Büyük veri ile yavaş	Sınıflandırma
-KNN	Basit ve anlaşılır	Hesaplama maliyeti yüksek	Benzer sporculara göre analiz
-Neural Network	Karmaşık ilişkileri öğrenebilir	Karmaşık, veri ve eğitim yoğun	Çoklu parametre tahmini, mobil uygulama
+Random Forest	                            Birden fazla karar ağacının birleşimi ile çalışan topluluk öğrenme yöntemidir.         	                      Daha yüksek doğruluklu sınıflandırma
 
-4. Seçilen Algoritma
-Proje gereksinimleri dikkate alındığında, mobil cihazlarda çalışabilecek, yeterli doğruluk sağlayan ve veri boyutu orta düzeyde olan bir model tercih edilmiştir.
-Seçilen algoritma: Decision Tree ve/veya TensorFlow Lite ile Neural Network
-•	Neden? 
-o	Decision Tree: Hızlı ve yorumlanabilir, az veri ile çalışabilir. 
-o	Neural Network (Lite): Daha karmaşık performans ilişkilerini öğrenebilir, mobilde çalışabilir. 
-5. Eğitim ve Optimizasyon Planı
-1.	Veri Kaynağı 
-o	Kalp atış hızı (bpm) 
-o	Adım sayısı ve hız 
-o	Mesafe ve enerji harcaması 
-o	Antrenman türü ve süre 
-2.	Eğitim Süreci 
-o	Veriyi temizleme ve normalize etme 
-o	Eğitim (train) ve test (test) seti oluşturma 
-o	Algoritmayı eğitme ve optimize etme 
-o	Hiperparametre ayarlamaları 
-3.	Performans Ölçümü 
-o	Doğruluk (Accuracy) 
-o	Hassasiyet (Precision) 
-o	Geri çağırma (Recall) 
-o	F1 skoru (dengeli performans ölçümü) 
-4.	Optimizasyon Yöntemleri 
-o	Overfitting önlemek için cross-validation 
-o	Hiperparametre optimizasyonu (grid search, random search) 
-o	Model küçültme ve TensorFlow Lite dönüşümü ile mobil optimizasyon 
+Support Vector Machine (SVM)	            Verileri ayıran en uygun hiper düzlemi bulan güçlü bir sınıflandırma yöntemidir.	                         Yüksek doğruluk gerektiren sınıflandırma
 
-6. Sonuç
-Bu analiz sonucunda, sporcu performansını mobil uygulama üzerinden değerlendirmek için Decision Tree veya TensorFlow Lite ile Neural Network algoritmaları en uygun seçenekler olarak belirlenmiştir. Bu algoritmaların eğitimi, optimizasyonu ve performans ölçümleri planlanmış ve mobil uygulama entegrasyonu için hazır hale getirilmiştir.
+K-Nearest Neighbors (KNN)	                Yeni bir veriyi en yakın komşularına göre sınıflandırır.           	                                          Benzerlik tabanlı analiz
+
+Yapay Sinir Ağları (TensorFlow Lite)	    İnsan beyninden esinlenen katmanlı yapılar ile karmaşık örüntüleri öğrenir.                                  Karmaşık veri analizi ve tahmin
+```
+ ```
+3. Algoritmaların Karşılaştırmalı Analizi
+
+Algoritma                               	Avantajlar	                   Dezavantajlar	                Uygulama Uygunluğu
+
+Decision Tree	                      Yorumlanabilir, hızlı	          Aşırı öğrenme (overfitting) riski	           Yüksek
+
+Random Forest	                   Yüksek doğruluk, stabil	              Hesaplama maliyeti yüksek	                 Orta
+
+SVM	                            Güçlü genelleme yeteneği	            Büyük veri ile yavaş	                    Orta
+
+KNN                               Basit ve sezgisel	                      Yüksek hesaplama maliyeti             	Düşük
+
+Neural Network                	Karmaşık ilişkileri öğrenir	            Veri ve eğitim maliyeti yüksek	         Çok Yüksek
+```
+
+4. Problem Tanımı ve Model Seçimi
+
+Bu çalışmada ele alınan problem, sporcu performansının çok boyutlu veriler (kalp atış hızı, hız, mesafe vb.) kullanılarak analiz edilmesi ve sınıflandırılmasıdır. Problem hem sınıflandırma hem de tahmin bileşenleri içermektedir.
+
+Proje gereksinimleri doğrultusunda model seçiminde aşağıdaki kriterler dikkate alınmıştır:
+
+Mobil cihazlarda çalışabilirlik
+
+Düşük gecikme süresi
+
+Orta ölçekli veri ile yüksek performans
+
+Yorumlanabilirlik
+
+Seçilen Modeller
+
+Decision Tree
+
+TensorFlow Lite tabanlı Yapay Sinir Ağı
+
+Seçim Gerekçesi
+
+Decision Tree, düşük hesaplama maliyeti ve yorumlanabilirliği sayesinde mobil uygulamalarda hızlı karar mekanizması sunar.
+
+Yapay sinir ağları ise doğrusal olmayan ve karmaşık ilişkileri öğrenerek daha yüksek doğruluk sağlar. TensorFlow Lite ile mobil ortama optimize edilebilir.
+
+5. Veri Seti ve Özellikler
+
+Model eğitiminde kullanılacak veri seti aşağıdaki özellikleri içermektedir:
+
+Kalp atış hızı (bpm)
+
+Adım sayısı
+
+Hız (km/s)
+
+Kat edilen mesafe (km)
+
+Enerji harcaması (kalori)
+
+Antrenman süresi ve türü
+
+Bu veriler giyilebilir sensörlerden elde edilecek olup, zaman serisi ve çok değişkenli veri yapısı içermektedir.
+
+
+
+
+6. Model Eğitimi ve Optimizasyon Süreci
+
+6.1 Veri Ön İşleme
+
+Eksik verilerin temizlenmesi
+
+Aykırı değerlerin tespiti
+
+Normalizasyon ve standardizasyon
+
+6.2 Eğitim Süreci
+
+Veri setinin eğitim (%80) ve test (%20) olarak ayrılması
+
+Modelin eğitim verisi üzerinde öğrenmesi
+
+Test verisi ile performansın değerlendirilmesi
+
+6.3 Hiperparametre Optimizasyonu
+
+Grid Search
+
+Random Search
+
+Cross-validation
+
+6.4 Mobil Optimizasyon
+
+Model küçültme (quantization)
+
+TensorFlow Lite dönüşümü
+
+Bellek ve hız optimizasyonu
+
+7. Performans Değerlendirme Metrikleri
+
+Model performansı aşağıdaki metrikler kullanılarak değerlendirilecektir:
+
+Accuracy (Doğruluk)
+
+Precision (Hassasiyet)
+
+Recall (Duyarlılık)
+
+F1-Score
+
+Bu metrikler, modelin hem genel doğruluğunu hem de dengesiz veri durumlarındaki başarısını ölçmek için kullanılacaktır.
+
+8. Sonuç
+
+Bu çalışma kapsamında, sporcu performans analizine yönelik çeşitli makine öğrenimi algoritmaları detaylı şekilde incelenmiş ve karşılaştırılmıştır. Yapılan analizler sonucunda:
+
+Decision Tree algoritması, hızlı ve yorumlanabilir yapısıyla mobil uygulamalar için uygun bulunmuştur.
+TensorFlow Lite tabanlı Yapay Sinir Ağları, karmaşık veri ilişkilerini öğrenebilme yeteneği sayesinde yüksek doğruluk sunmaktadır.
+
+Bu iki yaklaşımın birlikte kullanılması, hem performans hem de doğruluk açısından dengeli bir çözüm sunmaktadır. Geliştirilecek sistem, sporcuların performansını gerçek zamanlı analiz ederek antrenman süreçlerinin optimize edilmesine katkı sağlayacaktır.
 
 
 
