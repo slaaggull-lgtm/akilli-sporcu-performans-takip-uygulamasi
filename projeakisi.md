@@ -405,9 +405,9 @@ Son olarak, sistemin uzun vadeli hedefleri arasında yapay zeka destekli form an
 
 ### Performans Analiz Algoritmaları Araştırması ve Seçimi:
 - Sorumlu: Şevval Bulut
-- Durum: Devam Ediyor
+- Durum: Tamamlandı
 - Yapılan:
-📊 Sporcu Performans Analizi İçin Makine Öğrenimi Algoritmalarının Karşılaştırılması ve Seçimi
+ Sporcu Performans Analizi İçin Makine Öğrenimi Algoritmalarının Karşılaştırılması ve Seçimi
 1. Giriş
 
 Sporcu performansının doğru ve etkili bir şekilde analiz edilmesi, antrenman süreçlerinin optimize edilmesi ve bireysel gelişimin izlenmesi açısından kritik öneme sahiptir. Giyilebilir teknolojilerin (akıllı saatler, fitness takip cihazları vb.) yaygınlaşmasıyla birlikte büyük miktarda veri elde edilebilmekte ve bu verilerin anlamlı hale getirilmesi için makine öğrenimi yöntemlerine ihtiyaç duyulmaktadır.
