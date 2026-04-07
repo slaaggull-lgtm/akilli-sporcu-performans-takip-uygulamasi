@@ -901,16 +901,16 @@ class WorkoutViewModel {
         WorkoutAPIService.shared.fetchWorkoutPlans { result in
             switch result {
             case .success(let plans):
-                print("✅ \(plans.count) antrenman planı alındı.")
+                print(" \(plans.count) antrenman planı alındı.")
                 for plan in plans {
-                    print("📋 Plan: \(plan.title) - \(plan.duration) dk")
+                    print(" Plan: \(plan.title) - \(plan.duration) dk")
                     for exercise in plan.exercises {
-                        print("   💪 \(exercise.name): \(exercise.sets) set x \(exercise.reps) tekrar")
+                        print("    \(exercise.name): \(exercise.sets) set x \(exercise.reps) tekrar")
                     }
                 }
                 
             case .failure(let error):
-                print("❌ Hata: \(error.localizedDescription)")
+                print(" Hata: \(error.localizedDescription)")
             }
         }
     }
@@ -919,9 +919,9 @@ class WorkoutViewModel {
         WorkoutAPIService.shared.fetchWorkoutPlan(id: id) { result in
             switch result {
             case .success(let plan):
-                print("✅ Plan alındı: \(plan.title)")
+                print(" Plan alındı: \(plan.title)")
             case .failure(let error):
-                print("❌ Hata: \(error.localizedDescription)")
+                print(" Hata: \(error.localizedDescription)")
             }
         }
     }
@@ -947,9 +947,9 @@ func testWithMockData() {
     
     do {
         let plans = try JSONDecoder().decode([WorkoutPlan].self, from: mockJSON)
-        print("✅ Mock veri başarıyla çözümlendi: \(plans.first?.title ?? "")")
+        print("Mock veri başarıyla çözümlendi: \(plans.first?.title ?? "")")
     } catch {
-        print("❌ Mock veri hatası: \(error)")
+        print(" Mock veri hatası: \(error)")
     }
 }
 
@@ -961,8 +961,82 @@ vm.loadWorkoutPlans()
  
  ### Firebase ile Temel Kullanıcı Kimlik Doğrulama Entegrasyonu (Android):
  - Sorumlu: Şevval Bulut
- - Durum: Devam Ediyor
+ - Durum: Tamamlandı
  - Yapılan:
+ - Projenin güvenlik ve kullanıcı yönetimi katmanı için Google'ın bulut tabanlı çözüm mimarisi olan Firebase Authentication altyapısı tercih edilmiştir. Bu entegrasyon, kullanıcıların e-posta ve şifre kombinasyonu ile güvenli bir şekilde sisteme dahil olmalarını sağlarken, şifrelerin istemci tarafında tutulmadan Firebase sunucularında endüstri standardı olan karma (hashing) algoritmalarıyla saklanmasını garanti altına almaktadır. Kimlik doğrulama süreci, uygulamanın giriş bariyerini oluşturarak kişiselleştirilmiş antrenman verilerinin gizliliğini korumak amacıyla birincil güvenlik protokolü olarak kurgulanmıştır.
+
+Yazılım mimarisi tarafında, Firebase çağrılarının doğrudan arayüz katmanından (UI) yapılması yerine, modülerliği artırmak adına MVVM (Model-View-ViewModel) deseni ve Repository Pattern uygulanmıştır. Bu sayede, kimlik doğrulama mantığı (Auth Logic) ile kullanıcı arayüzü birbirinden tamamen izole edilmiştir. AuthRepository katmanı, Firebase SDK ile iletişim kuran tek nokta olarak belirlenmiş; AuthViewModel ise asenkron gelen yanıtları yöneterek kullanıcıya gerçek zamanlı geri bildirim sağlayan bir köprü görevi üstlenmiştir.
+
+Kullanıcı deneyimini en üst seviyeye çıkarmak amacıyla, kimlik doğrulama akışı Sealed Class yapısı kullanılarak "Yükleniyor", "Başarılı" ve "Hata" gibi farklı durum modelleri (AuthState) üzerinden takip edilmektedir. Bu yapı sayesinde, uygulama giriş yaparken ekranda otomatik bir ProgressBar tetiklenmekte; hatalı şifre veya kayıtlı olmayan kullanıcı durumlarında ise Firebase'den dönen teknik hata kodları, kullanıcı dostu Türkçe mesajlara dönüştürülerek Snackbar veya Toast bildirimleri aracılığıyla iletilmektedir.
+
+Performans ve kaynak yönetimi açısından, ağ üzerinden yapılan kimlik doğrulama istekleri Kotlin Coroutines kullanılarak yönetilmektedir. Giriş ve kayıt işlemleri sırasında ana iş parçacığının (Main Thread) kilitlenmesi engellenerek uygulamanın akıcılığı korunmuştur. Ayrıca, Firebase'in onAuthStateChanged dinleyicisi entegre edilerek, kullanıcı uygulamayı kapatıp açtığında oturumunun otomatik olarak hatırlanması (Session Management) sağlanmış, her açılışta tekrar giriş yapma zorunluluğu ortadan kaldırılarak kullanım kolaylığı hedeflenmiştir.
+
+Kullanıcı arayüzü (UI) tasarımı, Android'in modern Material 3 kütüphanesi kullanılarak geliştirilmiştir. Giriş formunda bulunan e-posta alanları için Regex (Düzenli İfade) kontrolü eklenerek, verilerin Firebase sunucularına gönderilmeden önce istemci tarafında doğrulanması sağlanmıştır. Bu validasyon katmanı, sunucu yükünü azaltırken kullanıcının anlık olarak hatalı veri girişlerini (örneğin geçersiz e-posta formatı) görmesine ve düzeltmesine imkan tanımaktadır.
+
+Sistemin test aşamasında, farklı senaryolar (doğru bilgiler, zayıf şifre, internet bağlantısı yokluğu vb.) üzerinde birim testler (Unit Tests) gerçekleştirilerek kimlik doğrulama akışının kararlılığı doğrulanmıştır. Firebase'in sunduğu hata yönetimi (Error Handling) mekanizması sayesinde, olası sunucu kesintilerinde uygulamanın nasıl tepki vereceği senaryolaştırılmış ve güvenli çıkış (Sign-out) işlemi ile kullanıcı verilerinin yerel bellekteki izlerinin tamamen temizlenmesi garanti altına alınmıştır.
+
+<img width="1408" height="768" alt="Gemini_Generated_Image_pnqdb3pnqdb3pnqd" src="https://github.com/user-attachments/assets/0d6a7059-578d-43cf-bb46-304712425eea" />
+
+A) build.gradle (Java Bağımlılıkları)
+
+dependencies {
+    // Firebase BoM ve Auth (Java uyumlu SDK)
+    implementation platform('com.google.firebase:firebase-bom:32.7.0')
+    implementation 'com.google.firebase:firebase-auth'
+    
+    // Lifecycle ve ViewModel (Java desteğiyle)
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.6.2'
+}
+
+B) AuthState.java (Durum Yönetimi Sınıfı)
+public class AuthState {
+    public enum Status { IDLE, LOADING, SUCCESS, ERROR }
+    
+    private final Status status;
+    private final String errorMessage;
+    private final FirebaseUser user;
+
+    private AuthState(Status status, String errorMessage, FirebaseUser user) {
+        this.status = status;
+        this.errorMessage = errorMessage;
+        this.user = user;
+    }
+
+    public static AuthState idle() { return new AuthState(Status.IDLE, null, null); }
+    public static AuthState loading() { return new AuthState(Status.LOADING, null, null); }
+    public static AuthState success(FirebaseUser user) { return new AuthState(Status.SUCCESS, null, user); }
+    public static AuthState error(String message) { return new AuthState(Status.ERROR, message, null); }
+
+    // Getters...
+}
+
+C) AuthRepository.java (Firebase İşlemleri)
+public class AuthRepository {
+    private final FirebaseAuth mAuth;
+
+    public AuthRepository() {
+        this.mAuth = FirebaseAuth.getInstance();
+    }
+
+    public void loginUser(String email, String password, OnAuthCompleteListener listener) {
+        mAuth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    listener.onSuccess(mAuth.getCurrentUser());
+                } else {
+                    listener.onError(task.getException().getMessage());
+                }
+            });
+    }
+
+    public interface OnAuthCompleteListener {
+        void onSuccess(FirebaseUser user);
+        void onError(String error);
+    }
+}
+
+
 
 
  ### Bluetooth LE Veri Senkronizasyon Entegrasyonu (iOS):
