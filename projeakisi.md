@@ -975,7 +975,7 @@ Kullanıcı arayüzü (UI) tasarımı, Android'in modern Material 3 kütüphanes
 
 Sistemin test aşamasında, farklı senaryolar (doğru bilgiler, zayıf şifre, internet bağlantısı yokluğu vb.) üzerinde birim testler (Unit Tests) gerçekleştirilerek kimlik doğrulama akışının kararlılığı doğrulanmıştır. Firebase'in sunduğu hata yönetimi (Error Handling) mekanizması sayesinde, olası sunucu kesintilerinde uygulamanın nasıl tepki vereceği senaryolaştırılmış ve güvenli çıkış (Sign-out) işlemi ile kullanıcı verilerinin yerel bellekteki izlerinin tamamen temizlenmesi garanti altına alınmıştır.
 
-<img width="1408" height="768" alt="Gemini_Generated_Image_pnqdb3pnqdb3pnqd" src="https://github.com/user-attachments/assets/0d6a7059-578d-43cf-bb46-304712425eea" />
+![Firebase ile Temel Kullanıcı Kimlik Doğrulama Entegrasyonu (Android)](https://github.com/user-attachments/assets/37ef2673-065f-4152-9e4b-2f76cd37341f)
 
 A) build.gradle (Java Bağımlılıkları)
 
