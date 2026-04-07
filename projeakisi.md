@@ -312,6 +312,29 @@ Mobil uygulama ile backend servisleri arasındaki veri iletişimi için REST API
 
 ## Hafta 2
 
+### Kişiselleştirilmiş Antrenman Planı Oluşturucu Tasarımı:
+- Sorumlu: Sıla Ağgül
+- Durum: Tamamlandı
+- Yapılan:
+
+Projenin temelini oluşturan kişiselleştirilmiş antrenman modülü, statik programların aksine kullanıcının biyometrik verilerini ve geçmiş spor deneyimini merkeze alan bir algoritma üzerine kurgulanmıştır. Bu aşamada; yaş, cinsiyet, boy/kilo endeksi (BMI) ve mevcut bazal metabolizma hızı gibi temel parametreler, antrenman yoğunluğunun belirlenmesinde birincil filtre olarak kullanılmıştır. Kullanıcının "sedanter", "orta seviye" veya "aktif sporcu" şeklindeki geçmiş beyanı, sakatlık riskini minimize etmek adına başlangıç ağırlıklarını ve set aralıklarını belirleyen kritik bir veri seti olarak modele dahil edilmiştir.
+
+Tasarlanan sistemde, antrenman planlarının sadece başlangıçta değil, süreç içerisinde de evrilmesi hedeflenmiştir. Bu bağlamda, "Algılanan Zorluk Derecesi" (RPE - Rate of Perceived Exertion) skalası entegre edilerek, sporcunun her set sonundaki geri bildirimi üzerinden bir sonraki haftanın yükleme parametreleri (Volume/Intensity) otomatik olarak ayarlanmaktadır. Eğer bir kullanıcı belirli bir harekette hedef tekrar sayısına "çok kolay" ulaşıyorsa, sistem bir sonraki döngüde %5 ile %10 arasında bir ağırlık artırımı veya dinlenme süresinde daralma planlayarak gelişimi maksimize etmektedir.
+
+Antrenman planlarının içeriği; ısınma, ana evre ve soğuma olmak üzere üç temel fazdan oluşan modüler bir kütüphane üzerinden tanımlanmıştır. Ana evre içerisinde bileşik hareketler ve izole egzersizler, sporcunun hedefine göre farklı hacimlerde dağıtılmaktadır. Her egzersiz için belirlenen set, tekrar ve tempo süreleri, kas grubunun toparlanma süreci gözetilerek takvime yerleştirilmiştir. Bu modüler yapı, kullanıcının o günkü enerji seviyesine göre antrenman süresini kısaltıp uzatabilmesine olanak tanıyan esnek bir mimariye sahiptir.
+
+Sistemin en güçlü yanını oluşturan dinamik güncelleme mekanizması, sporcunun performans grafiklerini sürekli analiz eden bir yapı üzerine kuruludur. Kullanıcının nabız verileri veya bitirilen setlerdeki istikrarı, programın dinlenme haftası periyotlarını otomatik olarak hesaplamasını sağlar. Bu sayede sporcu aşırı antrenman riskinden korunurken, plato dönemlerini aşmak için sistem tarafından periyodik olarak farklı antrenman varyasyonları önerilerek planın güncelliği korunmaktadır. Kullanıcı verileri biriktikçe, algoritma kişiye özel "en verimli saatleri" de tahminleme yeteneğine sahip olacaktır.
+
+Görsel tasarım aşamasında, kullanıcı deneyimini (UX) ön planda tutan bir "dashboard" yapısı kurgulanmıştır. Sporcu, o gün yapması gereken egzersizleri sadece isim olarak değil, hedef kas gruplarını gösteren anatomik haritalar eşliğinde görebilecektir. Antrenman esnasında setler arası kronometre takibi ve bir önceki antrenmanda kaldırılan ağırlığın referans olarak gösterilmesi, motivasyonu artırıcı bir unsur olarak tasarıma eklenmiştir. Bu etkileşimli yapı, sporcunun uygulamayı sadece bir liste olarak değil, bir dijital koç olarak görmesini sağlayacaktır.
+
+Son olarak, sistemin uzun vadeli hedefleri arasında yapay zeka destekli form analizi entegrasyonu bulunmaktadır. Tasarlanan veri modeli, gelecekte kameradan alınacak görüntülerin işlenmesine uygun şekilde "iskelet sistemi koordinat verilerini" kabul edebilecek esnekliktedir. Mevcut antrenman planlayıcı, kullanıcının sadece ne yapacağını değil, neden yapması gerektiğini de açıklayan kısa bilgilendirme notları ile desteklenmiştir. Bu sayede sporcu bilinci artırılarak sürdürülebilir bir fitness alışkanlığı hedeflenmektedir.
+
+
+
+![Kişiselleştirilmiş Antrenman Planı Oluşturucu 2](https://github.com/user-attachments/assets/287bfc76-0664-48ad-8d0c-2787bf316242)
+
+
+
 ### Kullanıcı Arayüzü (UI) ve Kullanıcı Deneyimi (UX) Tasarımı Araştırması
 - Sorumlu: Asım Gökalp
 - Durum: Tamamlandı
@@ -374,33 +397,6 @@ Bu çalışma kapsamında, Akıllı Sporcu Performans Takip Uygulaması için mo
 - Sorumlu: Baver Katar
 - Durum: Devam Ediyor
 - Yapılan:
-
-
-### Kişiselleştirilmiş Antrenman Planı Oluşturucu Tasarımı:
-- Sorumlu: Sıla Ağgül
-- Durum: Tamamlandı
-- Yapılan:
-
-Projenin temelini oluşturan kişiselleştirilmiş antrenman modülü, statik programların aksine kullanıcının biyometrik verilerini ve geçmiş spor deneyimini merkeze alan bir algoritma üzerine kurgulanmıştır. Bu aşamada; yaş, cinsiyet, boy/kilo endeksi (BMI) ve mevcut bazal metabolizma hızı gibi temel parametreler, antrenman yoğunluğunun belirlenmesinde birincil filtre olarak kullanılmıştır. Kullanıcının "sedanter", "orta seviye" veya "aktif sporcu" şeklindeki geçmiş beyanı, sakatlık riskini minimize etmek adına başlangıç ağırlıklarını ve set aralıklarını belirleyen kritik bir veri seti olarak modele dahil edilmiştir.
-
-Tasarlanan sistemde, antrenman planlarının sadece başlangıçta değil, süreç içerisinde de evrilmesi hedeflenmiştir. Bu bağlamda, "Algılanan Zorluk Derecesi" (RPE - Rate of Perceived Exertion) skalası entegre edilerek, sporcunun her set sonundaki geri bildirimi üzerinden bir sonraki haftanın yükleme parametreleri (Volume/Intensity) otomatik olarak ayarlanmaktadır. Eğer bir kullanıcı belirli bir harekette hedef tekrar sayısına "çok kolay" ulaşıyorsa, sistem bir sonraki döngüde %5 ile %10 arasında bir ağırlık artırımı veya dinlenme süresinde daralma planlayarak gelişimi maksimize etmektedir.
-
-Antrenman planlarının içeriği; ısınma, ana evre ve soğuma olmak üzere üç temel fazdan oluşan modüler bir kütüphane üzerinden tanımlanmıştır. Ana evre içerisinde bileşik hareketler ve izole egzersizler, sporcunun hedefine göre farklı hacimlerde dağıtılmaktadır. Her egzersiz için belirlenen set, tekrar ve tempo süreleri, kas grubunun toparlanma süreci gözetilerek takvime yerleştirilmiştir. Bu modüler yapı, kullanıcının o günkü enerji seviyesine göre antrenman süresini kısaltıp uzatabilmesine olanak tanıyan esnek bir mimariye sahiptir.
-
-Sistemin en güçlü yanını oluşturan dinamik güncelleme mekanizması, sporcunun performans grafiklerini sürekli analiz eden bir yapı üzerine kuruludur. Kullanıcının nabız verileri veya bitirilen setlerdeki istikrarı, programın dinlenme haftası periyotlarını otomatik olarak hesaplamasını sağlar. Bu sayede sporcu aşırı antrenman riskinden korunurken, plato dönemlerini aşmak için sistem tarafından periyodik olarak farklı antrenman varyasyonları önerilerek planın güncelliği korunmaktadır. Kullanıcı verileri biriktikçe, algoritma kişiye özel "en verimli saatleri" de tahminleme yeteneğine sahip olacaktır.
-
-Görsel tasarım aşamasında, kullanıcı deneyimini (UX) ön planda tutan bir "dashboard" yapısı kurgulanmıştır. Sporcu, o gün yapması gereken egzersizleri sadece isim olarak değil, hedef kas gruplarını gösteren anatomik haritalar eşliğinde görebilecektir. Antrenman esnasında setler arası kronometre takibi ve bir önceki antrenmanda kaldırılan ağırlığın referans olarak gösterilmesi, motivasyonu artırıcı bir unsur olarak tasarıma eklenmiştir. Bu etkileşimli yapı, sporcunun uygulamayı sadece bir liste olarak değil, bir dijital koç olarak görmesini sağlayacaktır.
-
-Son olarak, sistemin uzun vadeli hedefleri arasında yapay zeka destekli form analizi entegrasyonu bulunmaktadır. Tasarlanan veri modeli, gelecekte kameradan alınacak görüntülerin işlenmesine uygun şekilde "iskelet sistemi koordinat verilerini" kabul edebilecek esnekliktedir. Mevcut antrenman planlayıcı, kullanıcının sadece ne yapacağını değil, neden yapması gerektiğini de açıklayan kısa bilgilendirme notları ile desteklenmiştir. Bu sayede sporcu bilinci artırılarak sürdürülebilir bir fitness alışkanlığı hedeflenmektedir.
-
-
-
-![Kişiselleştirilmiş Antrenman Planı Oluşturucu 2](https://github.com/user-attachments/assets/287bfc76-0664-48ad-8d0c-2787bf316242)
-
-
-
-
-
 
 
 ### Performans Analiz Algoritmaları Araştırması ve Seçimi:
