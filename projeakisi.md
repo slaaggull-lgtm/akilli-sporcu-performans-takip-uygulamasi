@@ -553,9 +553,26 @@ Bu çalışma kapsamında, Akıllı Sporcu Performans Takip Uygulaması için mo
 
 ### Veri Toplama ve Senkronizasyon Modülü Gereksinim Analizi:
 - Sorumlu: Nur Beyda Genç
-- Durum: Devam Ediyor
+- Durum: Tamamlandı
 - Yapılan: 
+1. Toplanacak Veri Türleri ve Sensör Kaynakları
+Giyilebilir cihazlar, sporcunun biyometrik ve kinetik durumunu şu üç ana kategoride analiz eder:
 
+Biyometrik Veriler: Nabız (Heart Rate), kandaki oksijen (SpO2), vücut sıcaklığı ve HRV (Kalp Atış Hızı Değişkenliği).
+
+Kinematik Veriler: İvmeölçer (Accelerometer) ve Jiroskop (Gyroscope) kullanılarak elde edilen adım sayısı, kadans, vuruş hızı veya sıçrama yüksekliği.
+
+Konumsal Veriler: GPS ve Barometre aracılığıyla hız, kat edilen mesafe ve irtifa kazanımı.
+{
+  "athleteId": "SPORCU_01",
+  "timestamp": "2026-04-09T13:11:07Z",
+  "metrics": {
+    "heart_rate": 145,
+    "acceleration": {"x": 0.12, "y": 9.81, "z": -0.05},
+    "gps": {"lat": 38.67, "lng": 39.22, "alt": 1020}
+  }
+}
+2. Bluetooth LE (Low Energy) ve Veri FormatlarıAkıllı cihazlar genellikle GATT (Generic Attribute Profile) protokolünü kullanır.İletişim Protokolü: BLE, enerjiyi korumak için verileri küçük paketler (MTU - Maximum Transmission Unit) halinde gönderir.Servisler ve Karakteristikler: Her veri türü bir UUID ile tanımlanır. Örneğin, Nabız için 0x180D servisi kullanılır.Veri Formatı: Cihazlar ham veriyi genelde Little Endian Binary formatında gönderir. Mobil uygulama bu Byte dizisini (Byte Array) işleyerek anlamlı sayılara dönüştürür.3. Veri Toplama ve Senkronizasyon Akış ŞemasıVeri akışı, anlık performans takibi için "Streaming" ve geçmiş analiz için "Batch" (yığın) işleme olarak ikiye ayrılır.Bağlantı: Uygulama, önceden eşleşmiş cihazı UUID üzerinden tarar ve bağlanır.Abone Olma (Notify): Uygulama, ilgili karakteristiklere "Notify" isteği gönderir; böylece saat, veri değiştikçe otomatik olarak paket gönderir.Yerel İşleme: Gelen ham veri parse edilir ve anlık olarak UI'da gösterilir.Buffer & Sync: İnternet yoksa veriler yerelde depolanır, bağlantı geldiğinde buluta itilir.4. Veritabanı Seçimi: Realm/SQLite vs. FirebaseSporcu performans takibi gibi yüksek yazma frekansı gerektiren bir senaryoda seçimimiz şu yöndedir:Karar: Hibrit Mimari (Realm + Firebase)Neden Realm/SQLite (Yerel Depolama)?Düşük Gecikme: Sensörler saniyede onlarca veri üretebilir. Bu veriyi doğrudan buluta yazmak yerine yerelde Realm gibi nesne tabanlı bir veritabanında tutmak performans açısından kritiktir.Çevrimdışı Çalışma: Sporcu ormanlık alanda veya spor salonunda internet çekmiyorken veri kaybı yaşanmamalıdır.Neden Firebase (Bulut Depolama)?Gerçek Zamanlı Senkronizasyon: Antrenörün sporcuyu uzaktan izlemesi gerekiyorsa Firebase Realtime Database/Firestore rakipsizdir.Analitik ve Bildirimler: Veriler buluta çıktığında, sporcuya "Nabzın çok yüksek!" gibi anlık bildirimler gönderilebilir.ÖzellikRealm (Yerel)Firebase (Bulut)HızÇok Yüksek (Milisaniye altı)İnternet hızına bağlıKapasiteCihaz hafızasıyla sınırlıSınırsız (Scalable)RolHam veri tamponlama (Buffer)Uzun vadeli analiz ve paylaşım5. Veri Güvenliği ve DoğrulukHata İşleme: Veri paketi eksik gelirse (CRC hatası), o veri noktası "outlier" (aykırı değer) olarak işaretlenmeli ve kalibrasyon algoritmalarıyla düzeltilmelidir.Güvenlik: BLE üzerinden geçen veriler AES-128 ile şifrelenmeli ve mobil uygulamada Biometric Authentication ile korunmalıdır.Geliştirdiğimiz bu yapı, sporcunun antrenman esnasında hiçbir verisini kaybetmeden, en düşük gecikmeyle analiz edilmesini sağlar
 
 
 
@@ -1042,7 +1059,147 @@ vm.loadWorkoutPlans()
 
  ### Bluetooth LE Veri Senkronizasyon Entegrasyonu (iOS):
  - Sorumlu: Nur Beyda Genç
- - Durum: Devam Ediyor
+ - Durum: Tamamlandı
  - Yapılan:
+1. Temel Bluetooth Yöneticisi (Core Bluetooth)
+Öncelikle, Bluetooth işlemlerini merkezi bir yerden yönetmek için CBCentralManagerDelegate ve CBPeripheralDelegate protokollerini uygulayan bir sınıf oluşturuyoruz.
+import Foundation
+import CoreBluetooth
 
+class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeripheralDelegate {
+    
+    @Published var connectionStatus: String = "Bağlantı Yok"
+    @Published var performanceData: String = "---"
+    
+    private var centralManager: CBCentralManager!
+    private var heartRatePeripheral: CBPeripheral?
+    
+    // Akıllı saatlerin genellikle kullandığı standart Heart Rate Servis UUID'si
+    private let heartRateServiceUUID = CBUUID(string: "180D")
+    private let heartRateCharacteristicUUID = CBUUID(string: "2A37")
+
+    override init() {
+        super.init()
+        centralManager = CBCentralManager(delegate: self, queue: nil)
+    }
+
+    // MARK: - Merkezi Yönetici Durumu
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        switch central.state {
+        case .poweredOn:
+            connectionStatus = "Cihaz Aranıyor..."
+            centralManager.scanForPeripherals(withServices: [heartRateServiceUUID], options: nil)
+        case .poweredOff:
+            connectionStatus = "Bluetooth Kapalı"
+        case .unauthorized:
+            connectionStatus = "İzin Verilmedi"
+        default:
+            connectionStatus = "Bilinmeyen Hata"
+        }
+    }
+
+    // MARK: - Cihaz Bulma ve Bağlanma
+    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        connectionStatus = "Cihaz Bulundu: \(peripheral.name ?? "Bilinmiyor")"
+        heartRatePeripheral = peripheral
+        heartRatePeripheral?.delegate = self
+        centralManager.stopScan()
+        centralManager.connect(peripheral, options: nil)
+    }
+
+    func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        connectionStatus = "Bağlı: \(peripheral.name ?? "Cihaz")"
+        peripheral.discoverServices([heartRateServiceUUID])
+    }
+    
+    func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        connectionStatus = "Bağlantı Hatası!"
+    }
+
+    // MARK: - Servis ve Karakteristik Keşfi
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+        guard let services = peripheral.services else { return }
+        for service in services {
+            peripheral.discoverCharacteristics([heartRateCharacteristicUUID], for: service)
+        }
+    }
+
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+        guard let characteristics = service.characteristics else { return }
+        for characteristic in characteristics {
+            if characteristic.uuid == heartRateCharacteristicUUID {
+                // Veri akışını başlat (Notify)
+                peripheral.setNotifyValue(true, for: characteristic)
+            }
+        }
+    }
+
+    // MARK: - Veri Akışı ve Hata Yönetimi
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+        if let error = error {
+            print("Veri okuma hatası: \(error.localizedDescription)")
+            return
+        }
+        
+        if characteristic.uuid == heartRateCharacteristicUUID {
+            if let data = characteristic.value {
+                let bpm = decodeHeartRate(from: data)
+                DispatchQueue.main.async {
+                    self.performanceData = "\(bpm) BPM"
+                }
+            }
+        }
+    }
+
+    // Basit bir Heart Rate veri çözümleme yardımcı fonksiyonu
+    private func decodeHeartRate(from data: Data) -> Int {
+        var buffer = [UInt8](repeating: 0, count: data.count)
+        data.copyBytes(to: &buffer, count: data.count)
+        if buffer.count >= 2 {
+            return Int(buffer[1]) // Standart 8-bit nabız verisi
+        }
+        return 0
+    }
+}
+2. Kullanıcı Arayüzü (SwiftUI)
+Kullanıcının bağlantı durumunu görmesi ve gelen verileri takip etmesi için basit bir arayüz:
+import SwiftUI
+
+struct PerformanceTrackerView: View {
+    @StateObject var btManager = BluetoothManager()
+
+    var body: some View {
+        VStack(spacing: 30) {
+            Text("Sporcu Performans Takibi")
+                .font(.headline)
+            
+            // Bağlantı Durum Göstergesi
+            HStack {
+                Circle()
+                    .fill(btManager.connectionStatus.contains("Bağlı") ? Color.green : Color.red)
+                    .frame(width: 12, height: 12)
+                
+                Text(btManager.connectionStatus)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            .padding()
+            .background(Color(.systemGray6))
+            .cornerRadius(10)
+
+            // Performans Verisi
+            VStack {
+                Text("Anlık Nabız")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+                Text(btManager.performanceData)
+                    .font(.system(size: 64, weight: .bold, design: .rounded))
+                    .foregroundColor(.blue)
+            }
+            
+            Spacer()
+        }
+        .padding()
+    }
+}
    
