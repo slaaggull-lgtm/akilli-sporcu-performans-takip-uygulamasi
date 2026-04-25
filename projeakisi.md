@@ -1212,13 +1212,13 @@ struct PerformanceTrackerView: View {
 - Yapılan:
 
 
-## Genel Bakış
+Genel Bakış
 Bu haftanın görevi, mevcut antrenman programı optimizasyon sisteminin bireysel sporcu ihtiyaçlarına uyum kapasitesini artırmaya odaklanmaktadır. Mevcut algoritmanın kural tabanlı (rule-based) yapısı, ortalama bir sporcu profili için yeterli çıktılar üretse de bireysel farklılıkları (yaş, pozisyon, yorgunluk geçmişi, psikolojik yük) yeterince yansıtmamaktadır. Bu çalışmada üç farklı optimizasyon stratejisi denenmiş, sonuçlar karşılaştırmalı olarak analiz edilmiştir.
 
-## Mevcut Sistemin Kısıtları
+Mevcut Sistemin Kısıtları
 Sistemin mevcut hali, antrenman yükünü hesaplamak için sabit eşik değerlerine dayanan basit bir kural motoru kullanmaktadır. Bu yaklaşımın temel sorunları şunlardır: sporcunun gerçek zamanlı toparlanma durumu göz ardı edilmekte, haftalık yük dağılımı statik kalmakta ve takım dinamikleri ile maç takvimi gibi bağlamsal faktörler sisteme dahil edilmemektedir.
 
-## Strateji 1 — Kural Tabanlı Sistemin Güçlendirilmesi
+ Strateji 1 — Kural Tabanlı Sistemin Güçlendirilmesi
 İlk aşamada mevcut kural motoru, dinamik eşikler ve kısıt katmanı eklenerek iyileştirilmiştir. Sporcunun ACWR (Acute:Chronic Workload Ratio) değeri anlık olarak hesaplanmakta ve bu değere göre antrenman yoğunluğu otomatik olarak kısıtlanmaktadır.
 
 ```python
@@ -1250,7 +1250,7 @@ def apply_load_constraint(base_load: float, acwr: float) -> float:
 
 Bu yaklaşım, mevcut altyapıyla uyumludur ve hızla devreye alınabilir. Ancak kural sayısı arttıkça bakımı güçleşmekte ve keşfedilmemiş optimum senaryolara ulaşması sınırlı kalmaktadır.
 
-## Strateji 2 — Evrimsel Algoritma (Genetik Yaklaşım)
+ Strateji 2 — Evrimsel Algoritma (Genetik Yaklaşım)
 İkinci stratejide, haftalık antrenman programı bir "gen" dizisi olarak temsil edilmekte ve popülasyon tabanlı bir arama ile optimize edilmektedir. Her birey (çözüm adayı) bir haftayı temsil eden egzersiz-yoğunluk çiftlerinden oluşmaktadır.
 
 ```python
@@ -1288,7 +1288,7 @@ def mutate(program: list, rate=0.1) -> list:
 
 Evrimsel yaklaşım, kural tabanlı sistemin ulaşamayacağı program kombinasyonlarını keşfedebilmektedir. Bununla birlikte hesaplama süresi daha uzundur ve her çalıştırmada deterministik olmayan sonuçlar üretebilir.
 
-## Strateji 3 — Makine Öğrenmesi Tabanlı Tahmin (XGBoost)
+Strateji 3 — Makine Öğrenmesi Tabanlı Tahmin (XGBoost)
 Üçüncü stratejide, geçmiş antrenman verileri ve sonuçları (performans artışı, yaralanma kaydı) üzerinde eğitilmiş bir XGBoost modeli kullanılmıştır. Model, verilen sporcu profiline göre optimum haftalık yükü tahmin etmektedir.
 
 ```python
@@ -1318,7 +1318,7 @@ def predict_optimal_load(athlete: dict) -> float:
 
 Bu yaklaşım, büyük veri setiyle eğitildiğinde en yüksek bireyselleştirme kapasitesine ulaşmaktadır. Modelin güvenilirliği, eğitim verisinin kalitesine ve çeşitliliğine doğrudan bağlıdır.
 
-## Karşılaştırmalı Değerlendirme
+Karşılaştırmalı Değerlendirme
 
 | Kriter | Kural Tabanlı | Evrimsel | ML (XGBoost) |
 | :--- | :--- | :--- | :--- |
@@ -1328,10 +1328,10 @@ Bu yaklaşım, büyük veri setiyle eğitildiğinde en yüksek bireyselleştirme
 | Veri gereksinimi | Düşük | Düşük | Yüksek |
 | Bakım kolaylığı | Orta | Zor | Orta |
 
-## Önerilen Yol Haritası
+Önerilen Yol Haritası
 Kısa vadede kural tabanlı sistemin ACWR ve HRV entegrasyonuyla güçlendirilmesi önerilmektedir. Bu değişiklik mevcut altyapıya minimum müdahaleyle uygulanabilir ve hemen ölçülebilir iyileşme sağlar. Orta vadede evrimsel algoritma, haftalık program üretimi için arka planda çalışan bir öneri motoru olarak devreye alınabilir ve kural motoruyla hibrit biçimde kullanılabilir. Uzun vadede ise yeterli veri biriktiğinde ML modelinin prodüksiyona alınması planlanmaktadır.
 
-## Sonuç
+ Sonuç
 Bu hafta yürütülen çalışma, tek bir optimizasyon yaklaşımının tüm sporcu profillerini yeterince karşılayamadığını açıkça ortaya koymaktadır. Hibrit bir mimari — kural tabanlı güvenlik katmanı, evrimsel program keşfi ve ML tabanlı yük tahmini — en güçlü ve esnek çözümü sunmaktadır. Bir sonraki aşama, bu üç katmanın entegrasyon testlerinin gerçek sporcu verileriyle yapılmasıdır.
 
 ### Veritabanı Entegrasyonunu Tamamlama ve Test Etme
