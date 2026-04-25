@@ -1202,4 +1202,39 @@ struct PerformanceTrackerView: View {
         .padding()
     }
 }
-   
+
+
+## Hafta 5
+
+### Antrenman Programı Optimizasyon Algoritmasını İyileştirme
+Sorumlu: Sıla Ağgül
+Durum: Devam Ediyor
+Yapılan:
+
+
+
+### Veritabanı Entegrasyonunu Tamamlama ve Test Etme
+Sorumlu: Baver Katar
+Durum: Devam Ediyor
+Yapılan:
+
+
+
+### Veri Toplama ve İşleme Modülünü Geliştirme
+Sorumlu: Nur Beyda Genç
+Durum: Devam Ediyor
+Yapılan:
+
+
+
+### Mobil Uygulama Performans Analizi ve Optimizasyonu
+Sorumlu: Asım Gökalp
+Durum: Devam Ediyor
+Yapılan:
+
+
+
+### Kullanıcı Arayüzü Testlerini Tamamlama
+Sorumlu: Şevval Bulut
+Durum: Devam Ediyor
+Yapılan:
