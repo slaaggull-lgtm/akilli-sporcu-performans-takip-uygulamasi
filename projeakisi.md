@@ -1208,7 +1208,7 @@ struct PerformanceTrackerView: View {
 
 ### Antrenman Programı Optimizasyon Algoritmasını İyileştirme
 - Sorumlu: Sıla Ağgül
-- Durum: Devam Ediyor
+- Durum: Tamamlandı
 - Yapılan:
 
 
