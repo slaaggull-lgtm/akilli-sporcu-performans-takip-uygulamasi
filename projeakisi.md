@@ -1211,226 +1211,127 @@ struct PerformanceTrackerView: View {
 - Durum: Devam Ediyor
 - Yapılan:
 
-Genel Bakış
+
+## Genel Bakış
 Bu haftanın görevi, mevcut antrenman programı optimizasyon sisteminin bireysel sporcu ihtiyaçlarına uyum kapasitesini artırmaya odaklanmaktadır. Mevcut algoritmanın kural tabanlı (rule-based) yapısı, ortalama bir sporcu profili için yeterli çıktılar üretse de bireysel farklılıkları (yaş, pozisyon, yorgunluk geçmişi, psikolojik yük) yeterince yansıtmamaktadır. Bu çalışmada üç farklı optimizasyon stratejisi denenmiş, sonuçlar karşılaştırmalı olarak analiz edilmiştir.
 
-Mevcut Sistemin Kısıtları
+## Mevcut Sistemin Kısıtları
 Sistemin mevcut hali, antrenman yükünü hesaplamak için sabit eşik değerlerine dayanan basit bir kural motoru kullanmaktadır. Bu yaklaşımın temel sorunları şunlardır: sporcunun gerçek zamanlı toparlanma durumu göz ardı edilmekte, haftalık yük dağılımı statik kalmakta ve takım dinamikleri ile maç takvimi gibi bağlamsal faktörler sisteme dahil edilmemektedir.
 
-Strateji 1 — Kural Tabanlı Sistemin Güçlendirilmesi
+## Strateji 1 — Kural Tabanlı Sistemin Güçlendirilmesi
 İlk aşamada mevcut kural motoru, dinamik eşikler ve kısıt katmanı eklenerek iyileştirilmiştir. Sporcunun ACWR (Acute:Chronic Workload Ratio) değeri anlık olarak hesaplanmakta ve bu değere göre antrenman yoğunluğu otomatik olarak kısıtlanmaktadır.
 
-"""
-Training Load Management Utilities
----------------------------------
-This module provides calculations for the Acute:Chronic Workload Ratio (ACWR)
-to monitor injury risk and optimize athletic performance.
-"""
-
-from typing import List
-
-def compute_acwr(weekly_loads: List[float], acute_window: int = 7, chronic_window: int = 28) -> float:
+```python
+def compute_acwr(weekly_loads: list[float], acute_window=7, chronic_window=28) -> float:
     """
-    Calculates the Acute:Chronic Workload Ratio (ACWR).
-    
-    Safe Zone: 0.8 – 1.3
-    Injury Danger Zone: > 1.5
-    
-    Args:
-        weekly_loads: A list of daily or weekly load values (e.g., RPE * duration).
-        acute_window: Period for short-term fatigue (usually 7 days).
-        chronic_window: Period for long-term fitness (usually 28 days).
-        
-    Returns:
-        The ACWR as a float, rounded to 3 decimal places.
+    Akut:Kronik Yük Oranı hesaplar.
+    Güvenli bölge: 0.8 – 1.3
     """
     if len(weekly_loads) < chronic_window:
-        # Insufficient data — return neutral ratio to prevent false alarms
-        return 1.0
+        return 1.0  # Yetersiz veri — nötr oran döndür
 
-    # Acute load (Fatigue)
-    acute_load = sum(weekly_loads[-acute_window:]) / acute_window
-    
-    # Chronic load (Fitness)
-    chronic_load = sum(weekly_loads[-chronic_window:]) / chronic_window
+    acute = sum(weekly_loads[-acute_window:]) / acute_window
+    chronic = sum(weekly_loads[-chronic_window:]) / chronic_window
 
-    if chronic_load <= 0:
-        return 1.0
-        
-    return round(acute_load / chronic_load, 3)
-
+    return round(acute / chronic, 3) if chronic > 0 else 1.0
 
 def apply_load_constraint(base_load: float, acwr: float) -> float:
     """
-    Adjusts the planned training load based on the calculated ACWR value.
-    
-    Logic:
-        - ACWR > 1.5: High injury risk -> Reduce load by 40%
-        - ACWR > 1.3: Caution zone -> Reduce load by 15%
-        - ACWR < 0.8: Under-trained -> Increase load by 15%
-        - Otherwise: Sweet spot -> Maintain load
+    ACWR değerine göre antrenman yükünü ayarlar.
     """
     if acwr > 1.5:
-        return base_load * 0.60
+        return base_load * 0.6   # Yüksek yaralanma riski — düşür
     elif acwr > 1.3:
-        return base_load * 0.85
+        return base_load * 0.85  # Dikkatli bölge — hafif düşür
     elif acwr < 0.8:
-        return base_load * 1.15
-    
-    return base_load
-
-# Example Usage (Optional for testing)
-if __name__ == "__main__":
-    # Simulate 30 days of data
-    sample_data = [500] * 25 + [800] * 5 
-    current_acwr = compute_acwr(sample_data)
-    recommended_load = apply_load_constraint(600, current_acwr)
-    
-    print(f"Current ACWR: {current_acwr}")
-    print(f"Recommended Load: {recommended_load}")
+        return base_load * 1.15  # Düşük yük — artırılabilir
+    return base_load              # Güvenli bölge — değiştirme
+```
 
 Bu yaklaşım, mevcut altyapıyla uyumludur ve hızla devreye alınabilir. Ancak kural sayısı arttıkça bakımı güçleşmekte ve keşfedilmemiş optimum senaryolara ulaşması sınırlı kalmaktadır.
 
-Strateji 2 — Evrimsel Algoritma (Genetik Yaklaşım)
+## Strateji 2 — Evrimsel Algoritma (Genetik Yaklaşım)
 İkinci stratejide, haftalık antrenman programı bir "gen" dizisi olarak temsil edilmekte ve popülasyon tabanlı bir arama ile optimize edilmektedir. Her birey (çözüm adayı) bir haftayı temsil eden egzersiz-yoğunluk çiftlerinden oluşmaktadır.
 
-"""
-Training Program Optimizer (Genetic Algorithm)
----------------------------------------------
-This module uses a genetic algorithm approach to optimize weekly training
-schedules based on chronic load and recovery constraints.
-"""
-
+```python
 import random
-from typing import List, Dict, Any
 
-def fitness(program: List[Dict[str, Any]], athlete: Dict[str, Any]) -> float:
+def fitness(program: list, athlete: dict) -> float:
     """
-    Evaluates the suitability of a training program.
-    Higher score = Better program.
-    
-    Factors:
-    1. Load Score: How close the total load is to the 1.1x chronic load target.
-    2. Recovery Score: Encourages at least 2 days of rest (intensity = 0).
+    Bir antrenman programının uygunluğunu değerlendirir.
+    Yüksek skor = daha iyi program.
     """
-    # Calculate total program load (Intensity * Duration)
     total_load = sum(day["intensity"] * day["duration"] for day in program)
     recovery_days = sum(1 for day in program if day["intensity"] == 0)
 
-    # Target load: Aiming for a progressive overload of 10% (1.1x)
+    # Hedef yük — ACWR güvenli bölgesi
     target_load = athlete["chronic_load"] * 1.1
-    
-    if target_load <= 0:
-        load_score = 0
-    else:
-        # Calculates proximity to target (1.0 is perfect, decreases as it deviates)
-        load_score = max(0, 1 - abs(total_load - target_load) / target_load)
+    load_score = max(0, 1 - abs(total_load - target_load) / target_load)
 
-    # Recovery constraint: Goal is at least 2 days of rest per week
+    # En az 2 dinlenme günü şartı
     recovery_score = min(recovery_days / 2, 1.0)
 
-    # Weighted final score (60% Load accuracy, 40% Recovery adherence)
     return 0.6 * load_score + 0.4 * recovery_score
 
+def crossover(parent_a: list, parent_b: list) -> list:
+    """Tek noktalı çaprazlama."""
+    point = random.randint(1, len(parent_a) - 1)
+    return parent_a[:point] + parent_b[point:]
 
-def crossover(parent_a: List[Dict], parent_b: List[Dict]) -> List[Dict]:
-    """
-    Performs single-point crossover between two parent
+def mutate(program: list, rate=0.1) -> list:
+    """Rastgele gün yoğunluğunu değiştir."""
+    return [
+        {**day, "intensity": random.uniform(0, 1)} if random.random() < rate else day
+        for day in program
+    ]
+```
 
-    Evrimsel yaklaşım, kural tabanlı sistemin ulaşamayacağı program kombinasyonlarını keşfedebilmektedir. Bununla birlikte hesaplama süresi daha uzundur ve her çalıştırmada deterministik olmayan sonuçlar üretebilir.
+Evrimsel yaklaşım, kural tabanlı sistemin ulaşamayacağı program kombinasyonlarını keşfedebilmektedir. Bununla birlikte hesaplama süresi daha uzundur ve her çalıştırmada deterministik olmayan sonuçlar üretebilir.
 
-Strateji 3 — Makine Öğrenmesi Tabanlı Tahmin (XGBoost)
+## Strateji 3 — Makine Öğrenmesi Tabanlı Tahmin (XGBoost)
 Üçüncü stratejide, geçmiş antrenman verileri ve sonuçları (performans artışı, yaralanma kaydı) üzerinde eğitilmiş bir XGBoost modeli kullanılmıştır. Model, verilen sporcu profiline göre optimum haftalık yükü tahmin etmektedir.
 
-"""
-ML Load Prediction Service
--------------------------
-Integrates a pre-trained XGBoost model to predict the optimal training load 
-based on athlete physiological data and schedule context.
-"""
-
-import numpy as np
+```python
 from xgboost import XGBRegressor
-from typing import Dict, Any
+import numpy as np
 
-def build_features(athlete: Dict[str, Any]) -> np.ndarray:
-    """
-    Converts athlete dictionary data into a structured NumPy array for the model.
-    
-    Expected features:
-    - Age: Biological age
-    - Chronic Load: 28-day moving average of workload
-    - ACWR: Acute:Chronic Workload Ratio
-    - HRV: Heart Rate Variability (Recovery indicator)
-    - Sleep Score: Quality of recovery (0-100)
-    - Days to Match: Tapering context
-    """
-    feature_vector = [
+def build_features(athlete: dict) -> np.ndarray:
+    """Sporcu özelliklerinden model giriş vektörü oluşturur."""
+    return np.array([[
         athlete["age"],
         athlete["chronic_load"],
         athlete["acwr"],
-        athlete["hrv"],
+        athlete["hrv"],          # Heart Rate Variability
         athlete["sleep_score"],
         athlete["days_to_match"]
-    ]
-    # Reshape for a single sample prediction (1, n_features)
-    return np.array([feature_vector])
+    ]])
 
+# Model yükleme ve tahmin
+model = XGBRegressor()
+model.load_model("models/load_predictor_v2.json")
 
-class LoadPredictor:
-    def __init__(self, model_path: str = "models/load_predictor_v2.json"):
-        """Initializes the predictor by loading the pre-trained XGBoost model."""
-        self.model = XGBRegressor()
-        try:
-            self.model.load_model(model_path)
-        except Exception as e:
-            print(f"Error loading model from {model_path}: {e}")
-            self.model = None
+def predict_optimal_load(athlete: dict) -> float:
+    features = build_features(athlete)
+    prediction = model.predict(features)[0]
+    return round(float(prediction), 1)
+```
 
-    def predict_optimal_load(self, athlete: Dict[str, Any]) -> float:
-        """
-        Predicts the optimal training load for the next session.
-        Returns a default heuristic if the model is not loaded.
-        """
-        if self.model is None:
-            # Fallback to a safe progressive load if model is missing
-            return round(athlete["chronic_load"] * 1.05, 1)
+Bu yaklaşım, büyük veri setiyle eğitildiğinde en yüksek bireyselleştirme kapasitesine ulaşmaktadır. Modelin güvenilirliği, eğitim verisinin kalitesine ve çeşitliliğine doğrudan bağlıdır.
 
-        features = build_features(athlete)
-        prediction = self.model.predict(features)[0]
-        
-        # Ensure prediction is a standard float and rounded
-        return round(float(prediction), 1)
+## Karşılaştırmalı Değerlendirme
 
-# --- Quick Test ---
-if __name__ == "__main__":
-    # Example athlete state
-    current_athlete = {
-        "age": 24,
-        "chronic_load": 450.5,
-        "acwr": 1.15,
-        "hrv": 72.0,
-        "sleep_score": 85,
-        "days_to_match": 4
-    }
+| Kriter | Kural Tabanlı | Evrimsel | ML (XGBoost) |
+| :--- | :--- | :--- | :--- |
+| Bireyselleştirme | Orta | Yüksek | Çok yüksek |
+| Hesaplama süresi | Çok hızlı | Yavaş | Hızlı (eğitim sonrası) |
+| Yorumlanabilirlik | Yüksek | Orta | Düşük |
+| Veri gereksinimi | Düşük | Düşük | Yüksek |
+| Bakım kolaylığı | Orta | Zor | Orta |
 
-    predictor = LoadPredictor()
-    optimal_load = predictor.predict_optimal_load(current_athlete)
-    print(f"Target Load for next session: {optimal_load}")
-
-    Bu yaklaşım, büyük veri setiyle eğitildiğinde en yüksek bireyselleştirme kapasitesine ulaşmaktadır. Modelin güvenilirliği, eğitim verisinin kalitesine ve çeşitliliğine doğrudan bağlıdır. Yeni bir sporcu tipi için veri yoksa tahmin hataları artmaktadır.
-
-    Kriter,Kural Tabanlı (ACWR),Evrimsel (Genetik Algoritma),ML (XGBoost)
-Bireyselleştirme,Orta,Yüksek,Çok Yüksek
-Hesaplama Süresi,Çok Hızlı,Yavaş,Hızlı (Eğitim sonrası)
-Yorumlanabilirlik,Yüksek,Orta,Düşük (Black-box)
-Veri Gereksinimi,Düşük,Düşük,Yüksek
-Bakım Kolaylığı,Orta,Zor,Orta
-
-Önerilen Yol Haritası
+## Önerilen Yol Haritası
 Kısa vadede kural tabanlı sistemin ACWR ve HRV entegrasyonuyla güçlendirilmesi önerilmektedir. Bu değişiklik mevcut altyapıya minimum müdahaleyle uygulanabilir ve hemen ölçülebilir iyileşme sağlar. Orta vadede evrimsel algoritma, haftalık program üretimi için arka planda çalışan bir öneri motoru olarak devreye alınabilir ve kural motoruyla hibrit biçimde kullanılabilir. Uzun vadede ise yeterli veri biriktiğinde ML modelinin prodüksiyona alınması planlanmaktadır.
 
-Sonuç
+## Sonuç
 Bu hafta yürütülen çalışma, tek bir optimizasyon yaklaşımının tüm sporcu profillerini yeterince karşılayamadığını açıkça ortaya koymaktadır. Hibrit bir mimari — kural tabanlı güvenlik katmanı, evrimsel program keşfi ve ML tabanlı yük tahmini — en güçlü ve esnek çözümü sunmaktadır. Bir sonraki aşama, bu üç katmanın entegrasyon testlerinin gerçek sporcu verileriyle yapılmasıdır.
 
 ### Veritabanı Entegrasyonunu Tamamlama ve Test Etme
