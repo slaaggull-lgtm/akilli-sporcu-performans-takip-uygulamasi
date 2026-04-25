@@ -1211,6 +1211,114 @@ struct PerformanceTrackerView: View {
 - Durum: Devam Ediyor
 - Yapılan:
 
+Genel Bakış
+Bu haftanın görevi, mevcut antrenman programı optimizasyon sisteminin bireysel sporcu ihtiyaçlarına uyum kapasitesini artırmaya odaklanmaktadır. Mevcut algoritmanın kural tabanlı (rule-based) yapısı, ortalama bir sporcu profili için yeterli çıktılar üretse de bireysel farklılıkları (yaş, pozisyon, yorgunluk geçmişi, psikolojik yük) yeterince yansıtmamaktadır. Bu çalışmada üç farklı optimizasyon stratejisi denenmiş, sonuçlar karşılaştırmalı olarak analiz edilmiştir.
+
+Mevcut Sistemin Kısıtları
+Sistemin mevcut hali, antrenman yükünü hesaplamak için sabit eşik değerlerine dayanan basit bir kural motoru kullanmaktadır. Bu yaklaşımın temel sorunları şunlardır: sporcunun gerçek zamanlı toparlanma durumu göz ardı edilmekte, haftalık yük dağılımı statik kalmakta ve takım dinamikleri ile maç takvimi gibi bağlamsal faktörler sisteme dahil edilmemektedir.
+
+Strateji 1 — Kural Tabanlı Sistemin Güçlendirilmesi
+İlk aşamada mevcut kural motoru, dinamik eşikler ve kısıt katmanı eklenerek iyileştirilmiştir. Sporcunun ACWR (Acute:Chronic Workload Ratio) değeri anlık olarak hesaplanmakta ve bu değere göre antrenman yoğunluğu otomatik olarak kısıtlanmaktadır.
+
+def compute_acwr(weekly_loads: list[float], acute_window=7, chronic_window=28) -> float:
+    """
+    Akut:Kronik Yük Oranı hesaplar.
+    Güvenli bölge: 0.8 – 1.3
+    """
+    if len(weekly_loads) < chronic_window:
+        return 1.0  # Yetersiz veri — nötr oran döndür
+
+    acute = sum(weekly_loads[-acute_window:]) / acute_window
+    chronic = sum(weekly_loads[-chronic_window:]) / chronic_window
+
+    return round(acute / chronic, 3) if chronic > 0 else 1.0
+
+
+def apply_load_constraint(base_load: float, acwr: float) -> float:
+    """
+    ACWR değerine göre antrenman yükünü ayarlar.
+    """
+    if acwr > 1.5:
+        return base_load * 0.6   # Yüksek yaralanma riski — düşür
+    elif acwr > 1.3:
+        return base_load * 0.85  # Dikkatli bölge — hafif düşür
+    elif acwr < 0.8:
+        return base_load * 1.15  # Düşük yük — artırılabilir
+    return base_load              # Güvenli bölge — değiştirme
+
+    Bu yaklaşım, mevcut altyapıyla uyumludur ve hızla devreye alınabilir. Ancak kural sayısı arttıkça bakımı güçleşmekte ve keşfedilmemiş optimum senaryolara ulaşması sınırlı kalmaktadır.
+
+Strateji 2 — Evrimsel Algoritma (Genetik Yaklaşım)
+İkinci stratejide, haftalık antrenman programı bir "gen" dizisi olarak temsil edilmekte ve popülasyon tabanlı bir arama ile optimize edilmektedir. Her birey (çözüm adayı) bir haftayı temsil eden egzersiz-yoğunluk çiftlerinden oluşmaktadır.
+import random
+
+def fitness(program: list, athlete: dict) -> float:
+    """
+    Bir antrenman programının uygunluğunu değerlendirir.
+    Yüksek skor = daha iyi program.
+    """
+    total_load = sum(day["intensity"] * day["duration"] for day in program)
+    recovery_days = sum(1 for day in program if day["intensity"] == 0)
+
+    # Hedef yük — ACWR güvenli bölgesi
+    target_load = athlete["chronic_load"] * 1.1
+    load_score = max(0, 1 - abs(total_load - target_load) / target_load)
+
+    # En az 2 dinlenme günü şartı
+    recovery_score = min(recovery_days / 2, 1.0)
+
+    return 0.6 * load_score + 0.4 * recovery_score
+
+
+def crossover(parent_a: list, parent_b: list) -> list:
+    """Tek noktalı çaprazlama."""
+    point = random.randint(1, len(parent_a) - 1)
+    return parent_a[:point] + parent_b[point:]
+
+
+def mutate(program: list, rate=0.1) -> list:
+    """Rastgele gün yoğunluğunu değiştir."""
+    return [
+        {**day, "intensity": random.uniform(0, 1)} if random.random() < rate else day
+        for day in program
+    ]
+
+    Evrimsel yaklaşım, kural tabanlı sistemin ulaşamayacağı program kombinasyonlarını keşfedebilmektedir. Bununla birlikte hesaplama süresi daha uzundur ve her çalıştırmada deterministik olmayan sonuçlar üretebilir.
+
+Strateji 3 — Makine Öğrenmesi Tabanlı Tahmin (XGBoost)
+Üçüncü stratejide, geçmiş antrenman verileri ve sonuçları (performans artışı, yaralanma kaydı) üzerinde eğitilmiş bir XGBoost modeli kullanılmıştır. Model, verilen sporcu profiline göre optimum haftalık yükü tahmin etmektedir.
+from xgboost import XGBRegressor
+import numpy as np
+
+def build_features(athlete: dict) -> np.ndarray:
+    """Sporcu özelliklerinden model giriş vektörü oluşturur."""
+    return np.array([[
+        athlete["age"],
+        athlete["chronic_load"],
+        athlete["acwr"],
+        athlete["hrv"],          # Heart Rate Variability
+        athlete["sleep_score"],
+        athlete["days_to_match"]
+    ]])
+
+# Model yükleme ve tahmin
+model = XGBRegressor()
+model.load_model("models/load_predictor_v2.json")
+
+def predict_optimal_load(athlete: dict) -> float:
+    features = build_features(athlete)
+    prediction = model.predict(features)[0]
+    return round(float(prediction), 1)
+    Bu yaklaşım, büyük veri setiyle eğitildiğinde en yüksek bireyselleştirme kapasitesine ulaşmaktadır. Modelin güvenilirliği, eğitim verisinin kalitesine ve çeşitliliğine doğrudan bağlıdır. Yeni bir sporcu tipi için veri yoksa tahmin hataları artmaktadır.
+
+    Karşılaştırmalı Değerlendirme
+KriterKural TabanlıEvrimselML (XGBoost)BireyselleştirmeOrtaYüksekÇok yüksekHesaplama süresiÇok hızlıYavaşHızlı (eğitim sonrası)YorumlanabilirlikYüksekOrtaDüşükVeri gereksinimiDüşükDüşükYüksekBakım kolaylığıOrtaZorOrta
+Önerilen Yol Haritası
+Kısa vadede kural tabanlı sistemin ACWR ve HRV entegrasyonuyla güçlendirilmesi önerilmektedir. Bu değişiklik mevcut altyapıya minimum müdahaleyle uygulanabilir ve hemen ölçülebilir iyileşme sağlar. Orta vadede evrimsel algoritma, haftalık program üretimi için arka planda çalışan bir öneri motoru olarak devreye alınabilir ve kural motoruyla hibrit biçimde kullanılabilir. Uzun vadede ise yeterli veri biriktiğinde ML modelinin prodüksiyona alınması planlanmaktadır.
+
+Sonuç
+Bu hafta yürütülen çalışma, tek bir optimizasyon yaklaşımının tüm sporcu profillerini yeterince karşılayamadığını açıkça ortaya koymaktadır. Hibrit bir mimari — kural tabanlı güvenlik katmanı, evrimsel program keşfi ve ML tabanlı yük tahmini — en güçlü ve esnek çözümü sunmaktadır. Bir sonraki aşama, bu üç katmanın entegrasyon testlerinin gerçek sporcu verileriyle yapılmasıdır.
+
 
 
 ### Veritabanı Entegrasyonunu Tamamlama ve Test Etme
