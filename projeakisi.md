@@ -1614,7 +1614,7 @@ Açıklama: Gece modunda analiz grafiklerinin eksen etiketleri (X/Y) okunamaz du
 
 Etki: Kullanıcı deneyimini (UX) olumsuz etkiliyor.
 
-4. TEKNİK ÖNERİLER VE SONUÇ
+ TEKNİK ÖNERİLER VE SONUÇ
 
 Uygulamanın genel performansı tatmin edicidir; ancak özellikle verat tutarlılığı ve hata payı yönetimi (Error Handling) konularında iyileştirmeler yapılması gerekmektedir.
 
