@@ -1561,11 +1561,63 @@ darboğazları tespit etmek ve optimize etmek.
 
 TEST SENARYOLARI VE SONUÇ TABLOSU:
  ```
- ID  Fonksiyon / Modül  Test Tanımı  Başarı Kriteri  Durum
- TS-01     Kimlik Doğrulama     Kullanıcı e-posta/şifre ile giriş süreci.    Dashboard'a yönlendirme.      BAŞARILI
- TS-02     BLE Bağlantısı      Giyilebilir sensörün Bluetooth ile eşleşmesi. Stabil veri akışı kurulumu.  BAŞARILI
- TS-03  Gerçek Zamanlı İzleme    Antrenman esnasında metriklerin görselleştirilmesi.  Veri gecikmesinin <500ms olması. KISMEN BAŞARILI
- TS-04  Kritik Uyarı Sistemi    Eşik değer (Nabız/Hız) aşıldığında bildirim gönderimi.  Anlık sesli ve görsel uyarı.  BAŞARILI
- TS-05  Veri Senkronizasyonu    Antrenman bitiminde bulut kaydı ve geçmiş listeleme.    Verinin "Geçmiş"te görünmesi.  BAŞARILI
+ ID                Fonksiyon / Modül             Test Tanımı                            Başarı Kriteri                    Durum
+ TS-01             Kimlik Doğrulama     Kullanıcı e-posta/şifre ile giriş süreci.    Dashboard'a yönlendirme.            BAŞARILI
+ TS-02             BLE Bağlantısı      Giyilebilir sensörün Bluetooth ile eşleşmesi.   Stabil veri akışı kurulumu.         BAŞARILI
+ TS-03     Gerçek Zamanlı İzleme    Antrenman esnasında metriklerin görselleştirilmesi.  Veri gecikmesinin <500ms olması. KISMEN BAŞARILI
+ TS-04       Kritik Uyarı Sistemi    Eşik değer (Nabız/Hız) aşıldığında bildirim gönderimi.  Anlık sesli ve görsel uyarı.  BAŞARILI
+ TS-05       Veri Senkronizasyonu    Antrenman bitiminde bulut kaydı ve geçmiş listeleme.    Verinin "Geçmiş"te görünmesi.  BAŞARILI
 ```
- 
+ TESPİT EDİLEN HATALAR VE İYİLEŞTİRME TALEPLERİ (Bug Report)
+
+Hata ID: BUG-001 (Kritik)
+
+Hata Başlığı: Bağlantı Kesintisinde Veri Kaybı
+
+Öncelik: Yüksek (P1)
+
+Açıklama: Bluetooth bağlantısı koptuğunda, cihaz tekrar bağlandığı ana kadar geçen süredeki sensör verileri kaybolmaktadır.
+
+Adımlar:
+
+Antrenmanı başlatın.
+
+Sensörü menzilden çıkararak bağlantıyı kesin.
+
+10 saniye sonra tekrar yaklaştırın.
+
+Beklenen: Aradaki verilerin tampon belleğe (buffer) alınması ve senkronize edilmesi.
+
+Gerçekleşen: Grafikte veri boşluğu oluşuyor ve ortalama değerler yanlış hesaplanıyor.
+
+Hata ID: BUG-002 (Orta)
+
+Hata Başlığı: Geçersiz Veri Girişi Doğrulaması Eksikliği
+
+Öncelik: Orta (P2)
+
+Açıklama: Kullanıcı profil ekranında boy veya kilo kısmına mantıksız değerler (örn: negatif sayı veya 0) girebilmektedir.
+
+Adımlar: Profil sekmesine girin -> Boy alanına "-180" yazın -> Kaydet butonuna basın.
+
+Beklenen: Uygulamanın "Lütfen geçerli bir değer girin" uyarısı vermesi.
+
+Gerçekleşen: Veri kaydediliyor ve performans analiz algoritmaları hatalı sonuç üretiyor.
+
+Hata ID: BUG-003 (Düşük)
+
+Hata Başlığı: Dark Mode Arayüz Görünürlük Sorunu
+
+Öncelik: Düşük (P3)
+
+Açıklama: Gece modunda analiz grafiklerinin eksen etiketleri (X/Y) okunamaz durumdadır.
+
+Etki: Kullanıcı deneyimini (UX) olumsuz etkiliyor.
+
+4. TEKNİK ÖNERİLER VE SONUÇ
+
+Uygulamanın genel performansı tatmin edicidir; ancak özellikle verat tutarlılığı ve hata payı yönetimi (Error Handling) konularında iyileştirmeler yapılması gerekmektedir.
+
+Geliştiriciler İçin: Yerel veri tabanı (SQLite/Room) kullanımı artırılarak "offline-first" yaklaşımı benimsenmelidir.
+
+UI/UX Ekibi İçin: Dinamik tema (Material Design 3) geçişleri sırasında grafik kütüphanesindeki renk kontrastları tekrar gözden geçirilmelidir.
