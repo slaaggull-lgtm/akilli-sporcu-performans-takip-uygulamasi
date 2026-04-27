@@ -1558,8 +1558,10 @@ darboğazları tespit etmek ve optimize etmek.
 - Durum: Devam Ediyor
 - Yapılan:
   Bu rapor, "Akıllı Sporcu Performans Takip Uygulaması" mobil arayüzünün temel fonksiyonlarını, sensör entegrasyonunu ve veri tutarlılığını ölçmek amacıyla yapılan kapsamlı testlerin sonuçlarını içerir. Testler; Kara Kutu (Black Box) ve Kullanılabilirlik (Usability) test teknikleri kullanılarak gerçekleştirilmiştir. Toplamda 6 ana senaryo işletilmiş, 3 adet kritik ve orta seviye hata tespit edilmiştir.
+
 TEST SENARYOLARI VE SONUÇ TABLOSU:
 <pre>
- IDFonksiyon / ModülTest TanımıBaşarı KriteriDurumTS-01Kimlik DoğrulamaKullanıcı e-posta/şifre ile giriş süreci.Dashboard'a yönlendirme.BAŞARILITS-02BLE BağlantısıGiyilebilir sensörün Bluetooth ile eşleşmesi.Stabil veri akışı kurulumu.BAŞARILITS-03Gerçek Zamanlı İzlemeAntrenman esnasında metriklerin görselleştirilmesi.Veri gecikmesinin <500ms olması.KISMEN BAŞARILITS-04Kritik Uyarı SistemiEşik değer (Nabız/Hız) aşıldığında bildirim gönderimi.Anlık sesli ve görsel uyarı.BAŞARILITS-05Veri SenkronizasyonuAntrenman bitiminde bulut kaydı ve geçmiş listeleme.Verinin "Geçmiş"te görünmesi.BAŞARILI
+ ID ''' Fonksiyon / Modül ''' Test Tanımı  Başarı Kriteri  Durum
+ TS-01Kimlik DoğrulamaKullanıcı e-posta/şifre ile giriş süreci.Dashboard'a yönlendirme.BAŞARILITS-02BLE BağlantısıGiyilebilir sensörün Bluetooth ile eşleşmesi.Stabil veri akışı kurulumu.BAŞARILITS-03Gerçek Zamanlı İzlemeAntrenman esnasında metriklerin görselleştirilmesi.Veri gecikmesinin <500ms olması.KISMEN BAŞARILITS-04Kritik Uyarı SistemiEşik değer (Nabız/Hız) aşıldığında bildirim gönderimi.Anlık sesli ve görsel uyarı.BAŞARILITS-05Veri SenkronizasyonuAntrenman bitiminde bulut kaydı ve geçmiş listeleme.Verinin "Geçmiş"te görünmesi.BAŞARILI
 </pre>
  
