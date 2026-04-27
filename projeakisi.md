@@ -1561,12 +1561,12 @@ darboğazları tespit etmek ve optimize etmek.
 
 TEST SENARYOLARI VE SONUÇ TABLOSU:
  ```
- ID                Fonksiyon / Modül             Test Tanımı                            Başarı Kriteri                    Durum
- TS-01             Kimlik Doğrulama     Kullanıcı e-posta/şifre ile giriş süreci.    Dashboard'a yönlendirme.            BAŞARILI
- TS-02             BLE Bağlantısı      Giyilebilir sensörün Bluetooth ile eşleşmesi.   Stabil veri akışı kurulumu.         BAŞARILI
- TS-03     Gerçek Zamanlı İzleme    Antrenman esnasında metriklerin görselleştirilmesi.  Veri gecikmesinin <500ms olması. KISMEN BAŞARILI
- TS-04       Kritik Uyarı Sistemi    Eşik değer (Nabız/Hız) aşıldığında bildirim gönderimi.  Anlık sesli ve görsel uyarı.  BAŞARILI
- TS-05       Veri Senkronizasyonu    Antrenman bitiminde bulut kaydı ve geçmiş listeleme.    Verinin "Geçmiş"te görünmesi.  BAŞARILI
+ ID             FONKSİYON/MODÜL               TEST TANIMI                                                 BAŞARI KRİTERİ                        DURUM 
+ TS-01           Kimlik Doğrulama             Kullanıcı e-posta/şifre ile giriş süreci.                   Dashboard'a yönlendirme.              BAŞARILI
+ TS-02           BLE Bağlantısı               Giyilebilir sensörün Bluetooth ile eşleşmesi.               Stabil veri akışı kurulumu.           BAŞARILI
+ TS-03          Gerçek Zamanlı İzleme         Antrenman esnasında metriklerin görselleştirilmesi.         Veri gecikmesinin <500ms olması.      KISMEN BAŞARILI
+ TS-04          Kritik Uyarı Sistemi          Eşik değer (Nabız/Hız) aşıldığında bildirim gönderimi.      Anlık sesli ve görsel uyarı.          BAŞARILI
+ TS-05          Veri Senkronizasyonu          Antrenman bitiminde bulut kaydı ve geçmiş listeleme.        Verinin "Geçmiş"te görünmesi.         BAŞARILI
 ```
  TESPİT EDİLEN HATALAR VE İYİLEŞTİRME TALEPLERİ (Bug Report)
 
