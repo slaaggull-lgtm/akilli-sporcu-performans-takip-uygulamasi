@@ -1561,7 +1561,7 @@ darboğazları tespit etmek ve optimize etmek.
 
 TEST SENARYOLARI VE SONUÇ TABLOSU:
 <pre>
- ID ''' Fonksiyon / Modül ''' Test Tanımı  Başarı Kriteri  Durum
- TS-01Kimlik DoğrulamaKullanıcı e-posta/şifre ile giriş süreci.Dashboard'a yönlendirme.BAŞARILITS-02BLE BağlantısıGiyilebilir sensörün Bluetooth ile eşleşmesi.Stabil veri akışı kurulumu.BAŞARILITS-03Gerçek Zamanlı İzlemeAntrenman esnasında metriklerin görselleştirilmesi.Veri gecikmesinin <500ms olması.KISMEN BAŞARILITS-04Kritik Uyarı SistemiEşik değer (Nabız/Hız) aşıldığında bildirim gönderimi.Anlık sesli ve görsel uyarı.BAŞARILITS-05Veri SenkronizasyonuAntrenman bitiminde bulut kaydı ve geçmiş listeleme.Verinin "Geçmiş"te görünmesi.BAŞARILI
+ ID <br> Fonksiyon / Modül <br> Test Tanımı <br> Başarı Kriteri <br> Durum
+ TS-01     Kimlik DoğrulamaKullanıcı e-posta/şifre ile giriş süreci.Dashboard'a yönlendirme.BAŞARILITS-02BLE BağlantısıGiyilebilir sensörün Bluetooth ile eşleşmesi.Stabil veri akışı kurulumu.BAŞARILITS-03Gerçek Zamanlı İzlemeAntrenman esnasında metriklerin görselleştirilmesi.Veri gecikmesinin <500ms olması.KISMEN BAŞARILITS-04Kritik Uyarı SistemiEşik değer (Nabız/Hız) aşıldığında bildirim gönderimi.Anlık sesli ve görsel uyarı.BAŞARILITS-05Veri SenkronizasyonuAntrenman bitiminde bulut kaydı ve geçmiş listeleme.Verinin "Geçmiş"te görünmesi.BAŞARILI
 </pre>
  
