@@ -1343,9 +1343,34 @@ Bu hafta yürütülen çalışma, tek bir optimizasyon yaklaşımının tüm spo
 
 ### Veri Toplama ve İşleme Modülünü Geliştirme
 - Sorumlu: Nur Beyda Genç
-- Durum: Devam Ediyor
+- Durum: Tamamlandı
 - Yapılan:
+Temel Özellikler
+Veri Entegrasyonu: Apple HealthKit, Google Fit veya doğrudan cihaz sensörleri (kalp atış hızı, SpO2, adım sayısı, ivmeölçer) ile senkronizasyon.
 
+Performans Analizi: Antrenman yoğunluğu ve toparlanma (recovery) süresi analizi.
+
+Kişiselleştirilmiş Öneriler: Analiz sonuçlarına göre günlük antrenman programı güncellemeleri.
+
+Sakatlık Önleme Modülü: Yüksek yorgunluk veya düzensiz kalp ritmi durumunda kullanıcıya dinlenme uyarıları gönderme.
+
+🛠️ Teknoloji Yığını (Öneri)
+Mobil: Flutter veya React Native (Cross-platform kolaylığı için).
+
+Backend: Python (FastAPI/Flask) - Veri işleme ve analiz için ideal.
+
+Veri Analizi & AI: Pandas, Scikit-learn (Performans tahmini için).
+
+Veritabanı: Firebase (Gerçek zamanlı veri akışı) veya PostgreSQL.
+
+🏗️ Sistem Mimarisi
+Proje üç ana katmandan oluşmaktadır:
+
+Veri Toplama: Sensör verilerinin API'ler aracılığıyla ham halde alınması.
+
+İşleme Katmanı: Ham verilerin anlamlı metriklere (Örn: VO2 Max tahmini, TSS - Training Stress Score) dönüştürülmesi.
+
+Kullanıcı Arayüzü: Sporcunun gelişimini takip edebileceği görsel grafikler ve öneri paneli.
 
 
 ### Mobil Uygulama Performans Analizi ve Optimizasyonu
