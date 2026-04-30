@@ -1580,7 +1580,7 @@ darboğazları tespit etmek ve optimize etmek.
 
 ### Kullanıcı Arayüzü Testlerini Tamamlama
 - Sorumlu: Şevval Bulut
-- Durum: Devam Ediyor
+- Durum: Tamamlandı
 - Yapılan:
   Bu rapor, "Akıllı Sporcu Performans Takip Uygulaması" mobil arayüzünün temel fonksiyonlarını, sensör entegrasyonunu ve veri tutarlılığını ölçmek amacıyla yapılan kapsamlı testlerin sonuçlarını içerir. Testler; Kara Kutu (Black Box) ve Kullanılabilirlik (Usability) test teknikleri kullanılarak gerçekleştirilmiştir. Toplamda 6 ana senaryo işletilmiş, 3 adet kritik ve orta seviye hata tespit edilmiştir.
 
