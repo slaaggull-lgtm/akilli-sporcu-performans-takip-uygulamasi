@@ -747,6 +747,7 @@ CREATE TABLE Users (
     weight_kg REAL,
     fitness_level TEXT,
     created_at TEXT NOT NULL
+    
 );
 
 -- Antrenmanlar tablosu
@@ -759,6 +760,7 @@ CREATE TABLE Workouts (
     avg_heart_rate REAL,
     notes TEXT,
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
+    
 );
 
 -- Egzersizler tablosu
