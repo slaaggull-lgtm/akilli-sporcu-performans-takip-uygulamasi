@@ -726,6 +726,70 @@ Güvenlik ve KVKK Uyumluluğu: Veritabanı seviyesinde veri güvenliği öncelik
 Gelecek Planlaması ve Genişletilebilirlik: Tasarlanan veritabanı şeması modüler bir yapıdadır. İlerleyen aşamalarda yeni sensör türleri (örneğin; uyku takip verileri veya beslenme tabloları) eklendiğinde mevcut mimariyi bozmadan kolayca entegre edilebilecek esnekliktedir. NoSQL ve Relational yapıların avantajları birleştirilerek sistemin binlerce eş zamanlı kullanıcıya hizmet verebilecek kapasiteye ulaşması hedeflenmiştir.
 
 
+### Veritabanı Şeması Tasarımı
+
+- Sorumlu: Asım Gökalp
+- Durum: Tamamlandı
+- Yapılan:
+  - Uygulamanın ihtiyaç duyduğu sporcu bilgileri, antrenman kayıtları, egzersiz detayları ve performans metrikleri için veritabanı şeması tasarlanmıştır.
+  - SQLite tabanlı yapı esas alınarak tablo alanları, veri tipleri ve tablolar arası ilişkiler belirlenmiştir.
+  - Kullanıcılar, antrenmanlar, egzersizler ve performans kayıtları arasında bire-çok ilişkiler tanımlanmıştır.
+  - Sorgu performansını artırmak amacıyla kullanıcı kimliği, tarih ve antrenman kimliği gibi alanlar üzerinde indeksleme planlanmıştır.
+  - Veri güvenliği için hassas kullanıcı bilgilerinin korunmasına yönelik şifreleme ve erişim kontrolü yaklaşımları değerlendirilmiştir.
+  - Veritabanının sürdürülebilir ve genişletilebilir olması için modüler tablo yapısı ve yeni veri alanlarının eklenmesine uygun tasarım kararları alınmıştır.
+
+-- Kullanıcılar tablosu
+CREATE TABLE Users (
+    user_id INTEGER PRIMARY KEY,
+    full_name TEXT NOT NULL,
+    age INTEGER,
+    height_cm REAL,
+    weight_kg REAL,
+    fitness_level TEXT,
+    created_at TEXT NOT NULL
+);
+
+-- Antrenmanlar tablosu
+CREATE TABLE Workouts (
+    workout_id INTEGER PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    workout_date TEXT NOT NULL,
+    duration_minutes INTEGER,
+    calories_burned REAL,
+    avg_heart_rate REAL,
+    notes TEXT,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+-- Egzersizler tablosu
+CREATE TABLE Exercises (
+    exercise_id INTEGER PRIMARY KEY,
+    workout_id INTEGER NOT NULL,
+    exercise_name TEXT NOT NULL,
+    set_count INTEGER,
+    rep_count INTEGER,
+    duration_seconds INTEGER,
+    FOREIGN KEY (workout_id) REFERENCES Workouts(workout_id)
+);
+
+-- Performans metrikleri tablosu
+CREATE TABLE PerformanceMetrics (
+    metric_id INTEGER PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    metric_date TEXT NOT NULL,
+    steps INTEGER,
+    distance_km REAL,
+    sleep_hours REAL,
+    hrv REAL,
+    vo2max REAL,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+-- İndeksler
+CREATE INDEX idx_workouts_user_id ON Workouts(user_id);
+CREATE INDEX idx_workouts_date ON Workouts(workout_date);
+CREATE INDEX idx_metrics_user_id ON PerformanceMetrics(user_id);
+CREATE INDEX idx_metrics_date ON PerformanceMetrics(metric_date);
 
 ## Hafta 4
 
