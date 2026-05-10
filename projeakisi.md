@@ -1712,3 +1712,17 @@ Uygulamanın genel performansı tatmin edicidir; ancak özellikle verat tutarlı
 Geliştiriciler İçin: Yerel veri tabanı (SQLite/Room) kullanımı artırılarak "offline-first" yaklaşımı benimsenmelidir.
 
 UI/UX Ekibi İçin: Dinamik tema (Material Design 3) geçişleri sırasında grafik kütüphanesindeki renk kontrastları tekrar gözden geçirilmelidir.
+
+
+## Hafta 6
+
+### Uygulama Entegrasyonu ve Son Kontroller
+
+- Sorumlu: Asım Gökalp
+- Durum: Tamamlandı
+- Yapılan:
+  - Mobil uygulama ile sensör verileri arasındaki entegrasyon süreci son kez kontrol edilmiştir.
+  - Veri akışının sensörden uygulamaya aktarımı, veri modellerine dönüştürülmesi ve ilgili ekranlarda doğru şekilde gösterilmesi değerlendirilmiştir.
+  - Kalp atış hızı, adım sayısı, süre, kalori ve benzeri metriklerin veri tutarlılığı açısından kontrolü yapılmıştır.
+  - API, yerel veri katmanı ve kullanıcı arayüzü arasındaki veri uyumu gözden geçirilmiştir.
+  - Bağlantı kopması, eksik veri gelmesi ve senkronizasyon hataları gibi senaryolar değerlendirilerek güvenilir veri akışı için son kontroller tamamlanmıştır.
