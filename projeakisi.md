@@ -1109,6 +1109,9 @@ plt.savefig('model_performans_raporu.png') ( Grafiği bilgisayarına kaydeder)
 
 plt.show()
 
+<img width="1200" height="400" alt="model_performans_raporu" src="https://github.com/user-attachments/assets/865fd95c-6af7-4cbf-ba64-fac5d6104c49" />
+
+
 import os
  
  import glob
