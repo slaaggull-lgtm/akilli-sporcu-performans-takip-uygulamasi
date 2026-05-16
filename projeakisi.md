@@ -1807,15 +1807,17 @@ Laktat Eşiği Kontrollü Gelişim: Sinir sistemi toplandıktan sonra, marjinal 
    5. İLERLEME TAKİP MATRİSİ VE KPI (ANAHTAR PERFORMANS GÖSTERGELERİ)
      
       Önerilen optimizasyon protokolünün başarısı, 4 haftalık süreç boyunca sensörlerden toplanacak verilerle doğrulanacaktır. Başarı kriteri olarak kabul edilen hedef metrik tablosu aşağıdadır:
+
       ```
       İzlenen Performans Metriği         Mevcut Durum (Analiz Çıktısı)       4 Hafta Sonraki Hedef Durum           Analtik Hedef Tanımı
 
-       Ortalama Koşu                         162 adım/dk                         172 - 175 adım/dk                  172 - 175\ \text{adım/dk}$Yorgunluk anında dahi
-          Kadansı                                                                                                      yüksek adım frekansını koruyabilmek. 
-
+     Ortalama Koşu                         162 adım/dk                         172 - 175 adım/dk                  172 - 175\ \text{adım/dk}$Yorgunluk anında dahi
+       Kadansı                                                                                                      yüksek adım frekansını koruyabilmek. 
+   
     Yerle Temas Süresi(GCT)                 260 ms                                < 240 ms                          Reaktif gücü artırarak adım başına harcanan enerjiyi azaltmak.  
 
     Sabah HRV (RMSSD)                      52 ms (Negatif Anomali)                72 - 78 ms (Homestaz)              Otonom sinir sisteminin tam toparlanma durumuna ulaştığını doğrulamak.
 
     VO2 Max Seviyesi                       48 ml / kg / dk                        51 ml / kg / dk                   Aerobik güç ve oksijen tüketim kapasitesinde marjinal artış.
+      
       ```
