@@ -802,7 +802,17 @@ CREATE INDEX idx_metrics_date ON PerformanceMetrics(metric_date);
 - Sorumlu: Baver Katar
 - Durum: Devam Ediyor
 - Yapılan:
-  
+
+
+## Performans Analiz Algoritmaları Tasarımı
+- Sorumlu: Şevval Bulut
+- Durum: Devam Ediyor
+- Yapılan:
+
+## Veri Toplama ve Senkronizasyon Modülü Tasarımı
+- Sorumlu: Nur Beyda Genç
+- Durum: Devam Ediyor
+- Yapılan:
 
 ## Hafta 4
 
