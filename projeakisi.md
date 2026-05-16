@@ -1024,6 +1024,8 @@ tflite_model = converter.convert()
 with open("sporcu_analiz_modeli.tflite", "wb") as f:
    
     f.write(tflite_model)
+    
+<img width="598" height="1976" alt="sporcu_analiz_modeli tflite" src="https://github.com/user-attachments/assets/8ea9aa90-d12f-4dc3-a465-3bb980bb4963" />
 
 import pandas as pd
 import os
