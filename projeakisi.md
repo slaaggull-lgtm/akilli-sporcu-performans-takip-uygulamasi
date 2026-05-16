@@ -798,6 +798,12 @@ CREATE INDEX idx_workouts_date ON Workouts(workout_date);
 CREATE INDEX idx_metrics_user_id ON PerformanceMetrics(user_id);
 CREATE INDEX idx_metrics_date ON PerformanceMetrics(metric_date);
 
+## Mobil Uygulama Kullanıcı Arayüzü (UI) Tasarımı
+- Sorumlu: Baver Katar
+- Durum: Devam Ediyor
+- Yapılan:
+  
+
 ## Hafta 4
 
 ### SQLite Veritabanı Entegrasyonu ve Veri Modeli Oluşturma (Android):
