@@ -917,6 +917,86 @@ CREATE INDEX idx_metrics_date ON PerformanceMetrics(metric_date);
 - Sorumlu: Şevval Bulut
 - Durum: Devam Ediyor
 - Yapılan:
+- import pandas as pd
+import numpy as np
+import tensorflow as tf
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
+
+# 1. GERÇEK VERİ SETİNİ YÜKLEME
+# Colab sol paneldeki gerçek dosyanın yolunu okuyoruz
+dosya_yolu = '/content/Giyilebilir_Spor_Sagligi_Verisi.csv'
+veri = pd.read_csv(dosya_yolu)
+print("1. Aşama: Gerçek veri seti başarıyla okundu.\n")
+
+# 2. ZAMAN SERİSİ PENCERELEME (Boyut: 3)
+# Kalp atış hızı (Heart_Rate) üzerinden zaman serisi pencereleri oluşturuyoruz
+kalp_atislari = veri['Heart_Rate'].values
+
+pencere_boyutu = 3
+X_list = []
+y_list = []
+
+# t-3, t-2, t-1 anlarındaki kalp atışlarını alıp, t anındakini tahmin etmeyi öğreteceğiz
+for i in range(len(kalp_atislari) - pencere_boyutu):
+    X_list.append(kalp_atislari[i : i + pencere_boyutu])
+    y_list.append(kalp_atislari[i + pencere_boyutu])
+
+X_ham = np.array(X_list)
+y_ham = np.array(y_list)
+
+# 3. SCIKIT-LEARN İLE VERİYİ BÖLME VE ÖLÇEKLENDİRME
+# Verinin %20'sini test, %80'ini eğitim için ayırıyoruz
+X_train, X_test, y_train, y_test = train_test_split(X_ham, y_ham, test_size=0.2, random_state=42)
+
+# Scikit-learn MinMaxScaler kullanarak verileri 0 ile 1 arasına çekiyoruz
+scaler = MinMaxScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Veriyi LSTM modelinin beklediği 3 boyutlu formata getiriyoruz: [Örnek Sayısı, Zaman Adımı, Özellik Sayısı]
+X_train_lstm = X_train_scaled.reshape((X_train_scaled.shape[0], X_train_scaled.shape[1], 1))
+X_test_lstm = X_test_scaled.reshape((X_test_scaled.shape[0], X_test_scaled.shape[1], 1))
+
+print(f"2. Aşama: Veriler mutfakta hazırlandı.")
+print(f"Eğitim verisi boyutu: {X_train_lstm.shape}")
+print(f"Test verisi boyutu: {X_test_lstm.shape}\n")
+
+# 4. TENSORFLOW İLE LSTM SİNİR AĞININ KURULMASI
+print("3. Aşama: LSTM Modeli kuruluyor ve eğitiliyor...")
+model = tf.keras.models.Sequential([
+    
+   tf.keras.layers.LSTM(64, activation='relu', input_shape=(pencere_boyutu, 1)),
+
+   tf.keras.layers.Dense(32, activation='relu'),
+   
+   tf.keras.layers.Dense(1) # Gelecekteki kalp atış hızı değerini tahmin eden tek çıktı
+
+])
+
+model.compile(optimizer='adam', loss='mse', metrics=['mae'])
+
+# Modeli eğitme (10 tur boyunca verileri inceleyecek)
+
+model.fit(X_train_lstm, y_train, epochs=10, batch_size=16, validation_data=(X_test_lstm, y_test), verbose=1)
+
+# 5. TENSORFLOW LITE (.TFLITE) DÖNÜŞÜMÜ (Mobil Optimizasyon)
+
+print("\n4. Aşama: Model mobil cihazlar için TensorFlow Lite formatına dönüştürülüyor...")
+
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+
+converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS, tf.lite.OpsSet.SELECT_TF_OPS]
+
+converter._experimental_lower_tensor_list_ops = False
+
+tflite_model = converter.convert()
+
+# Dosyayı kaydetme
+with open("sporcu_analiz_modeli.tflite", "wb") as f:
+    f.write(tflite_model)
+
+
 
 ## Veri Toplama ve Senkronizasyon Modülü Tasarımı
 - Sorumlu: Nur Beyda Genç
