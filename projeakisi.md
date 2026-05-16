@@ -611,6 +611,115 @@ Gelecek Planlaması ve Geliştirilebilirlik: API tasarımı esnek ve modüler bi
 - Sorumlu: Sıla Ağgül
 - Durum: Devam Ediyor
 - Yapılan:
+  1. Giriş ve Araştırma Temeli (Research Foundation)
+
+Kişiselleştirilmiş bir antrenman jeneratörü tasarlarken, yazılımın spor bilimleri literatürüne sadık kalması gerekir. Statik ve herkese aynı programı veren geleneksel uygulamaların aksine, bu sistem "Kullanıcı Profilleme" ve "Dinamik Değişken Analizi" prensiplerine dayanır.
+
+Araştırma sürecinde sistemin besleneceği 3 ana akademik direk belirlenmiştir:
+
+Selye’nin Genel Adaptasyon Sendromu (GAS): Vücudun strese (ağırlığa) verdiği tepki. Algoritma, kullanıcının ne zaman dinlenmesi (Deload) gerektiğini bu teoriye göre hesaplar.
+
+Hacim ve Yoğunluk İlişkisi (Volume & Intensity): Volume=Set×Reps×Weight formülüyle her kas grubu için haftalık ideal eşiklerin (Minimum Effective Volume - MEV ve Maximum Recoverable Volume - MRV) takibi.
+
+Kişisel Kısıtlamalar: Kullanıcının sakatlık geçmişi, ekipman erişimi (Ev/Salon) ve haftalık ayırabileceği gün sayısı.
+
+ 2. Sistem Mimarisi ve Veri Akış Şeması (Data Flow & Architecture)
+
+Sistem girdi katmanı, işleme motoru (Engine) ve çıktı katmanı olmak üzere 3 modülden oluşur:
+
+Girdi Katmanı (User Inputs): Yaş, cinsiyet, fitness seviyesi (Başlangıç/Orta/İleri), hedef (Kilo verme/Kas kütlesi/Güç), sakatlık durumu, mevcut ekipmanlar ve haftalık antrenman gün sayısı.
+
+İşleme Motoru (Rule-Based AI Engine): Yazılan Java algoritmalarının, gelen girdileri filtreleyerek uygun periodizasyon modelini (DUP veya Lineer) seçtiği katman.
+
+Çıktı Katmanı (Output Plan): Kullanıcıya özel dinamik egzersiz, set, tekrar ve ağırlık eşleşmesi.
+
+ 3. Veritabanı İlişkisel Tasarımı (Database Schema for Generator)
+
+Bu jeneratörün çalışması için SQLite tarafında sadece kullanıcı verileri değil, egzersizlerin mekanik özelliklerini tutan tablolar da kurgulanmalıdır.
+
+SQL
+-- Egzersizler Kataloğu Tablosu
+CREATE TABLE Exercises (
+    exercise_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    target_muscle_group TEXT NOT NULL, -- Göğüs, Sırt, Bacak vb.
+    mechanic_type TEXT NOT NULL,       -- Compound (Bileşik) / Isolation (İzole)
+    required_equipment TEXT NOT NULL   -- Barbell, Dumbbell, Machine, Bodyweight
+);
+
+-- Kullanıcı Antrenman Tercihleri Tablosu
+CREATE TABLE UserPreferences (
+    user_id INTEGER PRIMARY KEY,
+    fitness_level TEXT CHECK(fitness_level IN ('Beginner', 'Intermediate', 'Advanced')),
+    goal TEXT CHECK(goal IN ('Hypertrophy', 'Strength', 'FatLoss')),
+    weekly_days_count INTEGER CHECK(weekly_days_count BETWEEN 2 AND 6),
+    equipment_access TEXT CHECK(equipment_access IN ('Gym', 'Home_Full', 'Home_Bodyweight'))
+);
+
+-- Jeneratör Şablon Eşleştirme Tablosu (Algoritmanın Beslendiği Kurallar)
+CREATE TABLE WorkoutTemplates (
+    template_id INTEGER PRIMARY KEY,
+    level_restriction TEXT,
+    day_index INTEGER, -- 1. Gün, 2. Gün vb.
+    split_type TEXT    -- FullBody, Upper/Lower, Push/Pull/Legs
+);
+ 4. Çekirdek Jeneratör Algoritması Mantığı (Java Core Logic)
+
+Aşağıdaki Java kodu, kullanıcının girdilerine göre hangi antrenman bölünmesini (Split) seçeceğine ve o gün kaç egzersiz atayacağına karar veren jeneratör kurallarını (Rule-Engine) içerir:
+
+Java
+package com.smartfit.engine;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class WorkoutPlanGenerator {
+
+    // Kullanıcı Girdi Sınıfı (Data Transfer Object)
+    public static class UserProfile {
+        public String level;          // Beginner, Intermediate, Advanced
+        public int weeklyDays;        // 2, 3, 4, 5
+        public String equipment;     // Gym, Home
+        public String goal;           // Strength, Hypertrophy
+    }
+
+    /**
+     * Kullanıcı profiline göre en optimize antrenman bölünmesini ve stratejisini seçer.
+     */
+    public String generateSplitsAndStrategy(UserProfile profile) {
+        StringBuilder planDecision = new StringBuilder();
+
+        // 1. Kural: Gün sayısına göre Bölünme (Split) Seçimi
+        if (profile.weeklyDays <= 3) {
+            planDecision.append("Bölünme: Tüm Vücut (Full Body) Modeli. ");
+            planDecision.append("Gerekçe: Düşük frekansta kas sentezini maksimumda tutmak.\n");
+        } else if (profile.weeklyDays == 4) {
+            planDecision.append("Bölünme: Üst / Alt Vücut (Upper/Lower Split). ");
+            planDecision.append("Gerekçe: Kas gruplarına 48 saat dinlenme süresi tanımak.\n");
+        } else {
+            planDecision.append("Bölünme: İtiş / Çekiş / Bacak (Push/Pull/Legs). ");
+            planDecision.append("Gerekçe: Yüksek hacimli antrenmanları optimize etmek.\n");
+        }
+
+        // 2. Kural: Seviyeye ve Hedefe göre Set/Tekrar Stratejisi
+        if (profile.level.equals("Beginner")) {
+            planDecision.append("Yoğunluk: %60-70 1RM (One Rep Max).\n");
+            planDecision.append("Hacim: Kas grubu başına haftalık 8-10 Set.\n");
+            planDecision.append("Strateji: Doğrusal (Linear) İlerleme Modeli.");
+        } else {
+            planDecision.append("Yoğunluk: %70-85 1RM.\n");
+            planDecision.append("Hacim: Kas grubu başına haftalık 12-20 Set.\n");
+            planDecision.append("Strateji: Günlük Dalgalı Periodizasyon (DUP) Motoru.");
+        }
+
+        return planDecision.toString();
+    }
+}
+ 5. Bu Araştırma ve Tasarımın Projeye Kazanımları
+
+Mühendislik Değeri: Bu tasarım, uygulamanın rastgele egzersiz seçmediğini, arkasında ilişkisel bir veritabanı kuralları dizisi (Rule-Engine) ve spor bilimleri matematiği barındırdığını kanıtlar.
+
+Modülerlik: Yarın bir gün sisteme yapay zeka (Machine Learning) entegre edilmek istense bile, bu kurulan kurumsal Java yapısı veri modellemesine doğrudan uyum sağlayacak esnekliktedir (Scalable).
 
 ### UI/UX Wireframe Tasarımı
 - Sorumlu: Şevval Bulut
