@@ -1714,6 +1714,7 @@ Geliştiriciler İçin: Yerel veri tabanı (SQLite/Room) kullanımı artırılar
 UI/UX Ekibi İçin: Dinamik tema (Material Design 3) geçişleri sırasında grafik kütüphanesindeki renk kontrastları tekrar gözden geçirilmelidir.
 
 
+
 ## Hafta 6
 
 ### Uygulama Entegrasyonu ve Son Kontroller
@@ -1821,3 +1822,27 @@ Laktat Eşiği Kontrollü Gelişim: Sinir sistemi toplandıktan sonra, marjinal 
     VO2 Max Seviyesi                       48 ml / kg / dk                        51 ml / kg / dk                   Aerobik güç ve oksijen tüketim kapasitesinde marjinal artış.
       
       ```
+
+
+
+## Veri Analizi ve Performans Optimizasyonu Raporu
+-  Sorumlu: Şevval Bulut
+-  Durum: Devam Ediyor
+-  Yapılan:
+
+
+
+## Proje Dokümantasyonunun Tamamlanması ve Son Kontroller
+- Sorumlu: Baver Katar
+- Durum: Devam Ediyor
+- Yapılan:
+
+
+## Mobil Uygulama Testleri ve Hata Düzeltmeleri 
+- Sorumlu: Sıla Ağgül
+- Durum: Devam Ediyor
+- Yapılan:
+
+
+
+
