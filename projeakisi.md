@@ -1730,39 +1730,89 @@ UI/UX Ekibi İçin: Dinamik tema (Material Design 3) geçişleri sırasında gra
 - Sorumlu: Şevval Bulut
 - Durum:
 - Yapılan :
+
 - Sporcu Performans Analizi ve Antrenman Optimizasyonu Raporu:
+
 -Bu çalışma; akıllı saatler, göğüs bantları ve giyilebilir ivmeölçer sensörlerden elde edilen çok boyutlu biyometrik ve kinematik zaman serisi verilerinin, sporcu performansını maksimize etmek ve sakatlık risklerini minimize etmek amacıyla analiz edilmesini kapsamaktadır. Proje kapsamında geliştirilen makine öğrenimi mimarisi (LSTM ve Otokodlayıcılar), ham sensör verilerini işleyerek sporcuların güçlü ve zayıf yönlerini sayısal metriklerle ortaya koymaktadır. Bu raporda, elde edilen analiz bulguları akademik bir formatta sunulmuş, sinir sisteminin toparlanma süreçleri incelenmiş ve antrenman programlarının optimize edilmesi için veri odaklı bir mikro-döngü (haftalık plan) önerisi geliştirilmiştir.
+
 1. GİRİŞ VE VERİ METODOLOJİSİ
-   Giyilebilir teknoloji araçlarından yüksek frekansta toplanan veriler, tek başlarına ham sinyallerden (gürültü içeren) ibarettir. Bu sistemde, verinin anlamlandırılması ve mobil cihazlarda (TensorFlow Lite üzerinde) gerçek zamanlı işlenebilmesi için öncelikle bir Veri Ön İşleme ve Özellik Mühendisliği (Feature Engineering) hattı kurgulanmıştır.
+
+    Giyilebilir teknoloji araçlarından yüksek frekansta toplanan veriler, tek başlarına ham sinyallerden (gürültü içeren) ibarettir. Bu sistemde, verinin anlamlandırılması ve mobil cihazlarda (TensorFlow Lite üzerinde) gerçek zamanlı işlenebilmesi için öncelikle bir Veri Ön İşleme ve Özellik Mühendisliği (Feature Engineering) hattı kurgulanmıştır.
+
     Veri Kaynakları ve Toplama Protokolü
-    Sistem, üç temel veri katmanından beslenmektedir:
-  1 . Fizyolojik Sinyaller (Fotopletismografi - PPG ve Elektrokardiyografi - ECG): Akıllı saat ve göğüs bandından anlık Kalp Atış Hızı (KAH) ve R-R aralıkları (milisaniye cinsinden kalp atışları arasındaki süre) toplanır.
-   2. Kinematik ve Dinamik Sinyaller (Inertial Measurement Unit - IMU): 3 eksenli ivmeölçer ve jiroskop yardımıyla sporcunun uzaysal hareketleri, adım frekansı ve ivmelenme vektörleri yakalanır.
-   3. Küresel Konumlandırma (GPS): Hız, kat edilen mesafe ve eğim verileri anlık olarak sisteme aktarılır.
+
+   Sistem, üç temel veri katmanından beslenmektedir:
+
+   1 . Fizyolojik Sinyaller (Fotopletismografi - PPG ve Elektrokardiyografi - ECG): Akıllı saat ve göğüs bandından anlık Kalp Atış Hızı (KAH) ve R-R aralıkları (milisaniye cinsinden kalp atışları arasındaki süre) toplanır.
+
+    2. Kinematik ve Dinamik Sinyaller (Inertial Measurement Unit - IMU): 3 eksenli ivmeölçer ve jiroskop yardımıyla sporcunun uzaysal hareketleri, adım frekansı ve ivmelenme vektörleri yakalanır.
+
+    3. Küresel Konumlandırma (GPS): Hız, kat edilen mesafe ve eğim verileri anlık olarak sisteme aktarılır.
+
        Analiz Edilen Temel Metrikler ve Matematiksel Altyapı
+     
       Modellerin eğitiminde ve tanımlayıcı analizlerde kullanılan temel fizyolojik parametreler şunlardır:
-      Kalp Atış Hızı Değişkenliği (HRV - RMSSD): Kalp atışları arasındaki milisaniyelik farkların karelerinin ortalamasının kareköküdür. Otonom sinir sisteminin (sempatik ve parasempatik) dengesini ve sporcunun yorgunluk/toparlanma (recovery) durumunu gösteren en kritik metriktir.
-      VO2 Max (Maksimum Oksijen Tüketimi): Sporcunun bir dakikada kilosunun kilogramı başına tüketebileceği maksimum oksijen miktarıdır ($ml/kg/dk$). Sistem, alt-maksimal kalp atış hızı ve hız verilerini lineer regresyon türevleriyle analiz ederek bu değeri tahmin eder.
-      Yerle Temas Süresi (Ground Contact Time - GCT): Koşu esnasında ayağın yerle temas ettiği süredir (milisaniye). Koşu mekaniğinin ve biyomekanik verimliliğin doğrudan göstergesidir.
+
+     Kalp Atış Hızı Değişkenliği (HRV - RMSSD): Kalp atışları arasındaki milisaniyelik farkların karelerinin ortalamasının kareköküdür. Otonom sinir sisteminin (sempatik ve parasempatik) dengesini ve sporcunun yorgunluk/toparlanma (recovery) durumunu gösteren en kritik metriktir.
+
+     VO2 Max (Maksimum Oksijen Tüketimi): Sporcunun bir dakikada kilosunun kilogramı başına tüketebileceği maksimum oksijen miktarıdır ($ml/kg/dk$). Sistem, alt-maksimal kalp atış hızı ve hız verilerini lineer regresyon türevleriyle analiz ederek bu değeri tahmin eder.
+
+    Yerle Temas Süresi (Ground Contact Time - GCT): Koşu esnasında ayağın yerle temas ettiği süredir (milisaniye). Koşu mekaniğinin ve biyomekanik verimliliğin doğrudan göstergesidir.
+      
       2. MAKİNE ÖĞRENİMİ TABANLI PERFORMANS BULGULARI
-         Toplanan veriler, Zaman Serisi Analizi (LSTM) ve Anomali Tespiti (Autoencoders) algoritmalarından geçirilerek sporcunun mevcut fizyolojik profili çıkarılmıştır. Yapılan derinlemesine analizler sonucunda şu bulgulara ulaşılmıştır:
-          Sporcunun Güçlü Yönlerinin Analizi Yüksek Aerobik Verimlilik ve Stabilizasyon: Sporcunun $14\ km/saat$ gibi yüksek hızlarda dahi kalp atış hızını Aerobik Eşik (Zone 3) sınırları içerisinde sabit tutabildiği gözlemlenmiştir. Bu, sporcunun mitokondriyal kapasitesinin ve kardiyovasküler sisteminin gelişmiş olduğunu, uzun süreli yüklenmelere karşı yüksek direnç gösterdiğini kanıtlamaktadır.
-         Hızlı Post-Egzersiz Kardiyak Toparlanma (Heart Rate Recovery): Yüksek yoğunluklu interval (HIIT) yüklenmelerinin hemen ardından, ilk 60 saniyede nabzın ortalama 35-40 atım/dakika düştüğü tespit edilmiştir. Bu hızlı düşüş, parasempatik sinir sisteminin aktivasyon hızının ve sporcunun genel antrenman uyumunun (fittnes seviyesi) oldukça güçlü olduğunu gösterir.
-         Geliştirilmesi Gereken Zayıf Yönler ve Risk Analizi
-         Yorgunluğa Bağlı Biyomekanik Deformasyon (Kinematik Verimsizlik): Zaman serisi analizlerinde, antrenmanın 45. dakikasından sonra sporcunun kadansının (dakikadaki adım sayısı) $175$'ten $162$'ye düştüğü, buna karşın Yerle Temas Süresinin (GCT) $230\ ms$'den $265\ ms$'ye yükseldiği saptanmıştır. Bu durum, yorgunluk arttıkça kasların elastik geri dönüşüm (elastic recoil) yeteneğini kaybettiğini, sporcunun ilerlemek için daha fazla enerji harcadığını ve koşu formunun bozulduğunu göstermektedir. Bu aşama sakatlık riskinin en yüksek olduğu evredir.
-         Merkezi Sinir Sistemi (MSS) Yorgunluğu ve Sürantreman (Overtraining) Sinyali: Son 7 günlük sabah dinlenik HRV verileri incelendiğinde, RMSSD değerinde baseline (sporcunun normal ortalaması) değerine göre %22'lik bir düşüş tespit edilmiştir. Aynı süreçte dinlenik nabızda da sistematik bir artış ($+5\ bpm$) gözlenmiştir. Bu anomali, sporcunun kas yapısı toparlanmış görünse bile merkezi sinir sisteminin bir önceki yoğun antrenman yüklerini tam olarak absorbe edemediğini (Under-recovery) net bir şekilde ortaya koymaktadır.
-         3. ANTRENMAN YOĞUNLUK BÖLGELERİ (HEART RATE ZONES) DAĞILIMISporcunun son makro döngüde gerçekleştirdiği antrenmanların yoğunluk dağılımı, laktat birikimi ve enerji sistemleri baz alınarak analiz edilmiştir. Mevcut durum dağılımı şu şekildedir:[Zone 1 - 2: Yenilenme & Aktif Dinlenme]  ████████ (20%)
+
+          Toplanan veriler, Zaman Serisi Analizi (LSTM) ve Anomali Tespiti (Autoencoders) algoritmalarından geçirilerek sporcunun mevcut fizyolojik profili çıkarılmıştır. Yapılan derinlemesine analizler sonucunda şu bulgulara ulaşılmıştır:
+
+    Sporcunun Güçlü Yönlerinin Analizi Yüksek Aerobik Verimlilik ve Stabilizasyon: Sporcunun $14\ km/saat$ gibi yüksek hızlarda dahi kalp atış hızını Aerobik Eşik (Zone 3) sınırları içerisinde sabit tutabildiği gözlemlenmiştir. Bu, sporcunun mitokondriyal kapasitesinin ve kardiyovasküler sisteminin gelişmiş olduğunu, uzun süreli yüklenmelere karşı yüksek direnç gösterdiğini kanıtlamaktadır.
+
+    Hızlı Post-Egzersiz Kardiyak Toparlanma (Heart Rate Recovery): Yüksek yoğunluklu interval (HIIT) yüklenmelerinin hemen ardından, ilk 60 saniyede nabzın ortalama 35-40 atım/dakika düştüğü tespit edilmiştir. Bu hızlı düşüş, parasempatik sinir sisteminin aktivasyon hızının ve sporcunun genel antrenman uyumunun (fittnes seviyesi) oldukça güçlü olduğunu gösterir.
+
+   Geliştirilmesi Gereken Zayıf Yönler ve Risk Analizi
+
+   Yorgunluğa Bağlı Biyomekanik Deformasyon (Kinematik Verimsizlik): Zaman serisi analizlerinde, antrenmanın 45. dakikasından sonra sporcunun kadansının (dakikadaki adım sayısı) $175$'ten $162$'ye düştüğü, buna karşın Yerle Temas Süresinin (GCT) $230\ ms$'den $265\ ms$'ye yükseldiği saptanmıştır. Bu durum, yorgunluk arttıkça kasların elastik geri dönüşüm (elastic recoil) yeteneğini kaybettiğini, sporcunun ilerlemek için daha fazla enerji harcadığını ve koşu formunun bozulduğunu göstermektedir. Bu aşama sakatlık riskinin en yüksek olduğu evredir.
+
+   Merkezi Sinir Sistemi (MSS) Yorgunluğu ve Sürantreman (Overtraining) Sinyali: Son 7 günlük sabah dinlenik HRV verileri incelendiğinde, RMSSD değerinde baseline (sporcunun normal ortalaması) değerine göre %22'lik bir düşüş tespit edilmiştir. Aynı süreçte dinlenik nabızda da sistematik bir artış ($+5\ bpm$) gözlenmiştir. Bu anomali, sporcunun kas yapısı toparlanmış görünse bile merkezi sinir sisteminin bir önceki yoğun antrenman yüklerini tam olarak absorbe edemediğini (Under-recovery) net bir şekilde ortaya koymaktadır.
+
+    3. ANTRENMAN YOĞUNLUK BÖLGELERİ (HEART RATE ZONES) DAĞILIMISporcunun son makro döngüde gerçekleştirdiği antrenmanların yoğunluk dağılımı, laktat birikimi ve enerji sistemleri baz alınarak analiz edilmiştir. Mevcut durum dağılımı şu şekildedir:
+
+       [Zone 1 - 2: Yenilenme & Aktif Dinlenme]  ████████ (20%)
 [Zone 3: Geliştirici Aerobik Kapasite]   ██████████████████████ (55%)
 [Zone 4 - 5: Anaerobik Eşik & Maks Efor] ██████████ (25%)
-Zone 3 Yoğunluğu (%55): Dayanıklılık altyapısı için ideal bir hacimdir.Zone 4 - 5 Yoğunluğu (%25): Bu bölgenin %25 gibi yüksek bir orana sahip olması, son dönemdeki laktat toleransını artırmış olsa da, yukarıda bahsettiğimiz sinir sistemi yorgunluğunun (HRV düşüşünün) temel tetikleyicisidir. Akıllı sistemlerin görevi bu aşamada devreye girerek hacmi kısmayı önermektir.
+
+Zone 3 Yoğunluğu (%55): Dayanıklılık altyapısı için ideal bir hacimdir.Zone 4 - 5 Yoğunluğu (%25): Bu bölgenin %25 gibi yüksek bir orana sahip olması, son dönemdeki laktat toleransını artırmış olsa da, yukarıda bahsettiğimiz sinir sistemi yorgunluğunun (HRV düşüşünün) temel tetikleyicisidir. 
+Akıllı sistemlerin görevi bu aşamada devreye girerek hacmi kısmayı önermektir.
+
 4. VERİ ODAKLI ANTRENMAN PROGRAMI OPTİMİZASYON ÖNERİLERİ
+
    Elde edilen sayısal bulgular (düşük kadans ve düşen HRV), mevcut antrenman programının körü körüne devam ettirilmesi durumunda kronik sakatlıklara (stres kırığı, tendon inflamasyonu vb.) yol açacağını göstermektedir. Bu nedenle program, algoritmik çıktılar doğrultusunda yeniden optimize edilmiştir:
+ 
  Mikro Döngü (Haftalık Plan) Yeniden Yapılandırması Yenilenme Bloklarının Entegrasyonu (Deload & Active Recovery): HRV değerleri normal baseline seviyesine (ortalama $75\ ms$) dönene kadar, haftalık programdaki yüksek yoğunluklu (Zone 4-5) seanslar askıya alınmalıdır. Bunun yerine, haftada 2 gün, eklemlere binen yükü azaltmak adına koşu yerine Zone 1-2 nabız aralığında ($110-130\ bpm$) 45 dakikalık düşük yoğunluklu bisiklet veya yüzme (aktif dinlenme) egzersizleri eklenmelidir.
+
 Laktat Eşiği Kontrollü Gelişim: Sinir sistemi toplandıktan sonra, marjinal hız kapasitesini artırmak için haftada sadece 1 gün, anlık laktat eşiği sınırında (Zone 4 başlangıcı) $2 \times 10$ dakikalık kontrollü tempo koşuları planlanmalıdır.
-    Biyomekanik ve Nöromüsküler Optimizasyon
+    
+   Biyomekanik ve Nöromüsküler Optimizasyon
+  
    Akustik ve Görsel Metronom Egzersizleri: Yorgunluk anındaki kadans düşüşünü engellemek amacıyla, sporcuya haftada 2 seanslik "Metronom Koşuları" atanmalıdır. Mobil uygulama üzerinden sporcuya kulaklık vasıtasıyla dakikada 178 vuruşluk (BPM) ritim verilerek, sinir sisteminin adım frekansını bu seviyede stabilize etmesi (nöromüsküler adaptasyon) sağlanmalıdır.
+  
    Pliyometrik ve Eksantrik Kas Kuvvetlendirme: Yerle temas süresini (GCT) kısaltmak amacıyla, antrenmanların ısınma evrelerine dikey sıçrama, drop jump ve bounding gibi pliyometrik egzersizler eklenmelidir. Bu, tendonların elastik enerji depolama kapasitesini artırarak koşu ekonomisini geliştirecektir.
-    Mobil Cihaz Üzerinde Gerçek Zamanlı TFLite Geri Bildirimi (Biofeedback)
+  
+   Mobil Cihaz Üzerinde Gerçek Zamanlı TFLite Geri Bildirimi (Biofeedback)
+   
    Optimizasyonun en kritik bacağı, eğitilen TFLite modelinin mobil cihaz üzerinde "Canlı Takip" modunda çalıştırılmasıdır.
+
    Sistem Çalışma Prensibi: Model, antrenman esnasında IMU sensörlerinden gelen anlık verilerde yerle temas süresinin $250\ ms$'nin üzerine çıktığını ve kadansın $165$'in altına düştüğünü tespit ettiği anda, sporcuyu sesli olarak uyaracaktır ("Koşu formu bozuldu, adımları sıklaştırın veya antrenmanı sonlandırın"). Bu yaklaşım, sakatlığı gerçekleşmeden önce önleyen proaktif bir koruma kalkanı oluşturur.
-   5. İLERLEME TAKİP MATRİSİ VE KPI (ANAHTAR PERFORMANS GÖSTERGELERİ)Önerilen optimizasyon protokolünün başarısı, 4 haftalık süreç boyunca sensörlerden toplanacak verilerle doğrulanacaktır. Başarı kriteri olarak kabul edilen hedef metrik tablosu aşağıdadır:İzlenen Performans MetriğiMevcut Durum (Analiz Çıktısı)4 Hafta Sonraki Hedef DurumAnalitik Hedef TanımıOrtalama Koşu Kadansı$162\ \text{adım/dk}$$172 - 175\ \text{adım/dk}$Yorgunluk anında dahi yüksek adım frekansını koruyabilmek.Yerle Temas Süresi (GCT)$260\ \text{ms}$$< 240\ \text{ms}$Reaktif gücü artırarak adım başına harcanan enerjiyi azaltmak.Sabah HRV (RMSSD)$52\ \text{ms}$ (Negatif Anomali)$72 - 78\ \text{ms}$ (Homeostaz)Otonom sinir sisteminin tam toparlanma durumuna ulaştığını doğrulamak.VO2 Max Seviyesi$48\ ml/kg/dk$$51\ ml/kg/dk$Aerobik güç ve oksijen tüketim kapasitesinde marjinal artış.
+  
+   5. İLERLEME TAKİP MATRİSİ VE KPI (ANAHTAR PERFORMANS GÖSTERGELERİ)
+     
+      Önerilen optimizasyon protokolünün başarısı, 4 haftalık süreç boyunca sensörlerden toplanacak verilerle doğrulanacaktır. Başarı kriteri olarak kabul edilen hedef metrik tablosu aşağıdadır:
+      ```
+      İzlenen Performans Metriği         Mevcut Durum (Analiz Çıktısı)       4 Hafta Sonraki Hedef Durum           Analtik Hedef Tanımı
+      Ortalama Koşu                         162 adım/dk                         172 - 175 adım/dk                  172 - 175\ \text{adım/dk}$Yorgunluk anında dahi
+          Kadansı                                                                                                      yüksek adım frekansını koruyabilmek. 
+
+    Yerle Temas Süresi(GCT)                 260 ms                                < 240 ms                          Reaktif gücü artırarak adım başına harcanan enerjiyi azaltmak.  
+
+    Sabah HRV (RMSSD)                      52 ms (Negatif Anomali)                72 - 78 ms (Homestaz)              Otonom sinir sisteminin tam toparlanma durumuna ulaştığını doğrulamak.
+
+    VO2 Max Seviyesi                       48 ml / kg / dk                        51 ml / kg / dk                   Aerobik güç ve oksijen tüketim kapasitesinde marjinal artış.
+      ```
