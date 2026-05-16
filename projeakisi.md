@@ -607,6 +607,11 @@ Dokümantasyon ve Test Süreci: Tüm API endpointleri için OpenAPI/Swagger taba
 
 Gelecek Planlaması ve Geliştirilebilirlik: API tasarımı esnek ve modüler bir yapıya sahiptir. Yeni endpoint eklenmesi, mevcut verilerin genişletilmesi veya üçüncü taraf hizmetlerle entegrasyon gerektiğinde minimal değişiklik ile uygulanabilir. Bu sayede projenin ilerleyen aşamalarında kullanıcı taleplerine veya teknolojik yeniliklere hızlı adaptasyon sağlanabilecektir.
 
+## Kişiselleştirilmiş Antrenman Planı Oluşturucu Tasarımı
+- Sorumlu: Sıla Ağgül
+- Durum: Devam Ediyor
+- Yapılan:
+
 ### UI/UX Wireframe Tasarımı
 - Sorumlu: Şevval Bulut
 - Durum: Tamamlandı
