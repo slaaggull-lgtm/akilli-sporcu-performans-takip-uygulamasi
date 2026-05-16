@@ -1776,7 +1776,9 @@ UI/UX Ekibi İçin: Dinamik tema (Material Design 3) geçişleri sırasında gra
     3. ANTRENMAN YOĞUNLUK BÖLGELERİ (HEART RATE ZONES) DAĞILIMISporcunun son makro döngüde gerçekleştirdiği antrenmanların yoğunluk dağılımı, laktat birikimi ve enerji sistemleri baz alınarak analiz edilmiştir. Mevcut durum dağılımı şu şekildedir:
 
        [Zone 1 - 2: Yenilenme & Aktif Dinlenme]  ████████ (20%)
+
 [Zone 3: Geliştirici Aerobik Kapasite]   ██████████████████████ (55%)
+
 [Zone 4 - 5: Anaerobik Eşik & Maks Efor] ██████████ (25%)
 
 Zone 3 Yoğunluğu (%55): Dayanıklılık altyapısı için ideal bir hacimdir.Zone 4 - 5 Yoğunluğu (%25): Bu bölgenin %25 gibi yüksek bir orana sahip olması, son dönemdeki laktat toleransını artırmış olsa da, yukarıda bahsettiğimiz sinir sistemi yorgunluğunun (HRV düşüşünün) temel tetikleyicisidir. 
@@ -1807,7 +1809,8 @@ Laktat Eşiği Kontrollü Gelişim: Sinir sistemi toplandıktan sonra, marjinal 
       Önerilen optimizasyon protokolünün başarısı, 4 haftalık süreç boyunca sensörlerden toplanacak verilerle doğrulanacaktır. Başarı kriteri olarak kabul edilen hedef metrik tablosu aşağıdadır:
       ```
       İzlenen Performans Metriği         Mevcut Durum (Analiz Çıktısı)       4 Hafta Sonraki Hedef Durum           Analtik Hedef Tanımı
-      Ortalama Koşu                         162 adım/dk                         172 - 175 adım/dk                  172 - 175\ \text{adım/dk}$Yorgunluk anında dahi
+
+       Ortalama Koşu                         162 adım/dk                         172 - 175 adım/dk                  172 - 175\ \text{adım/dk}$Yorgunluk anında dahi
           Kadansı                                                                                                      yüksek adım frekansını koruyabilmek. 
 
     Yerle Temas Süresi(GCT)                 260 ms                                < 240 ms                          Reaktif gücü artırarak adım başına harcanan enerjiyi azaltmak.  
