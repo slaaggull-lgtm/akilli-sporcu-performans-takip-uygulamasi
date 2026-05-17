@@ -941,8 +941,34 @@ CREATE INDEX idx_metrics_date ON PerformanceMetrics(metric_date);
 
 ## Mobil Uygulama Kullanıcı Arayüzü (UI) Tasarımı
 - Sorumlu: Baver Katar
-- Durum: Devam Ediyor
+- Durum: Tamamlandı
 - Yapılan:
+
+Uygulamanın hem iOS (SwiftUI) hem de Android (Jetpack Compose) platformlarında yerel (native) ve tutarlı bir kullanıcı deneyimi sunabilmesi için premium **Karanlık Mod (Dark Mode) UI/UX Tasarım Sistemi** kurgulanmış ve yüksek çözünürlüklü arayüz mockup'ları üretilmiştir.
+
+#### 🎨 1. Tasarım Sistemi ve Arayüz Dili
+- **Renk Paleti:** Vurgular ve ana eylemler için dinamik **Neon Teal** (`#00F0FF`) ve **Electric Blue** (`#007AFF`); toparlanma ve yüksek performans göstergeleri için **Glowing Green** (`#39FF14`); yüksek yoğunluklu bölgeler için **Neon Purple** (`#BD00FF`) kullanılmıştır.
+- **Tipografi:** Başlıklar ve önemli metrik gösterimleri için modern geometrik karakterli **Outfit** yazı tipi; gövde metinleri ve etiketler için yüksek okunurluk sağlayan nötr karakterli **Inter** yazı tipi seçilmiştir.
+- **Cam Efekti (Glassmorphism):** Kart bileşenleri ve modallarda derinlik hissi yaratmak için `backdrop-filter: blur(20px)` ve hafif yarı saydam sınır çizgileri (`rgba(255, 255, 255, 0.1)`) kullanılmıştır.
+
+#### 📱 2. Temel Ekran Tasarımları
+- **Ana Ekran (Dashboard Screen):** Kullanıcının bugünkü aktivite durumunu, anlık nabzını (kalp ritim dalga grafiğiyle birlikte), yakılan aktif kaloriyi ve egzersiz süresini gösteren şık cam kartlar tasarlanmıştır.
+- **Performans Göstergeleri Ekranı (Performance Analytics):** Ekranın merkezinde büyük bir dairesel neon gösterge (circular gauge) ile sporcunun **VO2 Max skoru** (Örn: "54.5 - Mükemmel") ve haftalık toparlanma (recovery) durumu görselleştirilmiştir.
+- **Antrenman Planları Ekranı (Workout Plans):** Kaydırılabilir haftalık takvim, yapay zeka motorunun o günkü yorgunluk durumuna göre önerdiği egzersiz programları ve hızlı antrenman başlatma bileşenleri kurgulanmıştır.
+- **Kullanıcı Profili Ekranı (User Profile):** Kullanıcının yaş, boy, kilo gibi fiziksel parametrelerinin şık bir grid düzeninde gösterimi ve Apple HealthKit / Google Fit entegrasyon ayarları eklenmiştir.
+
+#### 🔄 3. Çift Aşamalı Geri Bildirim Döngüsü (Feedback Loop)
+Arayüzü sürekli iyileştirmek ve antrenman öneri modellerini kişiselleştirmek için bir geri bildirim altyapısı kurgulanmıştır:
+1. **Egzersiz Sonrası RPE Değerlendirmesi:** Antrenman sonlarında açılan ve sporcunun antrenman zorluğunu 1-10 arası Borg ölçeğine göre puanladığı, anlık fizyolojik hissini belirttiği RPE modülü. Bu veriler Room DB'ye kaydedilerek Firebase üzerinden AI modeline aktarılır.
+2. **Uygulama İçi Memnuniyet Anketi (CSAT/NPS):** Profil sekmesinde yer alan ve kullanıcının arayüz deneyimini tek bir tıkla puanlamasını sağlayan mikro-anket yapısı.
+
+Tasarımların teknik detayları ve platform standartları [docs/design/ui_ux_design.md](file:///c:/Users/Bağver/Desktop/ymt/akilli-sporcu-performans-takip-uygulamasi-main/akilli-sporcu-performans-takip-uygulamasi-main/docs/design/ui_ux_design.md) dokümanında listelenmiştir.
+
+#### 🖼️ Tasarlanan Ekranların Mockup'ları
+1. **Ana Ekran (Dashboard) Arayüz Mockup'ı:** [athlete_dashboard_mockup.png](file:///c:/Users/Bağver/Desktop/ymt/akilli-sporcu-performans-takip-uygulamasi-main/akilli-sporcu-performans-takip-uygulamasi-main/docs/design/images/athlete_dashboard_mockup.png)
+2. **Performans Analiz (Analytics) Arayüz Mockup'ı:** [athlete_analytics_mockup.png](file:///c:/Users/Bağver/Desktop/ymt/akilli-sporcu-performans-takip-uygulamasi-main/akilli-sporcu-performans-takip-uygulamasi-main/docs/design/images/athlete_analytics_mockup.png)
+
+---
 
 
 ## Performans Analiz Algoritmaları Tasarımı
@@ -2367,8 +2393,22 @@ Laktat Eşiği Kontrollü Gelişim: Sinir sistemi toplandıktan sonra, marjinal 
 
 ## Proje Dokümantasyonunun Tamamlanması ve Son Kontroller
 - Sorumlu: Baver Katar
-- Durum: Devam Ediyor
+- Durum: Tamamlandı
 - Yapılan:
+
+Projenin tüm aşamalarının net, anlaşılır ve tutarlı bir şekilde aktarılması amacıyla kapsamlı ve premium düzeyde bir proje dokümantasyon süreci yürütülmüştür. 
+
+#### 📖 1. Tamamlanan Dokümantasyon Çalışmaları
+- **Proje Ana Dokümanı (`README.md`):** Projenin teknik yığınını (Tech Stack), Clean Architecture + MVVM veri akışını gösteren **Mermaid Mimari Şeması**nı, modül dizin ağacını ve ekibin tamamlanan rol tablosunu içeren üretim kalitesinde (production-ready) bir README dosyası baştan yazılmıştır.
+- **Mimari Tasarım Kılavuzu (`docs/architecture/architecture_design.md`):** Mobil platformlarda (iOS Swift & Android Kotlin) Clean Architecture katmanları, Bottom Navigation stratejisi, REST API entegrasyon planı (HTTPS, JSON, JWT, Offline-First) ve kütüphane karşılaştırmaları belgelenmiştir.
+- **Arayüz ve Tasarım Kılavuzu (`docs/design/ui_ux_design.md`):** Karanlık mod standartları, tipografi kuralları, platformlar arası (HIG ve MD3) tutarlılık kuralları, kullanıcı RPE geri bildirim mekanizmaları ve yüksek çözünürlüklü ekran mockup'ları belgelenmiştir.
+- **Haftalık Süreç Takibi (`projeakisi.md`):** Ekibin tüm üyelerinin haftalık ilerlemeleri, kod parçacıkları, veri tabanı şemaları ve mimari geliştirmeleri güncellenerek "Devam Ediyor" durumundaki tüm Baver Katar görevleri eksiksiz bir şekilde tamamlanmış ve belgelenmiştir.
+
+#### 🧪 2. Son Kontroller ve Doğrulamalar
+- Tüm dokümantasyon dosyalarındaki iç bağlantılar (`file://` şeması) ve başlık hiyerarşisi kontrol edilerek tutarlılık doğrulanmıştır.
+- GitHub üzerinde Pull Request'ler incelenmiş, tüm geliştirmelerin (`feature/architecture-design` ve `feature/ui-ux-design`) çakışmasız ve birleştirmeye hazır olduğu doğrulanmıştır.
+
+---
 
 
 ## Mobil Uygulama Testleri ve Hata Düzeltmeleri 
