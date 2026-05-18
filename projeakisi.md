@@ -2306,9 +2306,16 @@ UI/UX Ekibi İçin: Dinamik tema (Material Design 3) geçişleri sırasında gra
   - API, yerel veri katmanı ve kullanıcı arayüzü arasındaki veri uyumu gözden geçirilmiştir.
   - Bağlantı kopması, eksik veri gelmesi ve senkronizasyon hataları gibi senaryolar değerlendirilerek güvenilir veri akışı için son kontroller tamamlanmıştır.
  
+
+
+
+
+
+
+## Veri Analizi ve Performans Optimizasyonu Raporu
 - Sorumlu: Şevval Bulut
 - Durum: Tamamlandı
-- Yapılan :
+- Yapılan:
 
 - Sporcu Performans Analizi ve Antrenman Optimizasyonu Raporu:
 
@@ -2400,33 +2407,6 @@ Laktat Eşiği Kontrollü Gelişim: Sinir sistemi toplandıktan sonra, marjinal 
     VO2 Max Seviyesi                       48 ml / kg / dk                        51 ml / kg / dk                   Aerobik güç ve oksijen tüketim kapasitesinde marjinal artış.
       
       ```
-
-
-
-## Veri Analizi ve Performans Optimizasyonu Raporu
-- Sorumlu: Şevval Bulut
-- Durum: Tamamlandı
-- Yapılan:
-
-Uygulamanın yapay zeka modelinin doğruluğunu ve cihaz üzerindeki çalışma verimliliğini değerlendirmek, pil ve RAM tüketimini optimize etmek amacıyla kapsamlı analizler gerçekleştirilmiş ve optimize edilmiş bir rapor hazırlanmıştır.
-
-1. **Yapay Zeka Modeli Performans ve Doğruluk Analizi:**
-   - TensorFlow Lite tabanlı koşu analizi ve performans tahmin modelinin (LSTM) tahmin doğruluğu gerçek sporcu verileri üzerinde test edilmiştir.
-   - Giriş parametreleri olan kalp atış hızı (HR), kadans, tempo ve antrenman süresi kullanılarak üretilen Performans Skoru tahmininde model **%92.4 oranında yüksek doğruluk (Accuracy)** ve **%91.8 F1-Score** başarısına ulaşmıştır.
-   - Hata analizleri sonucunda modelin ulu orta sapan değerleri (outliers) ayıklayan veri ön işleme filtresi güçlendirilmiştir.
-
-2. **On-Device (Cihaz Üzeri) Yapay Zeka Optimizasyonu:**
-   - Mobil cihazların donanımsal kaynaklarını (RAM/CPU/GPU) yormamak adına model optimizasyon teknikleri uygulanmıştır.
-   - Eğitilen modelin ağırlıkları, 32-bit kayan noktadan (FP32) **8-bit tam sayıya (INT8 / FP16 Quantization) kuantize edilmiştir**. 
-   - Bu kuantizasyon sayesinde modelin diskteki boyutu **824 KB'den 212 KB'ye düşürülmüş**, çalışma esnasındaki RAM tüketimi **%60 oranında azaltılmıştır**. İşlemci üzerindeki yükün hafifletilmesiyle modelin bir tahmin üretme süresi (inference latency) **15 ms'nin altına indirilmiştir**.
-
-3. **Pil Tüketim ve Arka Plan İşlem Optimizasyonu:**
-   - Sensörlerden saniyede birden fazla kez gelen veri akışının CPU'yu sürekli uyanık tutarak bataryayı tüketmesi engellenmiştir.
-   - Bluetooth LE veri akışında ham verilerin her milisaniyede bir sunucuya veya yerel DB'ye yazılması yerine, cihaz üzerinde **5 saniyelik pencereler halinde paketlenerek toplu işlenmesi (batching)** kurgulanmıştır. Bu sayede arka plan thread'lerinin işlemciyi uyandırma frekansı azaltılarak pil ömründe **%25 oranında tasarruf** sağlanmıştır.
-
-4. **Arayüz ve UX Performans Analizleri:**
-   - Koşu esnasındaki canlı grafik çizimlerinin (custom view/canvas rendering) ekran yenileme hızları analiz edilmiştir. Yapılan çizim iyileştirmeleriyle arayüzün **stabil 60 FPS** değerinde akıcı çalışması sağlanmıştır.
-   - LeakCanary ve Xcode Instruments araçları kullanılarak bellek sızıntısı (memory leak) kontrolleri yapılmış; sayfalar arası geçişlerde ve Bluetooth bağlantı döngülerinde oluşabilecek bellek sızıntıları tamamen giderilmiştir.
 
 
 
