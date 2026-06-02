@@ -1,8 +1,48 @@
-INSERT INTO Users VALUES (1,'Ayşe Kaya', 24,165.0,58.0,'Intermediate', '2026-01-10');
-INSERT INTO Users VALUES (2, 'Mert Demir', 28,182.0,78.0, 'Advanced','2026-02-01');
+PRAGMA foreign_keys = ON;
 
-INSERT INTO Workouts VALUES (1,1,'2026-05-28',45,380.0,145.0,'Sabah koşusu');
-INSERT INTO Workouts VALUES (2,2,'2026-05-29',60,520.0,132.0, 'Yüzme seansı');
+CREATE TABLE Users (
+    user_id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    full_name     TEXT NOT NULL,
+    age           INTEGER,
+    height_cm     REAL,
+    weight_kg     REAL,
+    fitness_level TEXT,
+    created_at    TEXT NOT NULL DEFAULT (DATE('now'))
+);
 
-INSERT INTO PerformanceMetrics VALUES (1,1,'2026-05-28', 6200,4.8,7.5,65.0,42.0);
-INSERT INTO PerformanceMetrics VALUES (2,2,'2026-05-29', 0,2.1,8.0,72.0,54.0);
+CREATE TABLE Workouts (
+    workout_id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id          INTEGER NOT NULL,
+    workout_date     TEXT NOT NULL,
+    duration_minutes INTEGER,
+    calories_burned  REAL,
+    avg_heart_rate   REAL,
+    notes            TEXT,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE Exercises (
+    exercise_id      INTEGER PRIMARY KEY AUTOINCREMENT,
+    workout_id       INTEGER NOT NULL,
+    exercise_name    TEXT NOT NULL,
+    set_count        INTEGER,
+    rep_count        INTEGER,
+    duration_seconds INTEGER,
+    FOREIGN KEY (workout_id) REFERENCES Workouts(workout_id) ON DELETE CASCADE
+);
+
+CREATE TABLE PerformanceMetrics (
+    metric_id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id     INTEGER NOT NULL,
+    metric_date TEXT NOT NULL,
+    steps       INTEGER,
+    distance_km REAL,
+    sleep_hours REAL,
+    hrv         REAL,
+    vo2max      REAL,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_workouts_user_id ON Workouts(user_id);
+CREATE INDEX idx_workouts_date ON Workouts(workout_date);
+CREATE INDEX idx_metrics_user_id ON PerformanceMetrics(user_id);
