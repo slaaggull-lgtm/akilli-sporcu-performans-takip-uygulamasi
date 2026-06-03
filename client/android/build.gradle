@@ -1,0 +1,36 @@
+plugins {
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
+}
+
+android {
+    compileSdk 34
+    defaultConfig {
+        applicationId "com.akillitakip"
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+}
+
+dependencies {
+    // Firebase (BOM ile versiyon yonetimi)
+    implementation platform('com.google.firebase:firebase-bom:32.7.0')
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-firestore'
+
+    // Room (SQLite ORM)
+    implementation 'androidx.room:room-runtime:2.6.1'
+    annotationProcessor 'androidx.room:room-compiler:2.6.1'
+
+    // Lifecycle & ViewModel
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.6.2'
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.6.2'
+
+    // Material Design
+    implementation 'com.google.android.material:material:1.11.0'
+
+    // TensorFlow Lite (performans analizi icin)
+    implementation 'org.tensorflow:tensorflow-lite:2.13.0'
+}
