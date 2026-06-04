@@ -31,7 +31,7 @@
 
 ## 🎯 Proje Hakkında
 
-**AkıllıTakip**, sporcu performansını bütünsel olarak izleyen, yapay zeka destekli bir mobil sağlık ve fitness platformudur. Uygulama; Bluetooth sensörlerden elde edilen gerçek zamanlı biyometrik verilerle sakatlanma riskini tahmin eder, kişiselleştirilmiş antrenman planları önerir ve uzun vadeli performans trendlerini analiz eder.
+**Akıllı Sporcu Performans Takip Uygulaması**, sporcu performansını bütünsel olarak izleyen, yapay zeka destekli bir mobil sağlık ve fitness platformudur. Uygulama; Bluetooth sensörlerden elde edilen gerçek zamanlı biyometrik verilerle sakatlanma riskini tahmin eder, kişiselleştirilmiş antrenman planları önerir ve uzun vadeli performans trendlerini analiz eder.
 
 ```
 Sporcular için bir antrenör, bir fizyoterapist ve bir veri analistinin
@@ -277,7 +277,7 @@ python ai/export_tflite.py
 | Metrik | Değer |
 |--------|-------|
 | 🌿 Aktif Branch | 13 |
-| 💾 Toplam Commit | 20 |
+| 💾 Toplam Commit | 208 |
 | 📁 Klasör Sayısı | 32 |
 | 📄 Dosya Sayısı | 62 |
 | 🧪 Test Dosyaları | 2 |
@@ -314,7 +314,4 @@ Bu proje [MIT Lisansı](LICENSE) kapsamında lisanslanmıştır.
 
 ---
 
-<div align="center">
-<sub>AkıllıTakip Ekibi tarafından ❤️ ile geliştirilmiştir · 2025</sub>
-</div>
 
