@@ -1,0 +1,5 @@
+samplingRate: 1s
+heartRateEnabled: true
+gpsEnabled: true
+stepCounterEnabled: true
+offlineMode: true
