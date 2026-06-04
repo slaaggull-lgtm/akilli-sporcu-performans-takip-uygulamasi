@@ -1,0 +1,34 @@
+===========================================================================
+AKILLI SPORCU PERFORMANS TAKİP UYGULAMASI - SİSTEM MİMARİSİ GENEL BAKIŞ
+===========================================================================
+
+1. DONANIM VE SENSÖR ENTEGRASYON KATMANI (Client Hardware Layer)
+---------------------------------------------------------------------------
+* Uygulama, hibrit çerçevelerin getirdiği milisaniyelik gecikme bariyerlerini
+  aşmak için tamamen Native (Kotlin ve Swift) mimaride tasarlanmıştır.
+* Cihazların dahili İvmeölçer (Anlık ivme ve patlayıcı güç), Jiroskop (Açısal
+  hız ve rotasyon) ve Barometre (Yükseklik değişimi) sensörlerinden gelen ham
+  sinyaller, donanım katmanında yüksek frekansta yakalanır.
+* Bluetooth Low Energy (BLE) protokolü üzerinden Core Bluetooth (iOS) ve
+  Android BLE kütüphaneleri kullanılarak standart Heart Rate Service (UUID: 180D)
+  ve Karakteristik (UUID: 2A37) üzerinden anlık nabız (BPM) verisi asenkron 
+  akış (Notify modu) ile kesintisiz olarak dinlenir.
+
+2. YAPAY ZEKA VE ANALİTİK MOTORU (AI & Analytics Engine)
+---------------------------------------------------------------------------
+* Sporcuların antrenman postürlerinin ve form doğruluğunun analizi için 
+  MediaPipe Pose Landmarker kütüphanesi entegre edilmiştir. Kamera görüntüsü
+  üzerinden 33 farklı eklem noktası (skeletal tracking) koordinat düzleminde izlenir.
+* On-device (Cihaz üstü) anlık performans tahmini ve hareket sınıflandırma 
+  işlemleri için TensorFlow Lite (.tflite) modelleri optimize edilmiştir. Model 
+  girdisi olarak Hız, Kadans (SPM) ve Nabız Oranı alınarak 0-100 arası anlık 
+  performans ve yorgunluk skoru üretilir.
+
+3. VERİ YÖNETİMİ VE BULUT ALTYAPISI (Database & Cloud)
+---------------------------------------------------------------------------
+* Çevrimdışı (Offline-first) çalışma modelini desteklemek amacıyla yerel 
+  depolamada şifrelenmiş SQLite/Realm veritabanı yapısı tercih edilmiştir.
+* Cihaz internete bağlandığı anda yerel veriler Firebase Firestore (NoSQL) 
+  bulut mimarisi ile asenkron olarak senkronize edilir.
+* Kullanıcı kimlik doğrulama süreçleri Firebase Auth (JWT tabanlı) ile korunurken,
+  biyometrik sağlık verileri KVKK ve GDPR standartlarına uygun olarak şifrelenir.
