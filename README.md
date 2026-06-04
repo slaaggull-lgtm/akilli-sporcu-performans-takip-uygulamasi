@@ -289,9 +289,7 @@ python ai/export_tflite.py
 
 | Kaynak | Bağlantı |
 |--------|----------|
-| 📖 Dokümantasyon | [Wiki / GitHub Pages eklenecek](#) |
-| 📋 Proje Yönetimi | [GitHub Projects](#) — *Sağ üst > Projects sekmesi* |
-| 🎨 Tasarım Dosyaları | [Figma bağlantısı eklenecek](#) |
+| 📖 Dokümantasyon | [(https://github.com/slaaggull-lgtm/akilli-sporcu-performans-takip-uygulamasi/blob/main/projeakisi.md)](#) |
 | 🚀 Deployment Kılavuzu | [`DEPLOYMENT_GUIDE.txt`](DEPLOYMENT_GUIDE.txt) |
 | 🔒 Güvenlik Politikası | [`SECURITY.md`](SECURITY.md) |
 | 🤝 Katkı Kılavuzu | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
