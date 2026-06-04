@@ -1,0 +1,14 @@
+[
+  {
+    "user": "Ali",
+    "workoutType": "Running",
+    "durationMinutes": 45,
+    "caloriesBurned": 420
+  },
+  {
+    "user": "Ayşe",
+    "workoutType": "Cycling",
+    "durationMinutes": 60,
+    "caloriesBurned": 610
+  }
+]
