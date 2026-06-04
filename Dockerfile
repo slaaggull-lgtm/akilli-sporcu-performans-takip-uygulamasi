@@ -1,41 +1,74 @@
 # ==============================================================================
-# SMARTATHLETE PLATFORM - ANALYTICS ENGINE PRODUCTION DOCKERFILE
+# SMARTATHLETE PLATFORM - ENTERPRISE MULTI-STAGE DOCKER ARCHITECTURE
 # ==============================================================================
+# Bu dosya, Akıllı Sporcu Performans Takip Uygulaması'nın Python Analitik Motoru
+# ve yapay zeka katmanını (MediaPipe/TFLite) izole bir konteynerde ayağa kaldırır.
 
-# 1. Aşama: Hafif ve güvenli bir Python imajı seçimi
-FROM python:3.10-slim AS base
+# ------------------------------------------------------------------------------
+# 1. AŞAMA: DERLEME VE BAĞIMLILIK HAZIRLAMA (Builder Stage)
+# ------------------------------------------------------------------------------
+FROM python:3.10-slim AS builder
 
-# 2. Aşama: Sistem ortam değişkenlerinin ayarlanması
+LABEL maintainer="SmartAthlete Dev Team"
+LABEL project="Akilli Sporcu Performans Takip Uygulamasi"
+
+# Derleme için gerekli sistem araçlarının kurulması
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /build
+
+# Tekerlek (Wheel) paketleri oluşturarak bağımlılıkların optimize edilmesi
+COPY analytics/requirements.txt* ./
+RUN pip install --upgrade pip && \
+    if [ -f requirements.txt ]; then pip wheel --no-cache-dir --no-deps --wheel-dir /build/wheels -r requirements.txt; fi
+
+# ------------------------------------------------------------------------------
+# 2. AŞAMA: ÇALIŞMA VE ÜRETİM ORTAMI (Final Production Stage)
+# ------------------------------------------------------------------------------
+FROM python:3.10-slim AS final
+
+# Python çalışma optimizasyonları (Gereksiz bytecode yazımını engeller, logları anlık basar)
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV DEBIAN_FRONTEND=noninteractive
+ENV APP_HOME=/home/app/web
 
-# 3. Aşama: Çalışma dizininin oluşturulması
-WORKDIR /app
+WORKDIR $APP_HOME
 
-# 4. Aşama: Gerekli sistem paketlerinin yüklenmesi (MediaPipe ve OpenCV bağımlılıkları için)
+# MediaPipe, OpenCV ve grafik işleme kütüphanelerinin native bağımlılıkları
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
     libgl1-mesa-glx \
     libglib2.0-0 \
+    libgomp1 \
+    curl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# 5. Aşama: Bağımlılıkların kopyalanması ve pip optimizasyonu
-COPY analytics/requirements.txt* ./
-RUN pip install --no-cache-dir --upgrade pip && \
-    if [ -f requirements.txt ]; then pip install --no-cache-dir -r requirements.txt; fi
+# İlk aşamada derlenen optimize paketlerin nihai imaja taşınması
+COPY --from=builder /build/wheels /images/wheels
+RUN pip install --no-cache /images/wheels/* && rm -rf /images/wheels
 
-# 6. Aşama: Projenin diğer tüm kurumsal konfigürasyon ve kodlarının imaja dahil edilmesi
-COPY config/ /app/config/
-COPY datasets/ /app/datasets/
-COPY analytics/ /app/analytics/
+# Proje klasör yapısının katı kurallarla container içine map edilmesi
+COPY config/ $APP_HOME/config/
+COPY datasets/ $APP_HOME/datasets/
+COPY analytics/ $APP_HOME/analytics/
+COPY generate_sample_data.py $APP_HOME/
 
-# 7. Aşama: Güvenlik için root olmayan bir kullanıcıya geçiş (Hocaların bayıldığı bir detay)
-RUN useradd -m appuser && chown -R appuser:appuser /app
+# Güvenlik Protokolü: Root (Kök) yetkili kullanıcı yerine kısıtlı sistem kullanıcısı tanımı
+RUN useradd -U -m -s /bin/bash appuser && \
+    chown -R appuser:appuser $APP_HOME
 USER appuser
 
-# 8. Aşama: Dış dünyaya açılacak port ve tetiklenecek başlangıç komutu
+# Sunucu Sağlık Kontrolü (HEALTHCHECK): Konteynerin canlı olup olmadığını otomatik denetler
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
+
+# Dış dünyaya açılan servis portu (REST API ve WebSocket trafiği için)
 EXPOSE 8080
 
-CMD ["python", "analytics/performance_analysis.py"]
+# Uygulamanın güvenli şekilde başlatılma komutu
+ENTRYPOINT ["python"]
+CMD ["generate_sample_data.py"]
