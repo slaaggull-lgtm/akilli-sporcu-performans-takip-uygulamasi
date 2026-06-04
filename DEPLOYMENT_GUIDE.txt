@@ -1,0 +1,53 @@
+================================================================================
+SMARTATHLETE PLATFORM - ENTERPRISE DEPLOYMENT & VERIFICATION MATRIX
+================================================================================
+
+Bu kılavuz; Geliştirme (Development), Test (Staging) ve Canlı (Production) 
+ortamlarında tüm altyapının nasıl kurulacağını ve doğrulanacağını açıklamaktadır.
+
+1. SİSTEM GEREKSİNİMLERİ (System Requirements)
+--------------------------------------------------------------------------------
+- Python Çalışma Ortamı: v3.10.x veya üzeri (C-Python Interpreter)
+- Mobil SDK Yapıları: Apple Xcode 15.2+ / Android SDK API Level 34+
+- Yapay Zeka Bağımlılıkları: TensorFlow v2.14+, MediaPipe v0.10+
+- Donanım Gereksinimi: BLE 5.0+ destekleyen fiziksel test cihazı
+
+2. ANALİTİK MOTORUNUN ÇALIŞTIRILMASI VE DOĞRULANMASI (Analytics & Testing)
+--------------------------------------------------------------------------------
+Biyometrik skorlama ve performans modellerinin matematiksel doğruluğunu test etmek
+ve uç senaryo (edge-case) analizlerini simüle etmek için şu komutları koşturun:
+
+  $ cd analytics
+  $ source ../scripts/setup_environment.sh
+  $ pytest ../tests/test_running_analytics.py -v
+
+Bu izole pipeline; Karvonen metabolik hesaplamalarının doğruluğunu ve sıfıra 
+bölünme (zero-division) gibi kritik hataların sistem tarafından yakalandığını onaylar.
+
+3. NATIVE MOBİL İSTEMCİLERİN DERLENMESİ (Mobile Client Provisioning)
+--------------------------------------------------------------------------------
+A. iOS Native Core (Swift / SwiftUI):
+  $ cd client/ios
+  $ pod deintegrate && pod cache clean --all
+  $ pod install
+  $ open PerformanceTracker.xcworkspace
+  Not: Derleme şemasını (Build Schema) 'Release' moduna getirin. Bluetooth Low Energy
+  arka plan tarama izinlerinin 'Info.plist' içinde tanımlı olduğunu kontrol edin.
+
+B. Android Native Core (Java / Kotlin):
+  $ cd client/android
+  $ ./gradlew clean
+  $ ./gradlew assembleRelease
+  Not: Kodun tersine mühendislikle çözülmesini engellemek için ProGuard (Obfuscation)
+  kurallarının 'proguard-rules.pro' içinde aktif edildiğinden emin olun.
+
+4. FIREBASE VERİTABANI VE GÜVENLİK KURALLARI (Database & Cloud Security)
+--------------------------------------------------------------------------------
+- Projenin config/app_config.json dosyasında doğru API endpoint'lerinin olduğunu doğrulayın.
+- Veri sızıntılarını önlemek için Firebase Firestore üzerinde şu yetkilendirme
+  kuralının (Security Rules) aktif olduğunu kontrol edin:
+  
+  allow read, write: if request.auth != null && request.auth.uid == resource.data.athlete_id;
+
+Bu konfigürasyon, akademik ve klinik değerlendirme süreçlerinde sporcuların 
+hassas biyometrik verilerinin birbirine karışmasını (cross-tenant leakage) engeller.
