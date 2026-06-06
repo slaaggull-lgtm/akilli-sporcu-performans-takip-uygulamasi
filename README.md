@@ -6,7 +6,7 @@
 <br/>
 
 [![Branches](https://img.shields.io/badge/Git%20Branches-13-informational?style=flat-square)](https://github.com)
-[![Commits](https://img.shields.io/badge/Commits-220-brightgreen?style=flat-square)](https://github.com)
+[![Commits](https://img.shields.io/badge/Commits-221-brightgreen?style=flat-square)](https://github.com)
 [![Files](https://img.shields.io/badge/Files-62-blue?style=flat-square)](https://github.com)
 [![Folders](https://img.shields.io/badge/Folders-8-purple?style=flat-square)](https://github.com)
 [![License](https://img.shields.io/badge/License-MIT-red?style=flat-square)](LICENSE)
@@ -278,7 +278,7 @@ python ai/export_tflite.py
 |--------|-------|
 | 🌿 Aktif Branch | 13 |
 | 💾 Toplam Commit | 208 |
-| 📁 Klasör Sayısı | 32 |
+| 📁 Klasör Sayısı | 8 |
 | 📄 Dosya Sayısı | 62 |
 | 🧪 Test Dosyaları | 2 |
 | 📚 Dokümantasyon Dosyaları | 8 |
