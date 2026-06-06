@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AkıllıTakip — Tasarım Dosyası & Prototip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════
+   DESIGN TOKENS
+══════════════════════════════════════════════════ */
+:root {
+  --ink:        #0C0D14;
+  --ink-2:      #161720;
+  --ink-3:      #1E2030;
+  --surface:    #252737;
+  --line:       #2E3148;
+  --line-soft:  #383B58;
+  --text:       #E8EAF8;
+  --text-2:     #9799B8;
+  --text-3:     #6164858;
+  --white:      #FFFFFF;
+
+  --blue:       #4D7CFF;
+  --blue-glow:  rgba(77,124,255,.18);
+  --cyan:       #00D4CC;
+  --green:      #19E086;
+  --amber:      #FFB020;
+  --red:        #FF4D6A;
+  --purple:     #8B5CF6;
+
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+
+  --f-display: 'Syne', sans-serif;
+  --f-body:    'DM Sans', sans-serif;
+
+  --shadow: 0 4px 24px rgba(0,0,0,.4);
+  --shadow-lg: 0 8px 48px rgba(0,0,0,.5);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--f-body);
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── SIDEBAR ────────────────────────────────── */
+.sidebar {
+  position: fixed; left: 0; top: 0; bottom: 0; width: 220px;
+  background: var(--ink-2);
+  border-right: 1px solid var(--line);
+  display: flex; flex-direction: column;
+  z-index: 100;
+  padding: 28px 0;
+}
+.sidebar-logo {
+  padding: 0 24px 28px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 16px;
+}
+.sidebar-logo .wordmark {
+  font-family: var(--f-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -.5px;
+}
+.sidebar-logo .sub {
+  font-size: .7rem;
+  color: var(--text-2);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.sidebar-section {
+  padding: 6px 16px;
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-2);
+  margin: 10px 0 4px;
+}
+.sidebar a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 20px;
+  font-size: .85rem;
+  color: var(--text-2);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: all .18s;
+  cursor: pointer;
+}
+.sidebar a:hover { color: var(--text); background: rgba(255,255,255,.04); }
+.sidebar a.active { color: var(--blue); border-left-color: var(--blue); background: var(--blue-glow); }
+.sidebar .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--line-soft); flex-shrink: 0;
+}
+.sidebar a.active .dot { background: var(--blue); box-shadow: 0 0 6px var(--blue); }
+
+/* ── MAIN ───────────────────────────────────── */
+.main { margin-left: 220px; padding: 0; }
+
+/* ── SECTIONS ───────────────────────────────── */
+.section {
+  min-height: 100vh;
+  padding: 72px 60px;
+  border-bottom: 1px solid var(--line);
+  display: none;
+}
+.section.active { display: block; }
+
+.section-eyebrow {
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 12px;
+}
+.section-title {
+  font-family: var(--f-display);
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 10px;
+  letter-spacing: -.5px;
+}
+.section-desc {
+  font-size: .95rem;
+  color: var(--text-2);
+  max-width: 540px;
+  margin-bottom: 48px;
+  line-height: 1.7;
+}
+
+/* ── TOKENS GRID ─────────────────────────────── */
+.token-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 40px;
+}
+.token-swatch {
+  border-radius: var(--r-md);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: transform .15s;
+}
+.token-swatch:hover { transform: scale(1.03); }
+.token-color {
+  height: 64px;
+  position: relative;
+}
+.token-color .hex-label {
+  position: absolute; bottom: 6px; right: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: .65rem;
+  color: rgba(255,255,255,.5);
+}
+.token-info {
+  background: var(--ink-3);
+  padding: 8px 12px;
+}
+.token-name { font-size: .75rem; font-weight: 600; color: var(--text); }
+.token-role { font-size: .65rem; color: var(--text-2); margin-top: 2px; }
+
+/* ── TYPOGRAPHY ─────────────────────────────── */
+.type-specimen {
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 36px 40px;
+  margin-bottom: 20px;
+}
+.type-label {
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-2);
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.type-meta { display: flex; gap: 20px; margin-top: 10px; }
+.type-meta span {
+  font-size: .72rem;
+  color: var(--text-2);
+  background: var(--ink-3);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+/* ── COMPONENTS ─────────────────────────────── */
+.comp-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+.comp-card {
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 32px;
+}
+.comp-card h4 {
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-2);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* ── BUTTONS ────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px 22px;
+  border-radius: var(--r-sm);
+  font-family: var(--f-body);
+  font-size: .85rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all .18s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn-primary { background: var(--blue); color: #fff; }
+.btn-primary:hover { background: #3a68f0; box-shadow: 0 4px 20px rgba(77,124,255,.4); transform: translateY(-1px); }
+.btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--line); }
+.btn-secondary:hover { border-color: var(--blue); color: var(--blue); }
+.btn-ghost { background: transparent; color: var(--text-2); border: 1px solid var(--line-soft); }
+.btn-ghost:hover { color: var(--text); border-color: var(--text-2); }
+.btn-danger { background: rgba(255,77,106,.12); color: var(--red); border: 1px solid rgba(255,77,106,.25); }
+.btn-danger:hover { background: rgba(255,77,106,.2); }
+.btn-sm { padding: 7px 16px; font-size: .8rem; }
+.btn-lg { padding: 14px 32px; font-size: 1rem; border-radius: var(--r-md); }
+.btn-icon { padding: 10px; border-radius: var(--r-sm); }
+.btn-group { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+
+/* ── BADGES ─────────────────────────────────── */
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px;
+  border-radius: 30px;
+  font-size: .72rem;
+  font-weight: 600;
+}
+.badge-dot { width: 5px; height: 5px; border-radius: 50%; }
+.badge-blue   { background: rgba(77,124,255,.15); color: var(--blue); }
+.badge-green  { background: rgba(25,224,134,.12); color: var(--green); }
+.badge-amber  { background: rgba(255,176,32,.12); color: var(--amber); }
+.badge-red    { background: rgba(255,77,106,.12); color: var(--red); }
+.badge-purple { background: rgba(139,92,246,.12); color: var(--purple); }
+
+/* ── INPUTS ─────────────────────────────────── */
+.input-group { margin-bottom: 16px; }
+.input-label {
+  display: block;
+  font-size: .75rem;
+  font-weight: 500;
+  color: var(--text-2);
+  margin-bottom: 6px;
+  letter-spacing: .3px;
+}
+.input-field {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--ink-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  font-family: var(--f-body);
+  font-size: .88rem;
+  transition: border-color .18s, box-shadow .18s;
+  outline: none;
+}
+.input-field:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(77,124,255,.15);
+}
+.input-field::placeholder { color: var(--text-2); opacity: .6; }
+.input-hint { font-size: .72rem; color: var(--text-2); margin-top: 5px; }
+.input-error .input-field { border-color: var(--red); }
+.input-error .input-hint { color: var(--red); }
+
+/* ── METRIC CARDS ────────────────────────────── */
+.metric-card {
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: transform .2s, border-color .2s;
+}
+.metric-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.metric-card.blue::before { background: linear-gradient(90deg, var(--blue), var(--cyan)); }
+.metric-card.green::before { background: linear-gradient(90deg, var(--green), var(--cyan)); }
+.metric-card.amber::before { background: linear-gradient(90deg, var(--amber), #ff8c00); }
+.metric-card.red::before { background: linear-gradient(90deg, var(--red), var(--purple)); }
+.metric-card:hover { transform: translateY(-2px); border-color: var(--line-soft); }
+.metric-card .icon {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+.metric-card.blue .icon { background: rgba(77,124,255,.12); }
+.metric-card.green .icon { background: rgba(25,224,134,.12); }
+.metric-card.amber .icon { background: rgba(255,176,32,.12); }
+.metric-card.red .icon { background: rgba(255,77,106,.12); }
+.metric-card .val {
+  font-family: var(--f-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.metric-card .lbl { font-size: .78rem; color: var(--text-2); }
+.metric-card .change {
+  position: absolute; top: 20px; right: 20px;
+  font-size: .72rem;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+.metric-card .change.up { background: rgba(25,224,134,.12); color: var(--green); }
+.metric-card .change.down { background: rgba(255,77,106,.12); color: var(--red); }
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+/* ── RISK GAUGE ─────────────────────────────── */
+.risk-gauge {
+  background: var(--ink-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 28px;
+  text-align: center;
+}
+.gauge-ring {
+  width: 120px; height: 120px;
+  margin: 0 auto 16px;
+  position: relative;
+}
+.gauge-ring svg { transform: rotate(-90deg); }
+.gauge-ring .track { fill: none; stroke: var(--line); stroke-width: 10; }
+.gauge-ring .fill  { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset .8s cubic-bezier(.4,0,.2,1); }
+.gauge-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.gauge-pct {
+  font-family: var(--f-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1;
+}
+.gauge-unit { font-size: .65rem; color: var(--text-2); margin-top: 2px; }
+.gauge-level { font-size: .75rem; font-weight: 600; margin-top: 4px; }
+
+/* ── NAVIGATION BAR (mobile mockup) ────────── */
+.phone-frame {
+  width: 280px;
+  background: var(--ink-2);
+  border: 2px solid var(--line-soft);
+  border-radius: 36px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  margin: 0 auto;
+}
+.phone-status {
+  background: var(--ink-3);
+  height: 36px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px;
+  font-size: .65rem;
+  color: var(--text-2);
+}
+.phone-screen { padding: 0; }
+.phone-header {
+  background: var(--ink-2);
+  padding: 16px 20px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+}
+.phone-header .greeting { font-size: .7rem; color: var(--text-2); }
+.phone-header .name { font-family: var(--f-display); font-size: 1rem; font-weight: 700; color: var(--white); }
+.phone-content { padding: 16px; }
+.phone-section-title { font-size: .65rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-2); margin-bottom: 10px; }
+.phone-metric-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.phone-metric {
+  background: var(--ink-3);
+  border-radius: 10px;
+  padding: 12px;
+  border-top: 2px solid transparent;
+}
+.phone-metric.a { border-color: var(--blue); }
+.phone-metric.b { border-color: var(--green); }
+.phone-metric.c { border-color: var(--amber); }
+.phone-metric.d { border-color: var(--red); }
+.phone-metric .pval { font-family: var(--f-display); font-size: 1.3rem; font-weight: 700; color: var(--white); line-height:1; }
+.phone-metric .plbl { font-size: .6rem; color: var(--text-2); margin-top: 3px; }
+.phone-cta {
+  background: var(--blue);
+  border-radius: 10px;
+  padding: 13px;
+  text-align: center;
+  font-weight: 600;
+  font-size: .85rem;
+  color: #fff;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.phone-cta:hover { background: #3a68f0; }
+.phone-nav {
+  background: var(--ink-3);
+  display: flex;
+  border-top: 1px solid var(--line);
+}
+.phone-nav-item {
+  flex: 1; padding: 10px 4px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .15s;
+}
+.phone-nav-item .nav-icon { font-size: 1.1rem; }
+.phone-nav-item .nav-label { font-size: .6rem; color: var(--text-2); display: block; margin-top: 3px; }
+.phone-nav-item.active .nav-label { color: var(--blue); }
+.phone-nav-item.active .nav-icon { filter: none; }
+
+/* ── CHART PREVIEW ───────────────────────────── */
+.mini-chart { position: relative; height: 60px; }
+.mini-chart svg { width: 100%; height: 100%; }
+
+/* ── SPACING TOKENS ──────────────────────────── */
+.spacing-grid { display: flex; gap: 0; align-items: flex-end; margin-bottom: 24px; }
+.spacing-item { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-right: 20px; }
+.spacing-block { background: var(--blue); border-radius: 2px; width: 40px; }
+.spacing-label { font-family: 'Courier New', monospace; font-size: .7rem; color: var(--text-2); }
+
+/* ── SCREEN FLOWS ────────────────────────────── */
+.screens-row {
+  display: flex; gap: 28px; overflow-x: auto;
+  padding-bottom: 20px;
+  align-items: flex-start;
+}
+.screen-wrap { flex-shrink: 0; }
+.screen-label {
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: var(--text-2);
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+/* ── DIVIDER ──────────────────────────────────── */
+.divider { border: none; border-top: 1px solid var(--line); margin: 36px 0; }
+
+/* ── TABLE ────────────────────────────────────── */
+table { width: 100%; border-collapse: collapse; }
+th {
+  text-align: left;
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-2);
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+}
+td {
+  padding: 12px 16px;
+  font-size: .85rem;
+  color: var(--text);
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,.02); }
+
+/* ── ICON ROW ─────────────────────────────────── */
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 10px;
+}
+.icon-item {
+  background: var(--ink-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 16px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .15s;
+}
+.icon-item:hover { border-color: var(--blue); background: var(--blue-glow); }
+.icon-item .em { font-size: 1.4rem; display: block; margin-bottom: 6px; }
+.icon-item .ic-name { font-size: .6rem; color: var(--text-2); }
+
+/* ── HEADER ───────────────────────────────────── */
+.page-header {
+  background: linear-gradient(135deg, var(--ink) 0%, var(--ink-2) 100%);
+  border-bottom: 1px solid var(--line);
+  padding: 60px 60px 50px;
+  position: relative;
+  overflow: hidden;
+}
+.page-header::after {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(77,124,255,.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.header-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--ink-3);
+  border: 1px solid var(--line-soft);
+  border-radius: 30px;
+  padding: 5px 14px;
+  font-size: .72rem;
+  color: var(--text-2);
+  margin-bottom: 20px;
+}
+.status-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:.5} }
+
+/* ── TOAST ────────────────────────────────────── */
+#toast {
+  position: fixed; bottom: 28px; right: 28px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  padding: 12px 20px;
+  font-size: .84rem;
+  transform: translateY(80px); opacity: 0;
+  transition: all .28s cubic-bezier(.4,0,.2,1);
+  z-index: 999;
+  max-width: 280px;
+}
+#toast.show { transform: translateY(0); opacity: 1; }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--line-soft); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="wordmark">AkıllıTakip</div>
+    <div class="sub">Design System v1.0</div>
+  </div>
+  <div class="sidebar-section">Temel</div>
+  <a onclick="show('colors')" id="nav-colors" class="active"><span class="dot"></span> Renk Sistemi</a>
+  <a onclick="show('typography')" id="nav-typography"><span class="dot"></span> Tipografi</a>
+  <a onclick="show('spacing')" id="nav-spacing"><span class="dot"></span> Boşluk & Grid</a>
+  <div class="sidebar-section">Bileşenler</div>
+  <a onclick="show('components')" id="nav-components"><span class="dot"></span> UI Bileşenleri</a>
+  <a onclick="show('icons')" id="nav-icons"><span class="dot"></span> İkonlar</a>
+  <div class="sidebar-section">Ekranlar</div>
+  <a onclick="show('screens')" id="nav-screens"><span class="dot"></span> Ekran Akışları</a>
+  <a onclick="show('prototype')" id="nav-prototype"><span class="dot"></span> Tıklanabilir Demo</a>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ══ PAGE HEADER ══════════════════════════ -->
+<div class="page-header">
+  <div class="header-pill"><span class="status-dot"></span> Versiyon 1.0 — Haziran 2025</div>
+  <div style="font-family:var(--f-display);font-size:2.8rem;font-weight:800;color:var(--white);letter-spacing:-.5px;line-height:1.1">
+    AkıllıTakip<br><span style="color:var(--blue)">Tasarım Dosyası</span>
+  </div>
+  <div style="color:var(--text-2);margin-top:14px;font-size:.95rem;max-width:500px">
+    Akıllı Sporcu Performans Takip Uygulaması — UI/UX Tasarım Sistemi, Renk Tokenları, Bileşen Kütüphanesi ve Ekran Prototipleri.
+  </div>
+</div>
+
+<!-- ══ COLORS ══════════════════════════════ -->
+<section class="section active" id="sec-colors">
+  <div class="section-eyebrow">Design Tokens</div>
+  <div class="section-title">Renk Sistemi</div>
+  <div class="section-desc">Tüm renkler CSS değişkeni olarak tanımlanmıştır. Koyu tema (dark-first) yaklaşımı benimsenmiştir — spor ortamında yüksek kontrast ve okunabilirlik önceliklidir.</div>
+
+  <div style="margin-bottom:12px;font-size:.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-2)">Arka Plan Hiyerarşisi</div>
+  <div class="token-grid">
+    <div class="token-swatch" onclick="copy('#0C0D14')">
+      <div class="token-color" style="background:#0C0D14"><span class="hex-label">#0C0D14</span></div>
+      <div class="token-info"><div class="token-name">--ink</div><div class="token-role">Ana arka plan</div></div>
+    </div>
+    <div class="token-swatch" onclick="copy('#161720')">
+      <div class="token-color" style="background:#161720"><span class="hex-label">#161720</span></div>
+      <div class="token-info"><div class="token-name">--ink-2</div><div class="token-role">Sidebar / panel</div></div>
+    </div>
+    <div class="token-swatch" onclick="copy('#1E2030')">
+      <div class="token-color" style="background:#1E2030"><span class="hex-label">#1E2030</span></div>
+      <div class="token-info"><div class="token-name">--ink-3</div><div class="token-role">Giriş alanları</div></div>
+    </div>
+    <div class="token-swatch" onclick="copy('#252737')">
+      <div class="token-color" style="background:#252737"><span class="hex-label">#252737</span></div>
+      <div class="token-info"><div class="token-name">--surface</div><div class="token-role">Kart yüzeyleri</div></div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:12px;margin-top:28px;font-size:.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-2)">Vurgu Renkleri</div>
+  <div class="token-grid">
+    <div class="token-swatch" onclick="copy('#4D7CFF')">
+      <div class="token-color" style="background:#4D7CFF"><span class="hex-label">#4D7CFF</span></div>
+      <div class="token-info"><div class="token-name">--blue</div><div class="token-role">Birincil vurgu</div></div>
+    </div>
+    <div class="token-swatch" onclick="copy('#00D4CC')">
+      <div class="token-color" style="background:#00D4CC"><span class="hex-label">#00D4CC</span></div>
+      <div class="token-info"><div class="token-name">--cyan</div><div class="token-role">Gradyan çifti</div></div>
+    </div>
+    <div class="token-swatch" onclick="copy('#19E086')">
+      <div class="token-color" style="background:#19E086"><span class="hex-label">#19E086</span></div>
+      <div class="token-info"><div class="token-name">--green</div><div class="token-role">Başarı / Düşük risk</div></div>
+    </div>
+    <div class="token-swatch" onclick="copy('#FFB020')">
+      <div class="token-color" style="background:#FFB020"><span class="hex-label">#FFB020</span></div>
+      <div class="token-info"><div class="token-name">--amber</div><div class="token-role">Uyarı / Orta risk</div></div>
+    </div>
+    <div class="token-swatch" onclick="copy('#FF4D6A')">
+      <div class="token-color" style="background:#FF4D6A"><span class="hex-label">#FF4D6A</span></div>
+      <div class="token-info"><div class="token-name">--red</div><div class="token-role">Hata / Yüksek risk</div></div>
+    </div>
+    <div class="token-swatch" onclick="copy('#8B5CF6')">
+      <div class="token-color" style="background:#8B5CF6"><span class="hex-label">#8B5CF6</span></div>
+      <div class="token-info"><div class="token-name">--purple</div><div class="token-role">AI / Premium</div></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div style="margin-bottom:16px;font-size:.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-2)">Risk Renk Sistemi</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <div style="background:var(--ink-2);border:1px solid var(--line);border-left:4px solid var(--green);border-radius:var(--r-md);padding:20px 28px;min-width:180px">
+      <div style="font-family:var(--f-display);font-weight:700;color:var(--green);font-size:1.1rem">DÜŞÜK RİSK</div>
+      <div style="color:var(--text-2);font-size:.8rem;margin-top:4px">Skor: 0.00 – 0.29</div>
+      <div style="margin-top:8px"><span class="badge badge-green"><span class="badge-dot" style="background:var(--green)"></span>LOW</span></div>
+    </div>
+    <div style="background:var(--ink-2);border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:var(--r-md);padding:20px 28px;min-width:180px">
+      <div style="font-family:var(--f-display);font-weight:700;color:var(--amber);font-size:1.1rem">ORTA RİSK</div>
+      <div style="color:var(--text-2);font-size:.8rem;margin-top:4px">Skor: 0.30 – 0.59</div>
+      <div style="margin-top:8px"><span class="badge badge-amber"><span class="badge-dot" style="background:var(--amber)"></span>MEDIUM</span></div>
+    </div>
+    <div style="background:var(--ink-2);border:1px solid var(--line);border-left:4px solid var(--red);border-radius:var(--r-md);padding:20px 28px;min-width:180px">
+      <div style="font-family:var(--f-display);font-weight:700;color:var(--red);font-size:1.1rem">YÜKSEK RİSK</div>
+      <div style="color:var(--text-2);font-size:.8rem;margin-top:4px">Skor: 0.60 – 1.00</div>
+      <div style="margin-top:8px"><span class="badge badge-red"><span class="badge-dot" style="background:var(--red)"></span>HIGH</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TYPOGRAPHY ═══════════════════════════ -->
+<section class="section" id="sec-typography">
+  <div class="section-eyebrow">Type Scale</div>
+  <div class="section-title">Tipografi</div>
+  <div class="section-desc">İki yazı tipi ailesi kullanılmaktadır. Başlıklar için <strong>Syne</strong> (geometrik, güçlü karakter) — metin ve UI için <strong>DM Sans</strong> (okunabilir, modern).</div>
+
+  <div class="type-specimen">
+    <div class="type-label">Display — Syne 800 / 3.2rem</div>
+    <div style="font-family:var(--f-display);font-size:3.2rem;font-weight:800;color:var(--white);line-height:1.05;letter-spacing:-.5px">Bugün 12.4 km<br>koştun 🔥</div>
+    <div class="type-meta"><span>Syne</span><span>800</span><span>3.2rem / 51.2px</span><span>Ekran başlıkları</span></div>
+  </div>
+
+  <div class="type-specimen">
+    <div class="type-label">Heading 1 — Syne 700 / 2rem</div>
+    <div style="font-family:var(--f-display);font-size:2rem;font-weight:700;color:var(--white)">Performans Özeti</div>
+    <div class="type-meta"><span>Syne</span><span>700</span><span>2rem / 32px</span><span>Sayfa başlıkları</span></div>
+  </div>
+
+  <div class="type-specimen">
+    <div class="type-label">Heading 2 — Syne 600 / 1.3rem</div>
+    <div style="font-family:var(--f-display);font-size:1.3rem;font-weight:600;color:var(--white)">Sakatlanma Risk Analizi</div>
+    <div class="type-meta"><span>Syne</span><span>600</span><span>1.3rem / 20.8px</span><span>Bölüm başlıkları</span></div>
+  </div>
+
+  <div class="type-specimen">
+    <div class="type-label">Body — DM Sans 400 / 0.9rem</div>
+    <div style="font-family:var(--f-body);font-size:.9rem;color:var(--text);line-height:1.7;max-width:480px">Kalp atış hızınız son 5 dakikadır sürekli yükseliyor. Pace'inizi biraz düşürmenizi öneririz — hidrasyonunuzu da kontrol etmeyi unutmayın.</div>
+    <div class="type-meta"><span>DM Sans</span><span>400</span><span>0.9rem / 14.4px</span><span>Paragraf metni</span></div>
+  </div>
+
+  <div class="type-specimen">
+    <div class="type-label">Label / Caption — DM Sans 500 / 0.72rem</div>
+    <div style="font-family:var(--f-body);font-size:.72rem;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:var(--text-2)">KADıNLAR HAFTALIK ORTALAMA — ZONE 3</div>
+    <div class="type-meta"><span>DM Sans</span><span>500</span><span>0.72rem / 11.5px</span><span>Etiket, üst yazı</span></div>
+  </div>
+</section>
+
+<!-- ══ SPACING ═══════════════════════════════ -->
+<section class="section" id="sec-spacing">
+  <div class="section-eyebrow">Layout</div>
+  <div class="section-title">Boşluk & Grid</div>
+  <div class="section-desc">8px temel birim sistemi. Tüm boşluk değerleri bu birimin katlarıdır. Tutarlı ritim ve hizalama sağlar.</div>
+
+  <div style="margin-bottom:16px;font-size:.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-2)">Boşluk Skalası</div>
+  <div class="spacing-grid">
+    <div class="spacing-item"><div class="spacing-block" style="height:4px"></div><span class="spacing-label">4px</span></div>
+    <div class="spacing-item"><div class="spacing-block" style="height:8px"></div><span class="spacing-label">8px</span></div>
+    <div class="spacing-item"><div class="spacing-block" style="height:12px"></div><span class="spacing-label">12px</span></div>
+    <div class="spacing-item"><div class="spacing-block" style="height:16px"></div><span class="spacing-label">16px</span></div>
+    <div class="spacing-item"><div class="spacing-block" style="height:24px"></div><span class="spacing-label">24px</span></div>
+    <div class="spacing-item"><div class="spacing-block" style="height:32px"></div><span class="spacing-label">32px</span></div>
+    <div class="spacing-item"><div class="spacing-block" style="height:48px"></div><span class="spacing-label">48px</span></div>
+    <div class="spacing-item"><div class="spacing-block" style="height:64px"></div><span class="spacing-label">64px</span></div>
+    <div class="spacing-item"><div class="spacing-block" style="height:96px"></div><span class="spacing-label">96px</span></div>
+  </div>
+
+  <hr class="divider">
+  <div style="margin-bottom:16px;font-size:.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-2)">Köşe Yarıçapı</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:32px">
+    <div style="background:var(--ink-2);border:1px solid var(--line);width:80px;height:80px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.72rem;color:var(--text-2);flex-direction:column;gap:4px"><span>8px</span><span style="color:var(--text-2);font-size:.6rem">sm</span></div>
+    <div style="background:var(--ink-2);border:1px solid var(--line);width:80px;height:80px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:.72rem;color:var(--text-2);flex-direction:column;gap:4px"><span>14px</span><span style="color:var(--text-2);font-size:.6rem">md</span></div>
+    <div style="background:var(--ink-2);border:1px solid var(--line);width:80px;height:80px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:.72rem;color:var(--text-2);flex-direction:column;gap:4px"><span>20px</span><span style="color:var(--text-2);font-size:.6rem">lg</span></div>
+    <div style="background:var(--ink-2);border:1px solid var(--line);width:80px;height:80px;border-radius:28px;display:flex;align-items:center;justify-content:center;font-size:.72rem;color:var(--text-2);flex-direction:column;gap:4px"><span>28px</span><span style="color:var(--text-2);font-size:.6rem">xl</span></div>
+    <div style="background:var(--ink-2);border:1px solid var(--line);width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;color:var(--text-2);flex-direction:column;gap:4px"><span>50%</span><span style="color:var(--text-2);font-size:.6rem">full</span></div>
+  </div>
+</section>
+
+<!-- ══ COMPONENTS ════════════════════════════ -->
+<section class="section" id="sec-components">
+  <div class="section-eyebrow">UI Kit</div>
+  <div class="section-title">Bileşenler</div>
+  <div class="section-desc">Uygulamada kullanılan tüm temel UI bileşenleri. Her biri yeniden kullanılabilir ve tutarlı tasarım sistemi üzerine inşa edilmiştir.</div>
+
+  <div class="comp-grid">
+    <!-- BUTTONS -->
+    <div class="comp-card">
+      <h4>Butonlar</h4>
+      <div class="btn-group"><button class="btn btn-primary btn-lg">🏃 Antrenmanı Başlat</button></div>
+      <div class="btn-group">
+        <button class="btn btn-primary">Kaydet</button>
+        <button class="btn btn-secondary">İptal</button>
+        <button class="btn btn-ghost">Önizle</button>
+        <button class="btn btn-danger">Sil</button>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary btn-sm">Ekle</button>
+        <button class="btn btn-secondary btn-sm">Düzenle</button>
+        <button class="btn btn-icon btn-secondary">⚙️</button>
+        <button class="btn btn-icon btn-ghost">📤</button>
+      </div>
+    </div>
+
+    <!-- BADGES -->
+    <div class="comp-card">
+      <h4>Rozetler & Etiketler</h4>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+        <span class="badge badge-green"><span class="badge-dot" style="background:var(--green)"></span>Düşük Risk</span>
+        <span class="badge badge-amber"><span class="badge-dot" style="background:var(--amber)"></span>Orta Risk</span>
+        <span class="badge badge-red"><span class="badge-dot" style="background:var(--red)"></span>Yüksek Risk</span>
+        <span class="badge badge-blue">Zone 3</span>
+        <span class="badge badge-purple">AI Analiz</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <span class="badge badge-blue">Running</span>
+        <span class="badge badge-blue">Cycling</span>
+        <span class="badge badge-blue">Strength</span>
+        <span class="badge badge-green">✓ Tamamlandı</span>
+        <span class="badge badge-amber">⏳ Devam Ediyor</span>
+      </div>
+    </div>
+
+    <!-- INPUTS -->
+    <div class="comp-card">
+      <h4>Form Alanları</h4>
+      <div class="input-group">
+        <label class="input-label">E-posta Adresi</label>
+        <input class="input-field" type="email" placeholder="sporcu@email.com">
+        <div class="input-hint">Bildirimleri bu adrese göndereceğiz.</div>
+      </div>
+      <div class="input-group input-error">
+        <label class="input-label">Şifre</label>
+        <input class="input-field" type="password" value="123">
+        <div class="input-hint">⚠ Şifre en az 8 karakter olmalıdır.</div>
+      </div>
+    </div>
+
+    <!-- METRICS -->
+    <div class="comp-card">
+      <h4>Risk Göstergesi</h4>
+      <div style="display:flex;gap:16px;justify-content:space-around">
+        <div class="risk-gauge">
+          <div class="gauge-ring">
+            <svg viewBox="0 0 100 100" width="100" height="100">
+              <circle class="track" cx="50" cy="50" r="40"/>
+              <circle class="fill" cx="50" cy="50" r="40" stroke="var(--green)"
+                stroke-dasharray="251.2" stroke-dashoffset="200" id="g1"/>
+            </svg>
+            <div class="gauge-center">
+              <div class="gauge-pct">24</div>
+              <div class="gauge-unit">/ 100</div>
+            </div>
+          </div>
+          <div class="gauge-level" style="color:var(--green)">DÜŞÜK</div>
+        </div>
+        <div class="risk-gauge">
+          <div class="gauge-ring">
+            <svg viewBox="0 0 100 100" width="100" height="100">
+              <circle class="track" cx="50" cy="50" r="40"/>
+              <circle class="fill" cx="50" cy="50" r="40" stroke="var(--amber)"
+                stroke-dasharray="251.2" stroke-dashoffset="125" id="g2"/>
+            </svg>
+            <div class="gauge-center">
+              <div class="gauge-pct">51</div>
+              <div class="gauge-unit">/ 100</div>
+            </div>
+          </div>
+          <div class="gauge-level" style="color:var(--amber)">ORTA</div>
+        </div>
+        <div class="risk-gauge">
+          <div class="gauge-ring">
+            <svg viewBox="0 0 100 100" width="100" height="100">
+              <circle class="track" cx="50" cy="50" r="40"/>
+              <circle class="fill" cx="50" cy="50" r="40" stroke="var(--red)"
+                stroke-dasharray="251.2" stroke-dashoffset="25" id="g3"/>
+            </svg>
+            <div class="gauge-center">
+              <div class="gauge-pct">90</div>
+              <div class="gauge-unit">/ 100</div>
+            </div>
+          </div>
+          <div class="gauge-level" style="color:var(--red)">YÜKSEK</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- METRIC CARDS -->
+  <div style="margin-bottom:16px;font-size:.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-2)">Metrik Kartları</div>
+  <div class="metrics-grid">
+    <div class="metric-card blue">
+      <div class="icon">💨</div>
+      <div class="val">12.4</div>
+      <div class="lbl">km/s Ortalama Hız</div>
+      <span class="change up">↑ 8%</span>
+    </div>
+    <div class="metric-card green">
+      <div class="icon">❤️</div>
+      <div class="val">142</div>
+      <div class="lbl">bpm Kalp Hızı</div>
+      <span class="change up">Zone 3</span>
+    </div>
+    <div class="metric-card amber">
+      <div class="icon">🦵</div>
+      <div class="val">168</div>
+      <div class="lbl">spm Kadans</div>
+      <span class="change down">↓ 2%</span>
+    </div>
+    <div class="metric-card red">
+      <div class="icon">🫁</div>
+      <div class="val">98%</div>
+      <div class="lbl">SpO₂ Oksijen</div>
+      <span class="change up">Normal</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ICONS ══════════════════════════════════ -->
+<section class="section" id="sec-icons">
+  <div class="section-eyebrow">Visual Language</div>
+  <div class="section-title">İkon Seti</div>
+  <div class="section-desc">Uygulama genelinde tutarlı emoji-tabanlı ikonlar. Tıkla kopyala.</div>
+
+  <div style="margin-bottom:16px;font-size:.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-2)">Navigasyon</div>
+  <div class="icon-grid" style="margin-bottom:28px">
+    <div class="icon-item" onclick="copy('🏠')"><span class="em">🏠</span><span class="ic-name">Ana Sayfa</span></div>
+    <div class="icon-item" onclick="copy('📊')"><span class="em">📊</span><span class="ic-name">İstatistik</span></div>
+    <div class="icon-item" onclick="copy('🏋️')"><span class="em">🏋️</span><span class="ic-name">Antrenman</span></div>
+    <div class="icon-item" onclick="copy('🧠')"><span class="em">🧠</span><span class="ic-name">AI Analiz</span></div>
+    <div class="icon-item" onclick="copy('👤')"><span class="em">👤</span><span class="ic-name">Profil</span></div>
+    <div class="icon-item" onclick="copy('⚙️')"><span class="em">⚙️</span><span class="ic-name">Ayarlar</span></div>
+  </div>
+  <div style="margin-bottom:16px;font-size:.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-2)">Metrikler</div>
+  <div class="icon-grid" style="margin-bottom:28px">
+    <div class="icon-item" onclick="copy('❤️')"><span class="em">❤️</span><span class="ic-name">Kalp Hızı</span></div>
+    <div class="icon-item" onclick="copy('💨')"><span class="em">💨</span><span class="ic-name">Hız</span></div>
+    <div class="icon-item" onclick="copy('📏')"><span class="em">📏</span><span class="ic-name">Mesafe</span></div>
+    <div class="icon-item" onclick="copy('⏱')"><span class="em">⏱</span><span class="ic-name">Süre</span></div>
+    <div class="icon-item" onclick="copy('🫁')"><span class="em">🫁</span><span class="ic-name">SpO₂</span></div>
+    <div class="icon-item" onclick="copy('🦵')"><span class="em">🦵</span><span class="ic-name">Kadans</span></div>
+    <div class="icon-item" onclick="copy('🔥')"><span class="em">🔥</span><span class="ic-name">Kalori</span></div>
+    <div class="icon-item" onclick="copy('📡')"><span class="em">📡</span><span class="ic-name">Bluetooth</span></div>
+  </div>
+  <div style="margin-bottom:16px;font-size:.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-2)">Risk & Durum</div>
+  <div class="icon-grid">
+    <div class="icon-item" onclick="copy('✅')"><span class="em">✅</span><span class="ic-name">Düşük Risk</span></div>
+    <div class="icon-item" onclick="copy('⚠️')"><span class="em">⚠️</span><span class="ic-name">Orta Risk</span></div>
+    <div class="icon-item" onclick="copy('🚨')"><span class="em">🚨</span><span class="ic-name">Yüksek Risk</span></div>
+    <div class="icon-item" onclick="copy('🏆')"><span class="em">🏆</span><span class="ic-name">Başarı</span></div>
+    <div class="icon-item" onclick="copy('🩺')"><span class="em">🩺</span><span class="ic-name">Sağlık</span></div>
+    <div class="icon-item" onclick="copy('💪')"><span class="em">💪</span><span class="ic-name">Güç</span></div>
+  </div>
+</section>
+
+<!-- ══ SCREENS ════════════════════════════════ -->
+<section class="section" id="sec-screens">
+  <div class="section-eyebrow">UX Flow</div>
+  <div class="section-title">Ekran Akışları</div>
+  <div class="section-desc">Temel kullanıcı akışları ve ekran tasarımları. Mobil-önce yaklaşımı.</div>
+
+  <div class="screens-row">
+    <!-- ONBOARDING -->
+    <div class="screen-wrap">
+      <div class="screen-label">1 — Karşılama</div>
+      <div class="phone-frame" style="width:240px">
+        <div class="phone-status"><span>09:41</span><span>📶 🔋</span></div>
+        <div style="padding:40px 24px 32px;text-align:center;background:linear-gradient(160deg,var(--ink) 0%,var(--ink-2) 100%)">
+          <div style="font-size:3rem;margin-bottom:16px">🏃</div>
+          <div style="font-family:var(--f-display);font-size:1.6rem;font-weight:800;color:var(--white);line-height:1.1;margin-bottom:8px">Akıllı<br>Antrenör</div>
+          <div style="font-size:.8rem;color:var(--text-2);line-height:1.6">Spor verilerini analiz et,<br>sakatlanma riskini önle.</div>
+          <div style="margin-top:32px;display:flex;flex-direction:column;gap:10px">
+            <button class="btn btn-primary" style="width:100%;justify-content:center">Başla →</button>
+            <button class="btn btn-ghost" style="width:100%;justify-content:center;font-size:.8rem">Giriş Yap</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="screen-wrap">
+      <div class="screen-label">2 — Dashboard</div>
+      <div class="phone-frame" style="width:240px">
+        <div class="phone-status"><span>09:41</span><span>📶 🔋</span></div>
+        <div class="phone-screen">
+          <div class="phone-header">
+            <div><div class="greeting">Günaydın 👋</div><div class="name">Ahmet</div></div>
+            <button class="btn btn-icon btn-ghost btn-sm">🔔</button>
+          </div>
+          <div class="phone-content">
+            <div class="phone-section-title">Bugünkü Performans</div>
+            <div class="phone-metric-row">
+              <div class="phone-metric a"><div class="pval">12.4</div><div class="plbl">km / Toplam</div></div>
+              <div class="phone-metric b"><div class="pval">142</div><div class="plbl">bpm / Ort HR</div></div>
+              <div class="phone-metric c"><div class="pval">5:48</div><div class="plbl">min/km Pace</div></div>
+              <div class="phone-metric d"><div class="pval">24</div><div class="plbl">Risk Skoru</div></div>
+            </div>
+            <div class="phone-cta">🏃 Antrenman Başlat</div>
+          </div>
+          <div class="phone-nav">
+            <div class="phone-nav-item active"><span class="nav-icon">🏠</span><span class="nav-label">Ana Sayfa</span></div>
+            <div class="phone-nav-item"><span class="nav-icon">📊</span><span class="nav-label">Analiz</span></div>
+            <div class="phone-nav-item"><span class="nav-icon">🧠</span><span class="nav-label">AI</span></div>
+            <div class="phone-nav-item"><span class="nav-icon">👤</span><span class="nav-label">Profil</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RISK -->
+    <div class="screen-wrap">
+      <div class="screen-label">3 — Risk Analizi</div>
+      <div class="phone-frame" style="width:240px">
+        <div class="phone-status"><span>09:41</span><span>📶 🔋</span></div>
+        <div class="phone-screen">
+          <div class="phone-header">
+            <div><div class="greeting">Anlık Analiz</div><div class="name">🧠 AI Raporu</div></div>
+            <span class="badge badge-green" style="font-size:.65rem">DÜŞÜK</span>
+          </div>
+          <div class="phone-content">
+            <div style="text-align:center;padding:12px 0 16px">
+              <div style="font-family:var(--f-display);font-size:2.8rem;font-weight:800;color:var(--green)">24</div>
+              <div style="font-size:.75rem;color:var(--text-2)">Risk Skoru / 100</div>
+              <div style="background:var(--line);border-radius:4px;height:6px;margin:12px 0;overflow:hidden">
+                <div style="width:24%;height:100%;background:var(--green);border-radius:4px"></div>
+              </div>
+            </div>
+            <div class="phone-section-title">Öneriler</div>
+            <div style="background:var(--ink-3);border-radius:10px;padding:12px;font-size:.75rem;color:var(--text-2);line-height:1.6;margin-bottom:10px">
+              ✅ Her şey normal görünüyor. Devam edebilirsiniz.
+            </div>
+            <div style="background:var(--ink-3);border-radius:10px;padding:12px;font-size:.75rem;color:var(--text-2);line-height:1.6">
+              💧 Hidrasyonunuzu kontrol edin.
+            </div>
+          </div>
+          <div class="phone-nav">
+            <div class="phone-nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Ana Sayfa</span></div>
+            <div class="phone-nav-item"><span class="nav-icon">📊</span><span class="nav-label">Analiz</span></div>
+            <div class="phone-nav-item active"><span class="nav-icon">🧠</span><span class="nav-label">AI</span></div>
+            <div class="phone-nav-item"><span class="nav-icon">👤</span><span class="nav-label">Profil</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="screen-wrap">
+      <div class="screen-label">4 — Geçmiş</div>
+      <div class="phone-frame" style="width:240px">
+        <div class="phone-status"><span>09:41</span><span>📶 🔋</span></div>
+        <div class="phone-screen">
+          <div class="phone-header">
+            <div><div class="greeting">Antrenman</div><div class="name">📋 Geçmişim</div></div>
+            <button class="btn btn-icon btn-ghost btn-sm">🔍</button>
+          </div>
+          <div class="phone-content" style="padding:12px 14px">
+            <div style="font-size:.65rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-2);margin-bottom:8px">Bu Hafta</div>
+            ${['Pazartesi', 'Çarşamba', 'Cuma'].map((g,i) => `
+            <div style="background:var(--ink-3);border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between">
+              <div>
+                <div style="font-size:.8rem;font-weight:600;color:var(--white)">🏃 Koşu — ${g}</div>
+                <div style="font-size:.68rem;color:var(--text-2);margin-top:2px">${(5+i*2)}km · ${(25+i*3)} dk</div>
+              </div>
+              <span class="badge ${i===1?'badge-amber':'badge-green'}" style="font-size:.6rem">${i===1?'ORTA':'DÜŞÜK'}</span>
+            </div>`).join('')}
+          </div>
+          <div class="phone-nav">
+            <div class="phone-nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Ana Sayfa</span></div>
+            <div class="phone-nav-item active"><span class="nav-icon">📊</span><span class="nav-label">Analiz</span></div>
+            <div class="phone-nav-item"><span class="nav-icon">🧠</span><span class="nav-label">AI</span></div>
+            <div class="phone-nav-item"><span class="nav-icon">👤</span><span class="nav-label">Profil</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROTOTYPE ══════════════════════════════ -->
+<section class="section" id="sec-prototype">
+  <div class="section-eyebrow">Interactive</div>
+  <div class="section-title">Tıklanabilir Prototip</div>
+  <div class="section-desc">Gerçekçi ekran geçişleri ile uygulamayı deneyimleyin.</div>
+
+  <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap">
+    <div>
+      <div id="proto-phone" class="phone-frame" style="width:280px">
+        <div class="phone-status"><span>09:41</span><span>📶 🔋</span></div>
+        <div id="proto-screen"></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:16px;justify-content:center">
+        <button class="btn btn-ghost btn-sm" onclick="protoNav(-1)">← Geri</button>
+        <span id="proto-indicator" style="font-size:.75rem;color:var(--text-2);padding:7px 12px;background:var(--ink-2);border:1px solid var(--line);border-radius:8px">1 / 4</span>
+        <button class="btn btn-primary btn-sm" onclick="protoNav(1)">İleri →</button>
+      </div>
+    </div>
+
+    <div style="flex:1;min-width:260px">
+      <div style="margin-bottom:20px;font-size:.75rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--text-2)">Akış Adımları</div>
+      <div id="proto-steps"></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+// ── NAV ──────────────────────────────────────
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  document.getElementById('nav-' + id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ── TOAST ────────────────────────────────────
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'show';
+  setTimeout(() => t.className = '', 2200);
+}
+
+function copy(val) {
+  navigator.clipboard?.writeText(val).catch(()=>{});
+  toast('Kopyalandı: ' + val);
+}
+
+// ── PROTOTYPE ────────────────────────────────
+const steps = [
+  {
+    label: '1. Karşılama Ekranı',
+    desc: 'Kullanıcı uygulamayı ilk açıyor. Kayıt veya giriş seçeneği sunuluyor.',
+    html: `<div style="padding:36px 24px;text-align:center;background:linear-gradient(160deg,var(--ink) 0%,var(--ink-2) 100%)">
+      <div style="font-size:3rem;margin-bottom:16px">🏃</div>
+      <div style="font-family:var(--f-display);font-size:1.5rem;font-weight:800;color:var(--white);line-height:1.1;margin-bottom:8px">AkıllıTakip</div>
+      <div style="font-size:.78rem;color:var(--text-2);line-height:1.6;margin-bottom:28px">Spor verilerini analiz et,<br>sakatlanma riskini önle.</div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:10px" onclick="protoNav(1)">Kayıt Ol →</button>
+      <button class="btn btn-ghost" style="width:100%;justify-content:center;font-size:.8rem" onclick="protoNav(1)">Giriş Yap</button>
+    </div>
+    <div class="phone-nav">
+      <div class="phone-nav-item active"><span class="nav-icon">🏠</span><span class="nav-label">Ana</span></div>
+      <div class="phone-nav-item"><span class="nav-icon">📊</span><span class="nav-label">Analiz</span></div>
+      <div class="phone-nav-item"><span class="nav-icon">🧠</span><span class="nav-label">AI</span></div>
+      <div class="phone-nav-item"><span class="nav-icon">👤</span><span class="nav-label">Profil</span></div>
+    </div>`
+  },
+  {
+    label: '2. Dashboard',
+    desc: 'Kullanıcının günlük performans özeti. Anlık metrikler ve hızlı başlatma.',
+    html: `<div class="phone-header"><div><div class="greeting">Günaydın 👋</div><div class="name">Ahmet</div></div><button class="btn btn-icon btn-ghost btn-sm">🔔</button></div>
+    <div class="phone-content">
+      <div class="phone-section-title">Bugün</div>
+      <div class="phone-metric-row">
+        <div class="phone-metric a"><div class="pval">12.4</div><div class="plbl">km Toplam</div></div>
+        <div class="phone-metric b"><div class="pval">142</div><div class="plbl">bpm Ort HR</div></div>
+        <div class="phone-metric c"><div class="pval">5:48</div><div class="plbl">Pace</div></div>
+        <div class="phone-metric d"><div class="pval">24</div><div class="plbl">Risk</div></div>
+      </div>
+      <div class="phone-cta" onclick="protoNav(1)">🏃 Antrenmanı Başlat</div>
+      <div class="phone-section-title">Son Aktivite</div>
+      <div style="background:var(--ink-3);border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center">
+        <div><div style="font-size:.8rem;font-weight:600;color:var(--white)">🏃 Sabah Koşusu</div><div style="font-size:.68rem;color:var(--text-2);margin-top:2px">5km · 28 dk</div></div>
+        <span class="badge badge-green" style="font-size:.6rem">DÜŞÜK</span>
+      </div>
+    </div>
+    <div class="phone-nav">
+      <div class="phone-nav-item active"><span class="nav-icon">🏠</span><span class="nav-label">Ana</span></div>
+      <div class="phone-nav-item" onclick="protoNav(1)"><span class="nav-icon">📊</span><span class="nav-label">Analiz</span></div>
+      <div class="phone-nav-item"><span class="nav-icon">🧠</span><span class="nav-label">AI</span></div>
+      <div class="phone-nav-item"><span class="nav-icon">👤</span><span class="nav-label">Profil</span></div>
+    </div>`
+  },
+  {
+    label: '3. AI Risk Analizi',
+    desc: 'Sensörden gelen veri AI tarafından işleniyor. Risk skoru ve öneriler gösteriliyor.',
+    html: `<div class="phone-header"><div><div class="greeting">Anlık Analiz</div><div class="name">🧠 AI Raporu</div></div><span class="badge badge-green" style="font-size:.62rem">DÜŞÜK RİSK</span></div>
+    <div class="phone-content">
+      <div style="text-align:center;padding:8px 0 14px">
+        <div style="font-family:var(--f-display);font-size:3rem;font-weight:800;color:var(--green);line-height:1">24</div>
+        <div style="font-size:.72rem;color:var(--text-2)">Risk Skoru / 100</div>
+        <div style="background:var(--line);border-radius:4px;height:7px;margin:12px 0;overflow:hidden"><div style="width:24%;height:100%;background:var(--green);border-radius:4px;transition:width .8s"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:.6rem;color:var(--text-2)"><span>0 DÜŞÜK</span><span>50 ORTA</span><span>100 YÜKSEK</span></div>
+      </div>
+      <div class="phone-section-title" style="margin-top:8px">Metrikler</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+        <div style="background:var(--ink-3);border-radius:8px;padding:8px;font-size:.7rem;color:var(--text-2)">❤️ <b style="color:var(--white)">149</b> bpm</div>
+        <div style="background:var(--ink-3);border-radius:8px;padding:8px;font-size:.7rem;color:var(--text-2)">🫁 <b style="color:var(--white)">99%</b> SpO₂</div>
+      </div>
+      <div style="background:rgba(25,224,134,.08);border:1px solid rgba(25,224,134,.2);border-radius:8px;padding:10px;font-size:.72rem;color:var(--green)">✅ Her şey normal. Devam edebilirsiniz.</div>
+    </div>
+    <div class="phone-nav">
+      <div class="phone-nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Ana</span></div>
+      <div class="phone-nav-item"><span class="nav-icon">📊</span><span class="nav-label">Analiz</span></div>
+      <div class="phone-nav-item active"><span class="nav-icon">🧠</span><span class="nav-label">AI</span></div>
+      <div class="phone-nav-item" onclick="protoNav(1)"><span class="nav-icon">👤</span><span class="nav-label">Profil</span></div>
+    </div>`
+  },
+  {
+    label: '4. Profil & İstatistikler',
+    desc: 'Kullanıcı istatistikleri, haftalık özet ve ayarlar.',
+    html: `<div class="phone-header"><div><div class="greeting">Hesabım</div><div class="name">👤 Ahmet Yılmaz</div></div><button class="btn btn-icon btn-ghost btn-sm">⚙️</button></div>
+    <div class="phone-content">
+      <div style="text-align:center;margin-bottom:16px">
+        <div style="width:64px;height:64px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 10px">🏃</div>
+        <div style="font-family:var(--f-display);font-weight:700;color:var(--white)">Ahmet Yılmaz</div>
+        <div style="font-size:.72rem;color:var(--text-2)">ahmet@email.com</div>
+      </div>
+      <div class="phone-section-title">Bu Ay</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px">
+        <div style="background:var(--ink-3);border-radius:8px;padding:10px;text-align:center"><div style="font-family:var(--f-display);font-weight:700;color:var(--white);font-size:1.1rem">42</div><div style="font-size:.62rem;color:var(--text-2)">Antrenman</div></div>
+        <div style="background:var(--ink-3);border-radius:8px;padding:10px;text-align:center"><div style="font-family:var(--f-display);font-weight:700;color:var(--white);font-size:1.1rem">186</div><div style="font-size:.62rem;color:var(--text-2)">km Toplam</div></div>
+        <div style="background:var(--ink-3);border-radius:8px;padding:10px;text-align:center"><div style="font-family:var(--f-display);font-weight:700;color:var(--green);font-size:1.1rem">92%</div><div style="font-size:.62rem;color:var(--text-2)">Düşük Risk</div></div>
+      </div>
+      <button class="btn btn-danger btn-sm" style="width:100%;justify-content:center" onclick="protoNav(0,true)">↩ Başa Dön</button>
+    </div>
+    <div class="phone-nav">
+      <div class="phone-nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Ana</span></div>
+      <div class="phone-nav-item"><span class="nav-icon">📊</span><span class="nav-label">Analiz</span></div>
+      <div class="phone-nav-item"><span class="nav-icon">🧠</span><span class="nav-label">AI</span></div>
+      <div class="phone-nav-item active"><span class="nav-icon">👤</span><span class="nav-label">Profil</span></div>
+    </div>`
+  }
+];
+
+let protoIdx = 0;
+
+function renderProto() {
+  const s = steps[protoIdx];
+  document.getElementById('proto-screen').innerHTML = s.html;
+  document.getElementById('proto-indicator').textContent = `${protoIdx+1} / ${steps.length}`;
+  const stepsEl = document.getElementById('proto-steps');
+  stepsEl.innerHTML = steps.map((st, i) => `
+    <div onclick="protoNav(${i - protoIdx})" style="display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:var(--r-md);cursor:pointer;border:1px solid ${i===protoIdx?'var(--blue)':'var(--line)'};background:${i===protoIdx?'var(--blue-glow)':'transparent'};margin-bottom:8px;transition:all .15s">
+      <div style="width:26px;height:26px;border-radius:50%;background:${i===protoIdx?'var(--blue)':'var(--line)'};display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:${i===protoIdx?'#fff':'var(--text-2)'};flex-shrink:0">${i+1}</div>
+      <div>
+        <div style="font-size:.85rem;font-weight:600;color:${i===protoIdx?'var(--white)':'var(--text-2)'}">${st.label}</div>
+        <div style="font-size:.75rem;color:var(--text-2);margin-top:3px;line-height:1.5">${st.desc}</div>
+      </div>
+    </div>`).join('');
+}
+
+function protoNav(delta, reset=false) {
+  if (reset) { protoIdx = 0; }
+  else { protoIdx = Math.max(0, Math.min(steps.length-1, protoIdx + delta)); }
+  renderProto();
+}
+
+renderProto();
+</script>
+</body>
+</html>
