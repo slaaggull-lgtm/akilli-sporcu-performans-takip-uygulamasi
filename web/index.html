@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akıllı Sporcu Performans Takip</title>
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b22; --panel-2:#1c232d; --line:#262d38;
+    --text:#e6edf3; --text-2:#8b97a7; --text-3:#5d6675;
+    --accent:#3fb5f0; --green:#2ecc71; --amber:#f5a623; --red:#e5484d;
+    --f-display:'Segoe UI',system-ui,-apple-system,sans-serif;
+    --f-body:system-ui,-apple-system,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--f-body);line-height:1.5;padding:24px;min-height:100vh}
+  .wrap{max-width:1080px;margin:0 auto}
+  header{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  header .logo{font-size:1.7rem}
+  h1{font-family:var(--f-display);font-size:1.5rem;font-weight:700;letter-spacing:-.3px}
+  .sub{color:var(--text-2);font-size:.9rem;margin-bottom:24px}
+  .grid{display:grid;grid-template-columns:360px 1fr;gap:20px}
+  @media(max-width:840px){.grid{grid-template-columns:1fr}body{padding:16px}}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .panel h2{font-family:var(--f-display);font-size:.78rem;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-2);margin-bottom:16px}
+  .field{margin-bottom:14px}
+  label{display:block;font-size:.82rem;color:var(--text-2);margin-bottom:6px}
+  input[type=number]{width:100%;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:11px 12px;color:var(--text);font-size:.95rem;font-family:inherit}
+  input[type=number]:focus{outline:none;border-color:var(--accent)}
+  .btn{width:100%;border:none;border-radius:9px;padding:12px;font-size:.92rem;font-weight:600;cursor:pointer;font-family:inherit;transition:filter .15s}
+  .btn:hover{filter:brightness(1.08)}
+  .btn-primary{background:var(--accent);color:#06121b;margin-top:4px}
+  .btn-ghost{background:transparent;color:var(--text-2);border:1px solid var(--line);margin-top:10px}
+  /* sonuç */
+  .result{display:flex;align-items:center;gap:18px;margin-bottom:18px}
+  .gauge{width:104px;height:104px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;position:relative;background:conic-gradient(var(--g-color) calc(var(--g-pct)*1%),var(--panel-2) 0)}
+  .gauge::after{content:'';position:absolute;inset:9px;border-radius:50%;background:var(--panel)}
+  .gauge .val{position:relative;z-index:1;text-align:center}
+  .gauge .num{font-family:var(--f-display);font-size:1.5rem;font-weight:700;line-height:1}
+  .gauge .of{font-size:.62rem;color:var(--text-3)}
+  .verdict .lbl{font-family:var(--f-display);font-size:1.35rem;font-weight:700}
+  .verdict .note{font-size:.85rem;color:var(--text-2);margin-top:3px;max-width:360px}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px}
+  .stat{background:var(--panel-2);border-radius:10px;padding:12px;text-align:center}
+  .stat .s-num{font-family:var(--f-display);font-size:1.3rem;font-weight:700}
+  .stat .s-lbl{font-size:.68rem;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+  /* tablo */
+  .table-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  table{width:100%;border-collapse:collapse;font-size:.86rem}
+  th{text-align:left;color:var(--text-3);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;padding:8px 10px;border-bottom:1px solid var(--line)}
+  td{padding:10px;border-bottom:1px solid var(--line)}
+  tr:last-child td{border-bottom:none}
+  .pill{display:inline-block;padding:2px 10px;border-radius:20px;font-size:.74rem;font-weight:600}
+  .pill.low{background:rgba(46,204,113,.14);color:var(--green)}
+  .pill.mid{background:rgba(245,166,35,.14);color:var(--amber)}
+  .pill.high{background:rgba(229,72,77,.14);color:var(--red)}
+  .empty{text-align:center;color:var(--text-3);padding:32px 10px;font-size:.9rem}
+  .csv{background:transparent;border:1px solid var(--line);color:var(--text-2);border-radius:8px;padding:7px 14px;font-size:.82rem;cursor:pointer;font-family:inherit}
+  .csv:hover{color:var(--text);border-color:var(--accent)}
+  .foot{margin-top:22px;color:var(--text-3);font-size:.76rem;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><span class="logo">🏃</span><h1>Akıllı Sporcu Performans Takip</h1></header>
+  <p class="sub">Antrenman verisini gir veya simüle et, sakatlanma riskini anında hesapla.</p>
+
+  <div class="grid">
+    <!-- SOL: GİRİŞ -->
+    <div class="panel">
+      <h2>Yeni Antrenman Verisi</h2>
+      <div class="field"><label>Ortalama Nabız (bpm)</label><input type="number" id="avgHr" placeholder="örn. 145"></div>
+      <div class="field"><label>Maksimum Nabız (bpm)</label><input type="number" id="maxHr" placeholder="örn. 178"></div>
+      <div class="field"><label>Süre (dakika)</label><input type="number" id="dur" placeholder="örn. 60"></div>
+      <div class="field"><label>İvme Varyansı (0–10)</label><input type="number" id="accVar" step="0.1" placeholder="örn. 3.2"></div>
+      <div class="field"><label>Yorgunluk (1–10)</label><input type="number" id="fatigue" placeholder="örn. 6"></div>
+      <button class="btn btn-primary" onclick="saveWorkout()">Kaydet ve Riski Hesapla</button>
+      <button class="btn btn-ghost" onclick="simulate()">🎲 Rastgele Sensör Verisi Simüle Et</button>
+    </div>
+
+    <!-- SAĞ: SONUÇ + GEÇMİŞ -->
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div class="panel">
+        <h2>Risk Göstergesi</h2>
+        <div class="result">
+          <div class="gauge" id="gauge" style="--g-pct:0;--g-color:var(--text-3)">
+            <div class="val"><div class="num" id="gNum">--</div><div class="of">/ 100</div></div>
+          </div>
+          <div class="verdict">
+            <div class="lbl" id="vLbl" style="color:var(--text-3)">Veri bekleniyor</div>
+            <div class="note" id="vNote">Soldan veri gir ya da simüle et; risk skoru ve öneri burada görünür.</div>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="s-num" id="stTotal">0</div><div class="s-lbl">Toplam Antrenman</div></div>
+          <div class="stat"><div class="s-num" id="stHr">--</div><div class="s-lbl">Ort. Nabız</div></div>
+          <div class="stat"><div class="s-num" id="stRisk" style="color:var(--text-3)">--</div><div class="s-lbl">Genel Risk</div></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="table-head">
+          <h2 style="margin:0">Antrenman Geçmişi</h2>
+          <button class="csv" onclick="downloadCSV()">⬇ Raporu İndir (CSV)</button>
+        </div>
+        <div id="historyBox">
+          <div class="empty">Henüz antrenman verisi yok. Soldan veri girin veya simüle edin.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="foot">Risk skoru, girilen 5 metrikten kural tabanlı bir motorla hesaplanır · Tıbbi tanı aracı değildir.</p>
+</div>
+
+<script>
+// ── Veri deposu (oturum içi) ───────────────────────────────
+const workouts = [];
+
+// ── Risk motoru: 5 girdiden 0–100 kompozit skor ────────────
+// Ağırlıklar: Yorgunluk %30, İvme Varyansı %25, Nabız Rezervi %20,
+//             Ort. Nabız %15, Süre %10  (toplam 100)
+function calcRisk(avgHr, maxHr, dur, accVar, fatigue){
+  const clamp = (x)=>Math.max(0,Math.min(1,x));
+  const fatigueC = clamp((fatigue - 1) / 9);              // 1–10
+  const accC     = clamp(accVar / 10);                    // 0–10
+  const reserveC = clamp((maxHr - avgHr) / 90);           // nabız açıklığı yüksekse yüklenme yüksek
+  const avgHrC   = clamp((avgHr - 60) / 130);             // 60→190 bpm
+  const durC     = clamp(dur / 120);                      // 0–120 dk
+  const score = (fatigueC*0.30 + accC*0.25 + reserveC*0.20 + avgHrC*0.15 + durC*0.10) * 100;
+  return Math.round(score);
+}
+function band(score){
+  if(score < 30) return {key:'low',  lbl:'Düşük Risk', color:'var(--green)',
+                         note:'Yüklenme dengeli görünüyor. Mevcut programa devam edilebilir.'};
+  if(score < 60) return {key:'mid',  lbl:'Orta Risk',  color:'var(--amber)',
+                         note:'Yorgunluk birikiyor olabilir. Toparlanmaya ve uyku kalitesine dikkat et.'};
+  return            {key:'high', lbl:'Yüksek Risk', color:'var(--red)',
+                         note:'Aşırı yüklenme işareti. Yoğunluğu azalt, dinlenme günü planla.'};
+}
+
+// ── Kaydet & hesapla ───────────────────────────────────────
+function saveWorkout(){
+  const avgHr=+document.getElementById('avgHr').value;
+  const maxHr=+document.getElementById('maxHr').value;
+  const dur=+document.getElementById('dur').value;
+  const accVar=+document.getElementById('accVar').value;
+  const fatigue=+document.getElementById('fatigue').value;
+  if(!avgHr||!maxHr||!dur||!fatigue){ alert('Lütfen nabız, süre ve yorgunluk alanlarını doldur.'); return; }
+
+  const score=calcRisk(avgHr,maxHr,dur,accVar||0,fatigue);
+  const b=band(score);
+  const date=new Date().toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',year:'numeric'});
+  workouts.unshift({date,avgHr,maxHr,dur,accVar:accVar||0,fatigue,score,band:b});
+
+  renderResult(score,b);
+  renderStats();
+  renderHistory();
+  ['avgHr','maxHr','dur','accVar','fatigue'].forEach(id=>document.getElementById(id).value='');
+}
+
+function renderResult(score,b){
+  const g=document.getElementById('gauge');
+  g.style.setProperty('--g-pct',score);
+  g.style.setProperty('--g-color',b.color);
+  document.getElementById('gNum').textContent=score;
+  const v=document.getElementById('vLbl'); v.textContent=b.lbl; v.style.color=b.color;
+  document.getElementById('vNote').textContent=b.note;
+}
+function renderStats(){
+  document.getElementById('stTotal').textContent=workouts.length;
+  const avg=Math.round(workouts.reduce((s,w)=>s+w.avgHr,0)/workouts.length);
+  document.getElementById('stHr').textContent=avg+' bpm';
+  const avgScore=Math.round(workouts.reduce((s,w)=>s+w.score,0)/workouts.length);
+  const gb=band(avgScore);
+  const r=document.getElementById('stRisk'); r.textContent=gb.lbl.replace(' Risk',''); r.style.color=gb.color;
+}
+function renderHistory(){
+  const box=document.getElementById('historyBox');
+  if(!workouts.length){box.innerHTML='<div class="empty">Henüz antrenman verisi yok.</div>';return;}
+  let rows=workouts.map(w=>`<tr>
+      <td>${w.date}</td><td>${w.avgHr} bpm</td><td>${w.dur} dk</td>
+      <td><span class="pill ${w.band.key}">${w.band.lbl.replace(' Risk','')}</span></td>
+      <td style="color:var(--text-3)">${w.score}</td></tr>`).join('');
+  box.innerHTML=`<table><thead><tr>
+      <th>Tarih</th><th>Ort. Nabız</th><th>Süre</th><th>Risk</th><th>Skor</th>
+    </tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+// ── Sensör simülasyonu ─────────────────────────────────────
+function simulate(){
+  const r=(a,b)=>Math.round(a+Math.random()*(b-a));
+  document.getElementById('avgHr').value=r(110,175);
+  document.getElementById('maxHr').value=r(170,195);
+  document.getElementById('dur').value=r(20,110);
+  document.getElementById('accVar').value=(Math.random()*9+1).toFixed(1);
+  document.getElementById('fatigue').value=r(2,9);
+}
+
+// ── CSV dışa aktarım ───────────────────────────────────────
+function downloadCSV(){
+  if(!workouts.length){alert('Önce en az bir antrenman ekle.');return;}
+  const head=['Tarih','Ort_Nabiz','Max_Nabiz','Sure_dk','Ivme_Varyansi','Yorgunluk','Risk_Skoru','Risk_Durumu'];
+  const lines=workouts.map(w=>[w.date,w.avgHr,w.maxHr,w.dur,w.accVar,w.fatigue,w.score,w.band.lbl].join(','));
+  const csv=[head.join(','),...lines].join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='antrenman_raporu.csv'; a.click();
+}
+</script>
+</body>
+</html>
