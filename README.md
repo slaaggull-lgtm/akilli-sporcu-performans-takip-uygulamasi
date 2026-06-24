@@ -140,7 +140,7 @@ web: gunicorn app:app
 
 Render.com üzerinde otomatik deployment için repo bağlanması yeterlidir; `requirements.txt` ve `Procfile` hazır şekilde repo içinde yer almaktadır.
 
-🌐 **Canlı:** https://akilli-sporcu-uyg.onrender.com
+
 
 ## 👥 Takım
 
