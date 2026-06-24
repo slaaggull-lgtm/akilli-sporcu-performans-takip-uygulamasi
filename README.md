@@ -157,8 +157,8 @@ Render.com üzerinde otomatik deployment için repo bağlanması yeterlidir; `re
 | Metrik | Değer |
 |---|---|
 | 🌿 Aktif Branch | 12 |
-| 💾 Toplam Commit | 220 |
-| 📁 Klasör Sayısı | 2 |
+| 💾 Toplam Commit | 227 |
+| 📁 Klasör Sayısı |8 |
 | 📄 Dosya Sayısı |65 |
 
 
