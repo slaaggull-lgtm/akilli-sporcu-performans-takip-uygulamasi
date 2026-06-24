@@ -1,19 +1,10 @@
+# Akıllı Sporcu Takip Uygulaması 
 
-### Akıllı Sporcu Performans Takip Uygulaması
+Profesyonel sporcu performans analiz paneli · AI destekli sakatlanma risk analizi · Gerçek zamanlı antrenman takibi
 
-*Gerçek zamanlı sensör verisi · AI destekli sakatlanma risk analizi · Kişiselleştirilmiş antrenman*
+🌐 **Canlı Demo:** [akilli-sporcu-uyg.onrender.com](https://akilli-sporcu-uyg.onrender.com)
 
-<br/>
-
-[![Branches](https://img.shields.io/badge/Git%20Branches-13-informational?style=flat-square)](https://github.com)
-[![Commits](https://img.shields.io/badge/Commits-221-brightgreen?style=flat-square)](https://github.com)
-[![Files](https://img.shields.io/badge/Files-62-blue?style=flat-square)](https://github.com)
-[![Folders](https://img.shields.io/badge/Folders-8-purple?style=flat-square)](https://github.com)
-[![License](https://img.shields.io/badge/License-MIT-red?style=flat-square)](LICENSE)
-
-</div>
-
----
+Branches · Commits · Files · Folders · License
 
 ## 📋 İçerik
 
@@ -27,289 +18,168 @@
 - [Katkıda Bulunma](#-katkıda-bulunma)
 - [Lisans](#-lisans)
 
----
-
 ## 🎯 Proje Hakkında
 
-**Akıllı Sporcu Performans Takip Uygulaması**, sporcu performansını bütünsel olarak izleyen, yapay zeka destekli bir mobil sağlık ve fitness platformudur. Uygulama; Bluetooth sensörlerden elde edilen gerçek zamanlı biyometrik verilerle sakatlanma riskini tahmin eder, kişiselleştirilmiş antrenman planları önerir ve uzun vadeli performans trendlerini analiz eder.
+**AkıllıTakip Pro**, sporcuların antrenman verilerini (nabız, süre, kalori, algılanan yorgunluk) tek bir panelde toplayan, kural tabanlı bir yapay zeka motoruyla sakatlanma riskini analiz eden ve uzun vadeli performans trendlerini görselleştiren web tabanlı bir sporcu takip platformudur.
 
-```
-Sporcular için bir antrenör, bir fizyoterapist ve bir veri analistinin
-tek bir uygulamada birleşimi.
-```
+> Sporcular için bir antrenör, bir veri analisti ve bir sağlık danışmanının tek bir panelde birleşimi.
 
-### 🏆 Temel Hedefler
+## 🏆 Temel Hedefler
 
 | Hedef | Açıklama |
-|-------|----------|
-| 🔴 Sakatlanma Önleme | AI tabanlı gerçek zamanlı risk sınıflandırması |
-| 📈 Performans Takibi | BLE sensörlerle anlık metrik izleme |
-| 🧠 Akıllı Planlama | Kişiselleştirilmiş antrenman programı üretimi |
-| 📱 Çoklu Platform | Native Android & iOS destek |
-| 🔄 Offline-First | Bağlantısız ortamda tam işlevsellik |
-
----
+|---|---|
+| 🔴 Aşırı Yüklenme Önleme | Kural tabanlı risk skorlama motoru ile erken uyarı |
+| 📈 Performans Takibi | Antrenman bazlı BPM, süre, kalori ve yorgunluk metrikleri |
+| 🧠 Akıllı Koçluk | Geçmiş verilere göre otomatik AI koç geri bildirimi |
+| 👥 Çoklu Sporcu Yönetimi | Tek panelden birden fazla sporcu profili izleme |
+| 📤 Raporlama | Tek tıkla resmi PDF performans raporu dışa aktarımı |
 
 ## ✨ Özellikler
 
-- **🩺 Sakatlanma Risk Analizi** — Makine öğrenimi modeli ile egzersiz sırasında gerçek zamanlı risk tahmini
-- **📡 Bluetooth Sensör Entegrasyonu** — BLE protokolü üzerinden kalp hızı, ivmeölçer ve jiroskop verisi
-- **🏋️ Antrenman Planı Üretici** — Kullanıcı profiline ve geçmiş verisine göre dinamik plan oluşturma
-- **📊 Performans Analitiği** — Zaman serisi görselleştirme ve trend analizi
-- **🔔 Akıllı Bildirimler** — FCM tabanlı proaktif uyarı ve hatırlatma sistemi
-- **☁️ Bulut Senkronizasyonu** — Firebase ile cihazlar arası anlık veri senkronizasyonu
-- **📤 Veri Dışa Aktarım** — CSV/JSON formatında veri export desteği
-
----
+- 📊 **4 Gelişmiş Grafik** — BPM/Risk trendi, Süre/Kalori dağılımı, Yorgunluk trendi, Aktivite türü dağılımı (7/30/90 gün ve tüm zamanlar filtreli)
+- 🧠 **AI Koç & Risk Analiz Motoru** — Nabız, yorgunluk ve antrenman yoğunluğuna göre otomatik risk skoru ve gerekçeli geri bildirim
+- 🎯 **Hedef Sistemi** — Haftalık/aylık süre, antrenman sayısı ve kalori hedefleri ile otomatik ilerleme takibi
+- 🏅 **Başarım Sistemi** — Antrenman sayısı, toplam kalori ve dayanıklılık eşiklerine bağlı rozet kilidi açma
+- 🔔 **Bildirim Merkezi** — Yeni antrenman, başarım ve risk uyarıları için canlı bildirim paneli
+- 📤 **PDF Rapor** — BMI, risk skoru, başarımlar ve antrenman geçmişini içeren resmi rapor çıktısı
+- 📅 **Aktivite Takvimi** — GitHub katkı haritası tarzı, son 35 günü gösteren yoğunluk matrisi
+- 👥 **Çoklu Sporcu Yönetimi** — Sporcu ekleme, profil güncelleme ve silme
+- 🌓 **Dark / Light Tema** — Tercih `localStorage` ile kalıcı olarak saklanır
+- 📡 **Sensör Verisi Simülasyonu** — Gerçek sensör entegrasyonunu test etmek için rastgele veri üretimi
 
 ## 🏗 Sistem Mimarisi
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                     PRESENTATION LAYER                          │
-│   ┌─────────────────────┐    ┌──────────────────────────┐      │
-│   │  Android (Java/MVVM) │    │    iOS (Swift/SPM)        │      │
-│   │  Room DB · BLE       │    │  BluetoothManager · Cache │      │
-│   └──────────┬──────────┘    └────────────┬─────────────┘      │
-└──────────────┼─────────────────────────────┼────────────────────┘
-               │         REST API            │
-┌──────────────▼─────────────────────────────▼────────────────────┐
-│                      BACKEND LAYER                              │
-│         Python Flask · JWT Auth · Docker Container              │
-│   /routes/auth.py  /routes/workout.py  /export/                 │
+│        Jinja2 Templates · Tailwind CSS · Chart.js               │
+│   Ana Sayfa · Analiz · AI Koç · Takvim · Profil                 │
+└──────────────────────────────┬──────────────────────────────────┘
+                               │  HTTP (Flask Routing)
+┌──────────────────────────────▼──────────────────────────────────┐
+│                      APPLICATION LAYER                          │
+│              Python · Flask · Jinja2 · Gunicorn                 │
+│   /training  /athlete  /chart-data  /export-pdf  /notifications │
 └──────────────────────────────┬──────────────────────────────────┘
                                │
          ┌─────────────────────┼─────────────────────┐
          │                     │                     │
 ┌────────▼────────┐  ┌────────▼────────┐  ┌────────▼────────┐
-│   AI / ML Layer  │  │  Firebase DB    │  │  Notification   │
-│  TFLite Model   │  │  Realtime Sync  │  │  FCM Service    │
-│  InjuryAnalyzer │  │  SQL + NoSQL    │  │  Scheduler      │
+│  AI / Risk Motoru│  │   Veri Katmanı  │  │  Bildirim       │
+│  Kural tabanlı   │  │  SQLite ·       │  │  Servisi        │
+│  risk skorlama   │  │  SQLAlchemy ORM │  │  (in-app)       │
 └─────────────────┘  └─────────────────┘  └─────────────────┘
 ```
 
-> **Mimari Yaklaşım:** Katmanlı mimari (Layered Architecture) ile mikroservis ilkeleri birleştirilmiştir. İstemci tarafında MVVM deseni, sunucu tarafında servis bazlı modüler yapı uygulanmaktadır.
-
----
+**Mimari Yaklaşım:** Katmanlı mimari (Layered Architecture) uygulanmıştır. Sunum katmanı (Jinja2 şablonları), uygulama/iş mantığı katmanı (Flask route'ları ve servis fonksiyonları) ve veri katmanı (SQLAlchemy ORM + SQLite) birbirinden ayrılmıştır; bu sayede her katman bağımsız olarak geliştirilip test edilebilir.
 
 ## 🛠 Teknoloji Yığını
 
-<table>
-<tr>
-<th>Katman</th>
-<th>Teknoloji</th>
-<th>Amaç</th>
-</tr>
-<tr>
-<td><b>Android</b></td>
-<td>Java · Room ORM · Retrofit</td>
-<td>Native Android istemci, MVVM</td>
-</tr>
-<tr>
-<td><b>iOS</b></td>
-<td>Swift · SPM · CoreBluetooth</td>
-<td>Native iOS istemci</td>
-</tr>
-<tr>
-<td><b>Backend</b></td>
-<td>Python 3 · Flask · JWT</td>
-<td>REST API sunucusu</td>
-</tr>
-<tr>
-<td><b>AI/ML</b></td>
-<td>TensorFlow Lite · Python</td>
-<td>Sakatlanma riski modeli</td>
-</tr>
-<tr>
-<td><b>Veritabanı</b></td>
-<td>Firebase Realtime DB · SQL</td>
-<td>Hibrit veri katmanı</td>
-</tr>
-<tr>
-<td><b>Bildirim</b></td>
-<td>Firebase FCM</td>
-<td>Push bildirim servisi</td>
-</tr>
-<tr>
-<td><b>DevOps</b></td>
-<td>Docker · Git</td>
-<td>Container & versiyon yönetimi</td>
-</tr>
-</table>
-
----
+| Katman | Teknoloji | Amaç |
+|---|---|---|
+| Backend | Python 3 · Flask | Sunucu tarafı uygulama ve route yönetimi |
+| Şablon Motoru | Jinja2 | Sunucu taraflı dinamik HTML render |
+| Frontend | Tailwind CSS · Font Awesome | Responsive, modern arayüz |
+| Veri Görselleştirme | Chart.js | Çizgi, bar ve doughnut grafikler |
+| Veritabanı | SQLite · Flask-SQLAlchemy | İlişkisel veri katmanı, ORM |
+| AI / Risk Motoru | Kural tabanlı Python motoru | Sakatlanma riski skorlama |
+| Deployment | Render.com · Gunicorn | Üretim ortamı barındırma |
+| Versiyon Kontrol | Git & GitHub | Kaynak kod ve sürüm yönetimi |
 
 ## 📁 Proje Yapısı
 
 ```
 akillitakip/
-├── 📂 ai/                          # Yapay Zeka Modülleri
-│   ├── injury/
-│   │   ├── InjuryRiskAnalyzer.py   # Sakatlanma risk sınıflandırıcısı
-│   │   └── InjuryRiskTests.py      # Model testleri
-│   ├── models/                     # Eğitilmiş model dosyaları
-│   ├── running_analytics.py        # Koşu analitik motoru
-│   ├── optimization.py             # Model optimizasyonu
-│   └── export_tflite.py            # TFLite dönüştürücü
+├── 📂 templates/                   # Jinja2 Şablonları
+│   ├── base.html                   # Ortak layout (navbar, sidebar, tema)
+│   ├── index.html                  # Ana Sayfa (özet kartlar)
+│   ├── analytics.html              # Gelişmiş Analiz (4 grafik)
+│   ├── ai_coach.html               # AI Analiz Odası (risk geçmişi)
+│   ├── calendar.html               # Aktivite Takvimi
+│   ├── profile.html                # Profil & Sağlık
+│   └── pdf_template.html           # PDF rapor şablonu
 │
-├── 📂 client/                      # İstemci Uygulamaları
-│   ├── android/                    # Android (Java/MVVM)
-│   │   └── app/src/main/java/com/akillitakip/
-│   │       ├── data/local/         # Room DB katmanı
-│   │       ├── data/remote/        # API iletişim katmanı
-│   │       ├── domain/             # İş mantığı
-│   │       └── presentation/       # UI state yönetimi
-│   ├── ios/                        # iOS (Swift/SPM)
-│   │   └── Sources/
-│   │       ├── Bluetooth/          # BLE yönetimi
-│   │       ├── Cache/              # Görsel önbellekleme
-│   │       ├── Network/            # API servisleri
-│   │       └── Performance/        # Performans monitörü
-│   └── notifications/              # FCM bildirim sistemi
+├── 📂 static/                      # Statik dosyalar (görsel/varlık)
 │
-├── 📂 server/                      # Backend API
-│   ├── routes/                     # API endpoint rotaları
-│   ├── export/                     # Veri dışa aktarım servisi
-│   └── app.py                      # Ana uygulama giriş noktası
-│
-├── 📂 database/                    # Veritabanı şemaları
-│   ├── schema.sql                  # İlişkisel tablo tanımları
-│   ├── firebase_structure.md       # NoSQL yapısı dokümantasyonu
-│   └── database/seed_data.sql      # Test verileri
-│
-├── 📂 datasets/                    # Örnek veri setleri
-├── 📂 docs/                        # Proje dokümantasyonu
-├── 📂 config/                      # Uygulama yapılandırmaları
-├── 📂 tests/                       # Otomatik test dosyaları
-├── Dockerfile                      # Container yapılandırması
+├── app.py                          # Ana uygulama: modeller, route'lar, AI motoru
+├── requirements.txt                # Python bağımlılıkları
+├── Procfile                        # Render/Heroku başlatma komutu
 └── README.md
 ```
-
----
 
 ## 🚀 Kurulum
 
 ### Gereksinimler
-- Python 3.9+
-- Node.js 18+ (sadece geliştirme araçları için)
-- Android Studio / Xcode
-- Docker (opsiyonel, deployment için)
 
-### Backend Kurulumu
+- Python 3.9+
+- pip
+
+### Yerel Kurulum
 
 ```bash
 # Repoyu klonlayın
-git clone https://github.com/your-org/akillitakip.git
-cd akillitakip
-
-# Ortam değişkenlerini ayarlayın
-cp .env.example .env
+git clone https://github.com/slaaggull-lgtm/akilli-sporcu-v3.git
+cd akilli-sporcu-v3
 
 # Bağımlılıkları yükleyin
-pip install -r server/requirements.txt
+pip install -r requirements.txt
 
-# Sunucuyu başlatın
-python server/app.py
+# Uygulamayı başlatın
+python app.py
 ```
 
-### Docker ile Kurulum
+Tarayıcıda `http://localhost:5000` adresine gidin.
 
-```bash
-docker build -t akillitakip .
-docker run -p 5000:5000 --env-file .env akillitakip
+### Üretim Ortamı (Render.com)
+
+`Procfile` içeriği:
+
+```
+web: gunicorn app:app
 ```
 
-### AI Modül Kurulumu
+Render.com üzerinde otomatik deployment için repo bağlanması yeterlidir; `requirements.txt` ve `Procfile` hazır şekilde repo içinde yer almaktadır.
 
-```bash
-pip install -r ai/requirements.txt
-python ai/export_tflite.py
-```
-
----
+🌐 **Canlı:** https://akilli-sporcu-uyg.onrender.com
 
 ## 👥 Takım
 
-<table>
-<tr>
-<td align="center" width="200">
-<br/>
-<b>Sıla Ağgül</b><br/>
-<img src="https://img.shields.io/badge/Proje%20Lideri-1A56A8?style=for-the-badge" alt="Proje Lideri"/>
-<br/><small>Koordinasyon · Planlama · Delivery Yönetimi</small>
-</td>
-<td align="center" width="200">
-<br/>
-<b>Baver Katar</b><br/>
-<img src="https://img.shields.io/badge/Sistem%20Mimarı-6B21A8?style=for-the-badge" alt="Sistem Mimarı"/>
-<br/><small>Mimari Tasarım · Entegrasyon · DevOps</small>
-</td>
-<td align="center" width="200">
-<br/>
-<b>Asım Gökalp</b><br/>
-<img src="https://img.shields.io/badge/UI%2FUX%20Tasarımcı-D97706?style=for-the-badge" alt="UI/UX"/>
-<br/><small>Figma · Kullanıcı Deneyimi · Prototip</small>
-</td>
-</tr>
-<tr>
-<td align="center" width="200">
-<br/>
-<b>Nur Beyda Genç</b><br/>
-<img src="https://img.shields.io/badge/Veritabanı%20Sorumlusu-059669?style=for-the-badge" alt="DB"/>
-<br/><small>Firebase · SQL · Veri Modelleme</small>
-</td>
-<td align="center" width="200">
-<br/>
-<b>Şevval Bulut</b><br/>
-<img src="https://img.shields.io/badge/Backend%20Geliştirici-DC2626?style=for-the-badge" alt="Backend"/>
-<br/><small>Python · Flask · REST API</small>
-</td>
-<td align="center" width="200">
-<br/>
-</td>
-</tr>
-</table>
-
----
+| Üye | Rol | Sorumluluk |
+|---|---|---|
+| **Sıla Ağgül** | Proje Lideri | Koordinasyon · Planlama · Delivery Yönetimi |
+| **Baver Katar** | Sistem Mimarı | Mimari Tasarım · Entegrasyon · DevOps |
+| **Asım Gökalp** | UI/UX | Tasarım · Kullanıcı Deneyimi · Prototip |
+| **Nur Beyda Genç** | Veritabanı | SQLite/SQLAlchemy · Veri Modelleme |
+| **Şevval Bulut** | Backend | Python · Flask · Route/Servis Geliştirme |
 
 ## 📊 Proje İstatistikleri
 
 | Metrik | Değer |
-|--------|-------|
-| 🌿 Aktif Branch | 13 |
-| 💾 Toplam Commit | 208 |
-| 📁 Klasör Sayısı | 8 |
-| 📄 Dosya Sayısı | 62 |
-| 🧪 Test Dosyaları | 2 |
-| 📚 Dokümantasyon Dosyaları | 8 |
+|---|---|
+| 🌿 Aktif Branch | 12 |
+| 💾 Toplam Commit | 220 |
+| 📁 Klasör Sayısı | 2 |
+| 📄 Dosya Sayısı |65 |
 
----
 
 ## 🔗 Bağlantılar
 
 | Kaynak | Bağlantı |
-|--------|----------|
-| 📖 Dokümantasyon | [projeakisi.md](projeakisi.md)|
-| 🚀 Deployment Kılavuzu | [`DEPLOYMENT_GUIDE.txt`](DEPLOYMENT_GUIDE.txt) |
-| 🔒 Güvenlik Politikası | [`SECURITY.md`](SECURITY.md) |
-| 🤝 Katkı Kılavuzu | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
-
----
+|---|---|
+| 🌐 Canlı Demo | https://akilli-sporcu-uyg.onrender.com |
+| 📖 Dokümantasyon | README.md |
 
 ## 🤝 Katkıda Bulunma
 
-Katkı sağlamak için lütfen [`CONTRIBUTING.md`](CONTRIBUTING.md) dosyasını inceleyin. Genel iş akışı:
+Genel iş akışı:
 
 1. Bir `feature/isim` veya `fix/isim` branch oluşturun
 2. Değişikliklerinizi commit edin
 3. Pull Request açın ve inceleme bekleyin
 
----
-
 ## 📄 Lisans
 
-Bu proje [MIT Lisansı](LICENSE) kapsamında lisanslanmıştır.
+Bu proje MIT Lisansı kapsamında lisanslanmıştır.
 
----
 
 
