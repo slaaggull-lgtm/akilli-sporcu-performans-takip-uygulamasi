@@ -47,6 +47,32 @@ Branches · Commits · Files · Folders · License
 - 🌓 **Dark / Light Tema** — Tercih `localStorage` ile kalıcı olarak saklanır
 - 📡 **Sensör Verisi Simülasyonu** — Gerçek sensör entegrasyonunu test etmek için rastgele veri üretimi
 
+
+<img width="2937" height="1667" alt="Ekran Resmi 2026-06-27 23 26 34" src="https://github.com/user-attachments/assets/0e9dd464-ba8d-4fb0-8980-0a72a7ed4e60" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<img width="2921" height="1672" alt="Ekran Resmi 2026-06-27 23 26 44" src="https://github.com/user-attachments/assets/c24f147a-7a70-4e72-99c7-0127b35bebb7" />
+
+
+
+
+
+
+
+
+
 ## 🏗 Sistem Mimarisi
 
 ```
