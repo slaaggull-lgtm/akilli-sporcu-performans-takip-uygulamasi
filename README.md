@@ -24,6 +24,10 @@ Branches · Commits · Files · Folders · License
 
 > Sporcular için bir antrenör, bir veri analisti ve bir sağlık danışmanının tek bir panelde birleşimi.
 
+
+
+<img width="2937" height="1667" alt="Ekran Resmi 2026-06-27 23 26 34" src="https://github.com/user-attachments/assets/0e9dd464-ba8d-4fb0-8980-0a72a7ed4e60" />
+
 ## 🏆 Temel Hedefler
 
 | Hedef | Açıklama |
@@ -48,7 +52,7 @@ Branches · Commits · Files · Folders · License
 - 📡 **Sensör Verisi Simülasyonu** — Gerçek sensör entegrasyonunu test etmek için rastgele veri üretimi
 
 
-<img width="2937" height="1667" alt="Ekran Resmi 2026-06-27 23 26 34" src="https://github.com/user-attachments/assets/0e9dd464-ba8d-4fb0-8980-0a72a7ed4e60" />
+
 
 
 
